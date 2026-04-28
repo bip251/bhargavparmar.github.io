@@ -352,90 +352,108 @@ footer{padding:40px 5%;border-top:1px solid var(--border);display:flex;align-ite
 
 <div class="sec-divider"></div>
 
-<!-- FEATURED TOOL -->
-<div class="tool-section" id="tools">
-  <div class="tool-inner">
-    <div class="sec-eyebrow fade-up" style="margin-bottom:12px">Open Dev Tool</div>
-    <h2 class="sec-title fade-up" style="margin-bottom:48px">Built for Flutter developers,<br/>by a Flutter developer.</h2>
-    <div class="tool-card fade-up">
-      <div>
-        <div class="tool-badge">🚀 Featured Tool</div>
-        <div class="tool-title">Flutter<span>Rocket</span><br/>Prompt Generator</div>
-        <p class="tool-desc">An AI-powered developer tool that generates battle-tested, screen-specific optimisation prompts for Flutter apps. Pick your screen, choose techniques, hit launch — hand your AI coding agent a precise, safe instruction set.</p>
-        <div class="tool-features">
-          <div class="tf"><div class="tf-dot"></div>28+ optimisation techniques across 7 categories</div>
-          <div class="tf"><div class="tf-dot"></div>State management migration (GetX, Bloc, Riverpod, Provider)</div>
-          <div class="tf"><div class="tf-dot"></div>main.dart cold-start & launch time optimisation</div>
-          <div class="tf"><div class="tf-dot"></div>Safe mode — zero breaking changes enforced</div>
-          <div class="tf"><div class="tf-dot"></div>Works with Cursor, Windsurf, GitHub Copilot & more</div>
+<!-- ALL TOOLS SECTION — unified under #tools anchor -->
+<div id="tools" style="padding:100px 5%;background:var(--bg)">
+  <div style="max-width:1200px;margin:0 auto">
+
+    <!-- Header -->
+    <div class="sec-eyebrow fade-up">Flutter Dev Tools</div>
+    <h2 class="sec-title fade-up">Built for Flutter devs,<br/>by a Flutter dev.</h2>
+    <p class="sec-desc fade-up" style="margin-bottom:52px">Free AI-ready prompt generators that make your app faster, lighter, and smoother — battle-tested across 30+ production apps.</p>
+
+    <!-- 3 Tool Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:52px">
+
+      <!-- FlutterRocket -->
+      <a href="flutter-rocket/" style="background:linear-gradient(135deg,#0B1930,#0D2040);border:1px solid rgba(59,130,246,.25);border-radius:20px;padding:28px;text-decoration:none;display:block;transition:all .25s;position:relative;overflow:hidden" class="fade-up"
+         onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='rgba(59,130,246,.6)';this.style.boxShadow='0 24px 60px rgba(59,130,246,.2)'"
+         onmouseout="this.style.transform='';this.style.borderColor='rgba(59,130,246,.25)';this.style.boxShadow=''">
+        <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="font-size:36px">🚀</div>
+          <div style="font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:#3B82F6;font-weight:700;letter-spacing:.5px">FLAGSHIP</div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a href="flutter-rocket/" class="tool-link">Try FlutterRocket →</a>
-          <a href="tools/" style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(59,130,246,.35);color:#3B82F6;padding:13px 22px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(59,130,246,.08)'" onmouseout="this.style.background='transparent'">All Tools ↗</a>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;letter-spacing:-.3px">FlutterRocket</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px">The most powerful prompt generator. 28+ optimisations across 7 categories — cold start to ABI splitting. One click for full afterburner mode.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>28+ optimisations · 7 categories</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>GetX → Bloc / Riverpod migration</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>Safe mode — zero breaking changes</div>
         </div>
-      </div>
-      <div class="tool-visual">
-        <div class="tv-header">
-          <div class="tv-dot" style="background:#F43F5E"></div>
-          <div class="tv-dot" style="background:#F59E0B;margin-left:4px"></div>
-          <div class="tv-dot" style="background:#10B981;margin-left:4px"></div>
-          <span style="font-size:12px;color:var(--text3);margin-left:10px">FlutterRocket</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(59,130,246,.15)">
+          <div style="font-size:13px;font-weight:700;color:#3B82F6">Launch tool →</div>
+          <div style="display:flex;gap:5px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">FPS</span>
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Size</span>
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Speed</span>
+          </div>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Optimisations selected</div>
-        <div class="tv-opt-row">
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>Const widgets</div>
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>ListView.builder</div>
+      </a>
+
+      <!-- Flutter Optimizer -->
+      <a href="flutter-optimizer/" style="background:linear-gradient(135deg,#100A2A,#1A1040);border:1px solid rgba(139,92,246,.25);border-radius:20px;padding:28px;text-decoration:none;display:block;transition:all .25s;position:relative;overflow:hidden" class="fade-up"
+         onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='rgba(139,92,246,.6)';this.style.boxShadow='0 24px 60px rgba(139,92,246,.2)'"
+         onmouseout="this.style.transform='';this.style.borderColor='rgba(139,92,246,.25)';this.style.boxShadow=''">
+        <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="font-size:36px">⚡</div>
+          <div style="font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);color:#8B5CF6;font-weight:700;letter-spacing:.5px">SCREEN-FOCUSED</div>
         </div>
-        <div class="tv-opt-row">
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>Cached images</div>
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>Widget splitting</div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;letter-spacing:-.3px">Flutter Optimizer</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px">Target a screen by name — AI auto-discovers the view, controller, binding & sub-widgets, then applies precise isolated optimisations.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#8B5CF6;flex-shrink:0"></div>Auto file discovery from screen name</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#8B5CF6;flex-shrink:0"></div>Only touches related files</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#8B5CF6;flex-shrink:0"></div>State management migration</div>
         </div>
-        <div class="tv-opt-row">
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>SVG icons</div>
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>RepaintBoundary</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(139,92,246,.15)">
+          <div style="font-size:13px;font-weight:700;color:#8B5CF6">Launch tool →</div>
+          <div style="display:flex;gap:5px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Targeted</span>
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Safe</span>
+          </div>
         </div>
-        <div class="tv-opt-row">
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>main.dart init</div>
-          <div class="tv-opt"><div class="tv-opt-check">✓</div>Async SDK init</div>
+      </a>
+
+      <!-- Flutter Perf -->
+      <a href="flutter-perf/" style="background:linear-gradient(135deg,#041A10,#062A18);border:1px solid rgba(16,185,129,.25);border-radius:20px;padding:28px;text-decoration:none;display:block;transition:all .25s;position:relative;overflow:hidden" class="fade-up"
+         onmouseover="this.style.transform='translateY(-6px)';this.style.borderColor='rgba(16,185,129,.6)';this.style.boxShadow='0 24px 60px rgba(16,185,129,.15)'"
+         onmouseout="this.style.transform='';this.style.borderColor='rgba(16,185,129,.25)';this.style.boxShadow=''">
+        <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(16,185,129,.12),transparent 70%);pointer-events:none"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div style="font-size:36px">🔧</div>
+          <div style="font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:#10B981;font-weight:700;letter-spacing:.5px">QUICK FIX</div>
         </div>
-        <div class="tv-btn">🚀 Launch — Generate My Rocket Prompt</div>
-      </div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;letter-spacing:-.3px">Flutter Perf</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px">Fastest route to a performance prompt. Pick from 8 core fixes, enter your screen name, get a clean AI instruction in 30 seconds.</div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0"></div>8 core performance fixes</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0"></div>30-second setup, visual checklist</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)"><div style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0"></div>Clean focused output</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid rgba(16,185,129,.15)">
+          <div style="font-size:13px;font-weight:700;color:#10B981">Launch tool →</div>
+          <div style="display:flex;gap:5px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Quick</span>
+            <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)">Simple</span>
+          </div>
+        </div>
+      </a>
+
     </div>
+
+    <!-- Tools hub link -->
+    <div class="fade-up" style="text-align:center">
+      <a href="tools/" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);text-decoration:none;padding:10px 20px;border:1px solid var(--border);border-radius:10px;transition:all .2s"
+         onmouseover="this.style.borderColor='rgba(59,130,246,.4)';this.style.color='var(--text)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'">
+        View all tools in one place →
+      </a>
+    </div>
+
   </div>
 </div>
-
 <div class="sec-divider"></div>
-
-<!-- ALL TOOLS MINI SECTION -->
-<section style="padding:80px 5%">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="sec-eyebrow fade-up">More Dev Tools</div>
-    <h2 class="sec-title fade-up" style="margin-bottom:40px">All Flutter tools,<br/>one place.</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
-      <a href="flutter-rocket/" style="background:var(--card);border:1px solid rgba(59,130,246,.2);border-radius:16px;padding:22px;text-decoration:none;transition:all .2s;display:block" class="fade-up" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(59,130,246,.5)'" onmouseout="this.style.transform='';this.style.borderColor='rgba(59,130,246,.2)'">
-        <div style="font-size:28px;margin-bottom:12px">🚀</div>
-        <div style="font-family:var(--font-display);font-weight:700;font-size:16px;margin-bottom:6px;color:var(--text)">FlutterRocket</div>
-        <div style="font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:14px">28+ optimisations · State migration · Safe mode</div>
-        <div style="font-size:12px;color:#3B82F6;font-weight:600">Launch →</div>
-      </a>
-      <a href="flutter-optimizer/" style="background:var(--card);border:1px solid rgba(139,92,246,.2);border-radius:16px;padding:22px;text-decoration:none;transition:all .2s;display:block" class="fade-up" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(139,92,246,.5)'" onmouseout="this.style.transform='';this.style.borderColor='rgba(139,92,246,.2)'">
-        <div style="font-size:28px;margin-bottom:12px">⚡</div>
-        <div style="font-family:var(--font-display);font-weight:700;font-size:16px;margin-bottom:6px;color:var(--text)">Flutter Optimizer</div>
-        <div style="font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:14px">Screen-targeted · Auto file discovery · Isolated</div>
-        <div style="font-size:12px;color:#8B5CF6;font-weight:600">Launch →</div>
-      </a>
-      <a href="flutter-perf/" style="background:var(--card);border:1px solid rgba(16,185,129,.2);border-radius:16px;padding:22px;text-decoration:none;transition:all .2s;display:block" class="fade-up" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='rgba(16,185,129,.5)'" onmouseout="this.style.transform='';this.style.borderColor='rgba(16,185,129,.2)'">
-        <div style="font-size:28px;margin-bottom:12px">🔧</div>
-        <div style="font-family:var(--font-display);font-weight:700;font-size:16px;margin-bottom:6px;color:var(--text)">Flutter Perf</div>
-        <div style="font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:14px">8 core fixes · 30-second setup · Quick wins</div>
-        <div style="font-size:12px;color:#10B981;font-weight:600">Launch →</div>
-      </a>
-    </div>
-    <div style="margin-top:16px;text-align:center">
-      <a href="tools/" style="font-size:13px;color:var(--text2);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">View all tools in one place →</a>
-    </div>
-  </div>
-</section>
 <section id="projects">
   <div class="projects-header">
     <div>
