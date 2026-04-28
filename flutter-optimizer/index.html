@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flutter Optimizer — Screen Performance Prompt Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080C12;--card:#111827;--border:#1E2D47;--accent:#8B5CF6;--accent2:#F59E0B;--accent3:#10B981;--text:#F0F4FF;--text2:#8DA3C4;--text3:#4D6280;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,18,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(139,92,246,.1);padding:14px 5%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-back{font-size:13px;color:var(--text2);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--text)}
+.nav-tools{font-size:13px;color:var(--text2);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:8px;transition:all .2s}
+.nav-tools:hover{border-color:var(--accent);color:var(--text)}
+
+.hero{text-align:center;padding:56px 5% 44px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;width:500px;height:280px;background:radial-gradient(ellipse,rgba(139,92,246,.12),transparent 70%);top:0;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-icon{font-size:48px;margin-bottom:14px;display:inline-block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:600;color:var(--accent);margin-bottom:14px;letter-spacing:.8px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-size:clamp(28px,4.5vw,50px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px}
+h1 span{color:var(--accent)}
+.hero-sub{font-size:15px;color:var(--text2);max-width:560px;margin:0 auto 28px;line-height:1.7}
+.hero-badges{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.hbadge{font-size:11px;padding:3px 12px;border-radius:20px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.15);color:var(--text2)}
+
+.tool-wrap{max-width:820px;margin:0 auto;padding:40px 5% 80px}
+.section{margin-bottom:24px}
+label.lbl{display:block;font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+input[type=text]{width:100%;font-size:14px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);outline:none;font-family:var(--font-body);transition:border-color .2s}
+input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
+input[type=text]::placeholder{color:var(--text3)}
+.sm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}
+.sm-btn{padding:9px 8px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text2);cursor:pointer;font-size:13px;text-align:center;transition:all .15s;user-select:none;font-family:var(--font-body)}
+.sm-btn:hover{border-color:var(--accent)}
+.sm-btn.active{background:rgba(139,92,246,.1);border:1.5px solid var(--accent);color:var(--accent);font-weight:600}
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:540px){.opt-grid{grid-template-columns:1fr}}
+.group{margin-bottom:22px}
+.group-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.group-label{font-size:12px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.5px}
+.sel-grp{font-size:11px;color:var(--accent);cursor:pointer;padding:3px 10px;border:1px solid rgba(139,92,246,.2);border-radius:20px;background:rgba(139,92,246,.05)}
+.sel-grp:hover{background:rgba(139,92,246,.12)}
+.master-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(139,92,246,.05);border:1px solid rgba(139,92,246,.2);border-radius:12px;margin-bottom:22px;cursor:pointer;user-select:none}
+.master-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--accent)}
+.master-chk{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0}
+.master-chk.on{background:var(--accent);border-color:var(--accent)}
+.master-right{font-size:11px;color:var(--text3)}
+.opt-card{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:var(--card);transition:border-color .15s}
+.opt-card:hover{border-color:rgba(139,92,246,.3)}
+.opt-card.selected{border:1.5px solid var(--accent3);background:rgba(16,185,129,.04)}
+.chk{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff}
+.opt-card.selected .chk{background:var(--accent3);border-color:var(--accent3)}
+.opt-title{font-size:12.5px;font-weight:600;color:var(--text)}
+.opt-desc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4}
+.safe-card{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;cursor:pointer;background:var(--card);transition:all .15s;margin-bottom:22px}
+.safe-card.on{border:1.5px solid rgba(245,158,11,.4);background:rgba(245,158,11,.04)}
+.safe-chk{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px}
+.safe-card.on .safe-chk{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.safe-title{font-size:13px;font-weight:600;color:var(--text)}
+.safe-desc{font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5}
+.launch-btn{width:100%;padding:13px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(90deg,#4C1D95,#6D28D9,#8B5CF6);color:#fff;font-family:var(--font-display);transition:all .2s}
+.launch-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,.4)}
+.out-wrap{display:none;margin-top:22px}
+.out-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.out-label{font-size:12px;color:var(--text2);font-weight:600}
+.out-stats{font-size:11px;color:var(--text3)}
+.out-area{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:12px;line-height:1.7;color:var(--text2);font-family:'Courier New',monospace;white-space:pre-wrap;word-break:break-word;max-height:360px;overflow-y:auto}
+.copy-btn{margin-top:10px;width:100%;padding:10px;background:var(--card);color:var(--text2);border:1px solid var(--border);border-radius:10px;font-size:13px;cursor:pointer;font-family:var(--font-body);transition:all .15s}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+footer{border-top:1px solid var(--border);padding:24px 5%;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}
+footer a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../" class="nav-logo">BP<span>.</span></a>
+  <a href="../" class="nav-back">← Portfolio</a>
+  <a href="../tools/" class="nav-tools">All Tools</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-icon">⚡</div>
+  <div><div class="hero-eyebrow">Screen-Specific Optimizer</div></div>
+  <h1>Flutter <span>Optimizer</span></h1>
+  <p class="hero-sub">Target a specific screen by name — the AI discovers every related file automatically and applies precise, safe optimisations without touching unrelated code.</p>
+  <div class="hero-badges">
+    <span class="hbadge">🎯 Screen-targeted</span>
+    <span class="hbadge">🔍 Auto file discovery</span>
+    <span class="hbadge">🔄 State management migration</span>
+    <span class="hbadge">🛡️ Safe by default</span>
+  </div>
+</div>
+
+<div class="tool-wrap">
+  <div class="section">
+    <label class="lbl">Screen name (e.g. HomeView, ProductView)</label>
+    <input type="text" id="screenName" placeholder="HomeView" value="HomeView"/>
+  </div>
+  <div class="section">
+    <label class="lbl">State management</label>
+    <div class="sm-grid" id="smGrid">
+      <div class="sm-btn active" data-sm="GetX">GetX</div>
+      <div class="sm-btn" data-sm="Bloc">Bloc</div>
+      <div class="sm-btn" data-sm="Provider">Provider</div>
+      <div class="sm-btn" data-sm="Riverpod">Riverpod</div>
+      <div class="sm-btn" data-sm="MobX">MobX</div>
+      <div class="sm-btn" data-sm="Keep existing">Keep existing</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div id="masterRow" class="master-row">
+    <div class="master-left"><div class="master-chk on" id="masterChk">✓</div>⚡ Select all optimisations</div>
+    <div class="master-right" id="masterCount">0 of 0 selected</div>
+  </div>
+
+  <div class="group">
+    <div class="group-header"><div class="group-label">🚀 Startup</div><div class="sel-grp" data-group="startup">Select all</div></div>
+    <div class="opt-grid">
+      <div class="opt-card selected" data-key="const" data-group="startup"><div class="chk">✓</div><div><div class="opt-title">Const widgets</div><div class="opt-desc">Add const everywhere to eliminate unnecessary rebuilds</div></div></div>
+      <div class="opt-card selected" data-key="async_sdk" data-group="startup"><div class="chk">✓</div><div><div class="opt-title">Async SDK init</div><div class="opt-desc">Move heavy SDKs to background after first frame</div></div></div>
+      <div class="opt-card selected" data-key="lazy_routes" data-group="startup"><div class="chk">✓</div><div><div class="opt-title">Lazy routes</div><div class="opt-desc">Get.lazyPut so unused routes don't load on boot</div></div></div>
+      <div class="opt-card selected" data-key="maindart" data-group="startup"><div class="chk">✓</div><div><div class="opt-title">main.dart first frame</div><div class="opt-desc">Defer non-critical init after first frame renders</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-header"><div class="group-label">🖼️ Render</div><div class="sel-grp" data-group="render">Select all</div></div>
+    <div class="opt-grid">
+      <div class="opt-card selected" data-key="split" data-group="render"><div class="chk">✓</div><div><div class="opt-title">Widget splitting</div><div class="opt-desc">Extract _build methods into separate widget files</div></div></div>
+      <div class="opt-card selected" data-key="repaint" data-group="render"><div class="chk">✓</div><div><div class="opt-title">RepaintBoundary</div><div class="opt-desc">Isolate Shimmer &amp; animations from static content</div></div></div>
+      <div class="opt-card selected" data-key="listview" data-group="render"><div class="chk">✓</div><div><div class="opt-title">ListView.builder</div><div class="opt-desc">Replace Column.map with lazy builder</div></div></div>
+      <div class="opt-card selected" data-key="cache_img" data-group="render"><div class="chk">✓</div><div><div class="opt-title">Cached images</div><div class="opt-desc">CachedNetworkImage + disk cache</div></div></div>
+      <div class="opt-card" data-key="opacity" data-group="render"><div class="chk"></div><div><div class="opt-title">Avoid Opacity widget</div><div class="opt-desc">Use color.withOpacity() or FadeTransition</div></div></div>
+      <div class="opt-card" data-key="clip" data-group="render"><div class="chk"></div><div><div class="opt-title">Reduce ClipRRect</div><div class="opt-desc">Use BoxDecoration borderRadius instead</div></div></div>
+      <div class="opt-card" data-key="mediaquery" data-group="render"><div class="chk"></div><div><div class="opt-title">Cache MediaQuery</div><div class="opt-desc">Store MediaQuery.of(context) once per build</div></div></div>
+      <div class="opt-card" data-key="keys" data-group="render"><div class="chk"></div><div><div class="opt-title">Widget keys</div><div class="opt-desc">Add ValueKey to list items for efficient diffing</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-header"><div class="group-label">📦 Size</div><div class="sel-grp" data-group="size">Select all</div></div>
+    <div class="opt-grid">
+      <div class="opt-card selected" data-key="svg" data-group="size"><div class="chk">✓</div><div><div class="opt-title">SVG icons</div><div class="opt-desc">Convert PNG icons to SVG for smaller bundle</div></div></div>
+      <div class="opt-card selected" data-key="asset_compress" data-group="size"><div class="chk">✓</div><div><div class="opt-title">Asset compression</div><div class="opt-desc">Compress PNG/JPEG, remove unused assets</div></div></div>
+      <div class="opt-card" data-key="proguard" data-group="size"><div class="chk"></div><div><div class="opt-title">R8/ProGuard</div><div class="opt-desc">Enable minification in release build.gradle</div></div></div>
+      <div class="opt-card" data-key="unused_pkg" data-group="size"><div class="chk"></div><div><div class="opt-title">Remove unused packages</div><div class="opt-desc">Audit pubspec.yaml — remove dead dependencies</div></div></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-header"><div class="group-label">🧵 Threading</div><div class="sel-grp" data-group="thread">Select all</div></div>
+    <div class="opt-grid">
+      <div class="opt-card selected" data-key="compute" data-group="thread"><div class="chk">✓</div><div><div class="opt-title">compute() offloading</div><div class="opt-desc">Move heavy JSON parsing off the main thread</div></div></div>
+      <div class="opt-card" data-key="dispose" data-group="thread"><div class="chk"></div><div><div class="opt-title">Proper dispose</div><div class="opt-desc">Verify controllers &amp; streams disposed correctly</div></div></div>
+      <div class="opt-card" data-key="debounce" data-group="thread"><div class="chk"></div><div><div class="opt-title">Debounce inputs</div><div class="opt-desc">350ms debounce on search; throttle scroll callbacks</div></div></div>
+      <div class="opt-card" data-key="release_logs" data-group="thread"><div class="chk"></div><div><div class="opt-title">Strip debug logs</div><div class="opt-desc">Guard print/debugPrint with kReleaseMode</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="safeCard" class="safe-card on">
+    <div class="safe-chk">✓</div>
+    <div>
+      <div class="safe-title">🛡️ Safe mode — no breaking changes (recommended)</div>
+      <div class="safe-desc">AI must verify every change against existing navigation, callbacks and business logic. Any breaking-change risk must be flagged with a comment and safe alternative. Compiles with zero new errors after each phase.</div>
+    </div>
+  </div>
+
+  <button class="launch-btn" id="genBtn">⚡ Generate Optimizer Prompt</button>
+
+  <div class="out-wrap" id="outWrap">
+    <div class="out-header">
+      <div class="out-label">✅ Your optimizer prompt is ready</div>
+      <div class="out-stats" id="outStats"></div>
+    </div>
+    <div class="out-area" id="outArea"></div>
+    <button class="copy-btn" id="copyBtn">Copy prompt to clipboard</button>
+  </div>
+</div>
+
+<footer>
+  <span>Built by <a href="../">Bhargav Parmar</a></span>
+  <a href="../tools/">← All Flutter Tools</a>
+</footer>
+
+<script>
+document.querySelectorAll('.sm-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.sm-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+let safeMode=true;
+document.getElementById('safeCard').addEventListener('click',()=>{safeMode=!safeMode;document.getElementById('safeCard').classList.toggle('on',safeMode);document.getElementById('safeCard').querySelector('.safe-chk').textContent=safeMode?'✓':'';});
+function setCard(c,on){c.classList.toggle('selected',on);c.querySelector('.chk').textContent=on?'✓':'';}
+function updateCount(){const t=document.querySelectorAll('.opt-card').length,s=document.querySelectorAll('.opt-card.selected').length;document.getElementById('masterCount').textContent=s+' of '+t+' selected';const mc=document.getElementById('masterChk');mc.className='master-chk'+(s===t?' on':'');mc.textContent=s===t?'✓':(s>0?'–':'');}
+document.getElementById('masterRow').addEventListener('click',()=>{const s=document.querySelectorAll('.opt-card.selected').length,t=document.querySelectorAll('.opt-card').length;document.querySelectorAll('.opt-card').forEach(c=>setCard(c,s<t));updateCount();});
+document.querySelectorAll('.sel-grp').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();const g=btn.dataset.group,cards=document.querySelectorAll(`.opt-card[data-group="${g}"]`);const all=[...cards].every(c=>c.classList.contains('selected'));cards.forEach(c=>setCard(c,!all));btn.textContent=all?'Select all':'Deselect all';updateCount();}));
+document.querySelectorAll('.opt-card').forEach(c=>c.addEventListener('click',()=>{setCard(c,!c.classList.contains('selected'));updateCount();}));
+updateCount();
+
+document.getElementById('genBtn').addEventListener('click',()=>{
+  const s=document.getElementById('screenName').value.trim()||'HomeView';
+  const sm=[...document.querySelectorAll('#smGrid .sm-btn.active')].map(x=>x.dataset.sm)[0]||'GetX';
+  const keys=[...document.querySelectorAll('.opt-card.selected')].map(c=>c.dataset.key);
+  const ctrl=s.replace('View','Controller');
+  const smNote=sm==='Keep existing'?'Do NOT change the state management layer.':
+    `Migrate to **${sm}** LAST. Create equivalent state class. Wire same logic. Update view. Remove old controller. Do NOT touch other screens.`;
+  const safeNote=safeMode?`🛡️ SAFE MODE ENFORCED:\n- List every file before touching anything\n- Verify navigation, callbacks, routes intact after each change\n- No public class/method/route renames\n- Flag breaking risks + provide safe alternative\n- Confirm flutter analyze passes after each phase`:
+    `Safe mode OFF — apply directly.`;
+  const phases={
+    const:`\n### Const widget pass\nAdd const to every qualifying widget in ${s}.dart and all its sub-widgets. Start from deepest leaves. Run dart fix --apply.`,
+    async_sdk:`\n### Async SDK init\nIn ${ctrl}.dart onInit(), classify calls as [BLOCKING] or [BACKGROUND]. Wrap [BACKGROUND] in Future.microtask. Move >50ms tasks to compute().`,
+    lazy_routes:`\n### Lazy routes\nReplace all Get.put() in bindings with Get.lazyPut(()=>Controller(), fenix:true). Verify ${s} initial route still loads.`,
+    maindart:`\n### main.dart first frame\nDefer non-critical SDKs with addPostFrameCallback. Wrap parallel inits in Future.wait. Comment each: // [CRITICAL] or // [DEFERRED].`,
+    split:`\n### Widget splitting\nExtract every _build method >30 lines in ${s}.dart into widgets/<name>.dart StatelessWidget. Pass data as constructor params. Pixel-identical output required.`,
+    repaint:`\n### RepaintBoundary\nWrap every Shimmer, flutter_animate widget, and ConfettiWidget in ${s} with RepaintBoundary. Place as close to animated content as possible.`,
+    listview:`\n### ListView.builder\nReplace Column(children: list.map(...).toList()) with ListView.builder(shrinkWrap:true, physics:NeverScrollableScrollPhysics()). Preserve all item widgets.`,
+    cache_img:`\n### CachedNetworkImage\nReplace every Image.network() in ${s} files with CachedNetworkImage(). Preserve fit, width, height, errorWidget. Set memCacheWidth/memCacheHeight.`,
+    opacity:`\n### Eliminate Opacity\nReplace Opacity() with color.withOpacity() or FadeTransition. Keep Opacity only where no alternative applies.`,
+    clip:`\n### Reduce ClipRRect\nMove borderRadius into BoxDecoration for Container/DecoratedBox children. Keep ClipRRect only as last resort.`,
+    mediaquery:`\n### Cache MediaQuery\nIn every build() using MediaQuery.of(context) >1 time, extract: final mq = MediaQuery.of(context);`,
+    keys:`\n### Widget keys\nAdd key: ValueKey(item.id) to each list item. Use stable ID; index only as fallback with comment.`,
+    svg:`\n### SVG icons\nConvert PNG UI icons in AppImages to SVG in assets/icons/. Add flutter_svg. Replace Image.asset with SvgPicture.asset. Delete PNGs after verification.`,
+    asset_compress:`\n### Asset compression\nCompress PNG >50KB with pngquant (≤80%). Remove assets in pubspec never referenced in code. Remove unused font weights.`,
+    proguard:`\n### R8/ProGuard\nSet minifyEnabled true, shrinkResources true in build.gradle release block. Add keep rules for reflection-accessed classes.`,
+    unused_pkg:`\n### Remove unused packages\nCross-reference pubspec.yaml deps against actual imports. Remove unused. Run flutter pub get.`,
+    compute:`\n### compute() offloading\nMove JSON parsing >100 items, encryption, image processing to compute(topLevelFn, input).`,
+    dispose:`\n### Dispose audit\nVerify every AnimationController, TextEditingController, ScrollController, StreamSubscription, Timer has dispose()/cancel() in onClose().`,
+    debounce:`\n### Debounce inputs\n350ms debounce on all onChanged callbacks triggering API calls. Throttle scroll listeners to once per 100ms. Dispose timer in onClose().`,
+    release_logs:`\n### Strip debug logs\nWrap all print()/debugPrint()/log() in if(kDebugMode){} or replace with AppLogger no-op class.`,
+  };
+  const phaseTxt=keys.map(k=>phases[k]||'').filter(Boolean).join('\n');
+  const prompt=`# ⚡ Flutter Optimizer — Screen Performance Prompt\n# Tool: bhargavparmar.github.io/flutter-optimizer\n# Screen: ${s} | State: ${sm} | Optimisations: ${keys.length}\n# ────────────────────────────────────────────────\n\n## Role\nSenior Flutter performance engineer. Optimise the target screen — faster, smoother, smaller — without breaking existing functionality.\n\n## Target: \`${s}\`\nAuto-discover: \`${s}.dart\`, \`${ctrl}.dart\`, binding class, widgets/ sub-folder, pubspec.yaml, AppImages constants.\nList ALL discovered files before making any change.\n\n## ${safeNote}\n\n---\n## Phases\n${phaseTxt}\n\n---\n## ${smNote}\n\n---\n## Deliverables\n1. Files changed table (File | Change | Reason)\n2. Before/after snippet per phase (max 20 lines each)\n3. Confirm: "flutter build apk --release: zero new errors"\n4. Impact estimate: FPS, memory, APK size`;
+  document.getElementById('outArea').textContent=prompt;
+  document.getElementById('outWrap').style.display='block';
+  document.getElementById('outStats').textContent=keys.length+' optimisations · ~'+prompt.split(/\s+/).length+' words';
+  document.getElementById('outWrap').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(document.getElementById('outArea').textContent).then(()=>{document.getElementById('copyBtn').textContent='✅ Copied!';setTimeout(()=>document.getElementById('copyBtn').textContent='Copy prompt to clipboard',2000);});
+});
+</script>
+</body>
+</html>
