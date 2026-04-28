@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bhargav Parmar — Mobile App Developer & Tech Lead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080C12;
+  --bg2:#0D1220;
+  --bg3:#111827;
+  --card:#131C2E;
+  --border:#1E2D47;
+  --accent:#3B82F6;
+  --accent2:#F59E0B;
+  --accent3:#10B981;
+  --text:#F0F4FF;
+  --text2:#8DA3C4;
+  --text3:#4D6280;
+  --font-display:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:0}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(59,130,246,.1)}
+.nav-logo{font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-0.5px;color:var(--text)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#fff;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 5% 80px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%;max-width:1200px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:100px;padding:5px 14px 5px 5px;font-size:12px;font-weight:500;color:var(--accent);margin-bottom:20px;letter-spacing:.5px}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1.hero-name{font-family:var(--font-display);font-size:clamp(44px,5.5vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:8px}
+h1.hero-name .first{color:var(--text)}
+h1.hero-name .last{-webkit-text-stroke:1.5px var(--accent);color:transparent}
+.hero-title{font-family:var(--font-display);font-size:clamp(16px,2vw,22px);font-weight:600;color:var(--accent2);margin-bottom:20px;letter-spacing:-.3px}
+.hero-desc{font-size:16px;color:var(--text2);line-height:1.75;margin-bottom:36px;max-width:480px}
+.hero-stats{display:flex;gap:36px;margin-bottom:40px}
+.stat-num{font-family:var(--font-display);font-size:32px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:.5px;text-transform:uppercase}
+.hero-btns{display:flex;gap:12px}
+.btn-primary{background:var(--accent);color:#fff;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(59,130,246,.35)}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text2);padding:13px 28px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--text)}
+
+/* HERO VISUAL */
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-phone{width:240px;background:var(--card);border-radius:36px;border:1.5px solid var(--border);padding:24px 20px;position:relative;z-index:2;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.phone-notch{width:80px;height:6px;background:var(--bg3);border-radius:3px;margin:0 auto 20px}
+.phone-app-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.phone-app{height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;animation:float 3s ease-in-out infinite}
+.phone-app:nth-child(2){animation-delay:.4s}.phone-app:nth-child(3){animation-delay:.8s}
+.phone-app:nth-child(4){animation-delay:.2s}.phone-app:nth-child(5){animation-delay:.6s}.phone-app:nth-child(6){animation-delay:1s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.pa-blue{background:rgba(59,130,246,.15);color:var(--accent)}
+.pa-amber{background:rgba(245,158,11,.15);color:var(--accent2)}
+.pa-green{background:rgba(16,185,129,.15);color:var(--accent3)}
+.pa-purple{background:rgba(139,92,246,.15);color:#8B5CF6}
+.pa-rose{background:rgba(244,63,94,.15);color:#F43F5E}
+.pa-cyan{background:rgba(6,182,212,.15);color:#06B6D4}
+.phone-stat{background:var(--bg3);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:11px}
+.phone-stat-l{color:var(--text2)}.phone-stat-num{font-weight:700;color:var(--accent3);font-family:var(--font-display)}
+.orbit{position:absolute;border-radius:50%;border:1px dashed rgba(59,130,246,.15);animation:spin 20s linear infinite}
+.orbit1{width:340px;height:340px}.orbit2{width:460px;height:460px;animation-duration:30s;animation-direction:reverse}
+.orbit-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--accent);top:-4px;left:50%;transform:translateX(-50%);box-shadow:0 0 12px var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── BG GLOWS ── */
+.glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.glow-blue{width:500px;height:500px;background:rgba(59,130,246,.08);top:-100px;right:-100px}
+.glow-amber{width:300px;height:300px;background:rgba(245,158,11,.05);bottom:100px;left:0}
+
+/* ── SECTION BASE ── */
+section{padding:100px 5%;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.sec-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px}
+h2.sec-title{font-family:var(--font-display);font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px}
+.sec-desc{font-size:16px;color:var(--text2);max-width:560px;line-height:1.75}
+.sec-divider{width:100%;height:1px;background:var(--border);margin:0 5%}
+
+/* ── SKILLS ── */
+.skills-wrap{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s,transform .2s}
+.skill-card:hover{border-color:rgba(59,130,246,.4);transform:translateY(-4px)}
+.skill-icon{font-size:28px;margin-bottom:14px}
+.skill-name{font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:8px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.stag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);color:var(--text2)}
+
+/* ── FEATURED TOOL ── */
+.tool-section{padding:100px 5%}
+.tool-inner{max-width:1200px;margin:0 auto}
+.tool-card{background:linear-gradient(135deg,#0B1930 0%,#0D2040 50%,#0A1525 100%);border:1px solid rgba(59,130,246,.25);border-radius:24px;padding:56px;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.tool-card::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 60%);pointer-events:none}
+.tool-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:100px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--accent2);margin-bottom:20px;letter-spacing:.5px}
+.tool-title{font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px;line-height:1.1}
+.tool-title span{color:var(--accent)}
+.tool-desc{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:28px}
+.tool-features{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.tf{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2)}
+.tf-dot{width:6px;height:6px;border-radius:50%;background:var(--accent3);flex-shrink:0}
+.tool-link{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s}
+.tool-link:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(59,130,246,.35)}
+.tool-visual{background:var(--bg3);border-radius:16px;border:1px solid var(--border);padding:24px;position:relative}
+.tv-header{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.tv-dot{width:10px;height:10px;border-radius:50%}
+.tv-opt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.tv-opt{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--accent3);display:flex;align-items:center;gap:6px}
+.tv-opt-check{width:12px;height:12px;border-radius:3px;background:var(--accent3);display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;flex-shrink:0}
+.tv-btn{margin-top:14px;background:linear-gradient(90deg,#0B2250,#185FA5);color:#fff;border:none;border-radius:8px;padding:10px;width:100%;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.3px}
+
+/* ── PROJECTS ── */
+.projects-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .25s;cursor:default}
+.proj-card:hover{border-color:rgba(59,130,246,.35);transform:translateY(-6px);box-shadow:0 24px 48px rgba(0,0,0,.4)}
+.proj-top{height:120px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden}
+.proj-body{padding:20px 22px 22px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.ptag{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.15);color:var(--text2);font-weight:500}
+.ptag.android{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:var(--accent3)}
+.ptag.ios{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:var(--accent2)}
+.ptag.flutter{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);color:var(--accent)}
+.ptag.kotlin{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.2);color:#8B5CF6}
+.proj-name{font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:8px}
+.proj-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.proj-meta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.proj-country{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.proj-live{font-size:10px;padding:2px 8px;border-radius:20px}
+.live{background:rgba(16,185,129,.1);color:var(--accent3);border:1px solid rgba(16,185,129,.2)}
+.private{background:rgba(77,98,128,.1);color:var(--text3);border:1px solid rgba(77,98,128,.2)}
+
+/* ── EXPERIENCE ── */
+.exp-timeline{margin-top:56px;display:flex;flex-direction:column;gap:0}
+.exp-item{display:grid;grid-template-columns:140px 1fr;gap:32px;position:relative;padding-bottom:40px}
+.exp-item:last-child{padding-bottom:0}
+.exp-item::before{content:'';position:absolute;left:139px;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),transparent);opacity:.3}
+.exp-item:last-child::before{display:none}
+.exp-date{text-align:right;padding-top:2px}
+.exp-date-text{font-size:12px;color:var(--text3);font-weight:500;line-height:1.5}
+.exp-dot{position:absolute;left:134px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent);border:2px solid var(--bg)}
+.exp-current .exp-dot{background:var(--accent3);box-shadow:0 0 16px var(--accent3);animation:pulse 2s infinite}
+.exp-content{padding-left:28px}
+.exp-company{font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.exp-role{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:12px}
+.exp-bullets{display:flex;flex-direction:column;gap:8px}
+.exp-bullet{font-size:14px;color:var(--text2);display:flex;gap:10px}
+.exp-bullet::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px}
+
+/* ── CERTIFICATIONS ── */
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:48px}
+.cert-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+.cert-card:hover{border-color:rgba(245,158,11,.3)}
+.cert-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.cert-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.cert-source{font-size:12px;color:var(--text3)}
+
+/* ── FOOTER ── */
+footer{padding:40px 5%;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:1400px;margin:0 auto}
+.footer-left{font-family:var(--font-display);font-weight:700;font-size:18px;color:var(--text)}
+.footer-left span{color:var(--accent)}
+.footer-right{font-size:13px;color:var(--text3)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:13px;color:var(--text3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
+.fade-up.visible{opacity:1;transform:none}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .tool-card{grid-template-columns:1fr;padding:32px 24px}
+  .projects-header{flex-direction:column;align-items:flex-start;gap:16px}
+  .exp-item{grid-template-columns:1fr}
+  .exp-item::before{display:none}
+  .exp-dot{display:none}
+  .exp-date{text-align:left}
+  footer{flex-direction:column;gap:16px;text-align:center}
+  .footer-links{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BP<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+  </ul>
+  <a href="https://www.linkedin.com/in/bhargav-parmar-6a6b476" target="_blank" class="nav-cta">Let's Connect</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="glow glow-blue"></div>
+  <div class="glow glow-amber"></div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow fade-up">
+        <span style="background:#10B981;width:6px;height:6px;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>
+        Available for opportunities
+      </div>
+      <h1 class="hero-name fade-up">
+        <span class="first">Bhargav</span><br/>
+        <span class="last">Parmar</span>
+      </h1>
+      <div class="hero-title fade-up">Technical Lead · Mobile Application Developer</div>
+      <p class="hero-desc fade-up">9+ years of crafting high-performance mobile experiences for Android and iOS — from IoT dispensers in China to ed-tech platforms used on 10,000+ government school tablets in India.</p>
+      <div class="hero-stats fade-up">
+        <div>
+          <div class="stat-num">9+</div>
+          <div class="stat-label">Years</div>
+        </div>
+        <div>
+          <div class="stat-num">30+</div>
+          <div class="stat-label">Apps shipped</div>
+        </div>
+        <div>
+          <div class="stat-num">100K+</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+      </div>
+      <div class="hero-btns fade-up">
+        <a href="#projects" class="btn-primary">View Projects →</a>
+        <a href="#tools" class="btn-secondary">My Dev Tools</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="orbit orbit1"><div class="orbit-dot"></div></div>
+      <div class="orbit orbit2"><div class="orbit-dot" style="background:var(--accent2);box-shadow:0 0 12px var(--accent2)"></div></div>
+      <div class="hero-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-app-row">
+          <div class="phone-app pa-blue">📱</div>
+          <div class="phone-app pa-amber">🚀</div>
+          <div class="phone-app pa-green">🎓</div>
+          <div class="phone-app pa-purple">💬</div>
+          <div class="phone-app pa-rose">📦</div>
+          <div class="phone-app pa-cyan">🏥</div>
+        </div>
+        <div class="phone-stat">
+          <span class="phone-stat-l">Apps shipped</span>
+          <span class="phone-stat-num">30+</span>
+        </div>
+        <div class="phone-stat" style="margin-top:6px">
+          <span class="phone-stat-l">Flutter & Native</span>
+          <span class="phone-stat-num">Android · iOS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- SKILLS -->
+<section id="about">
+  <div class="sec-eyebrow fade-up">Technical Arsenal</div>
+  <h2 class="sec-title fade-up">Built to ship.<br/>Across every platform.</h2>
+  <p class="sec-desc fade-up">Full-stack mobile developer with deep expertise in both native and cross-platform development — plus the leadership to take teams and products end-to-end.</p>
+  <div class="skills-wrap">
+    <div class="skill-card fade-up">
+      <div class="skill-icon">📱</div>
+      <div class="skill-name">Mobile Development</div>
+      <div style="font-size:13px;color:var(--text2)">Native Android, Flutter cross-platform, and Unreal Engine deployment for Android/iOS.</div>
+      <div class="skill-tags">
+        <span class="stag">Flutter · Dart</span>
+        <span class="stag">Kotlin</span>
+        <span class="stag">Java</span>
+        <span class="stag">Unreal Engine</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">Backend & Databases</div>
+      <div style="font-size:13px;color:var(--text2)">Integrating REST APIs, managing local-first offline data and cloud sync at scale.</div>
+      <div class="skill-tags">
+        <span class="stag">REST APIs</span>
+        <span class="stag">Firebase</span>
+        <span class="stag">SQLite · Hive</span>
+        <span class="stag">Supabase</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-name">Integrations</div>
+      <div style="font-size:13px;color:var(--text2)">8+ payment gateways, maps (Google, Baidu, Tencent), FCM, JPush, social media APIs.</div>
+      <div class="skill-tags">
+        <span class="stag">Stripe · Razorpay</span>
+        <span class="stag">WeChat Pay</span>
+        <span class="stag">Google Maps</span>
+        <span class="stag">FCM · JPush</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-name">AI & Automation</div>
+      <div style="font-size:13px;color:var(--text2)">Building AI-powered dev tools, automating workflows with n8n, and leveraging LLMs in the development process.</div>
+      <div class="skill-tags">
+        <span class="stag">n8n workflows</span>
+        <span class="stag">Generative AI</span>
+        <span class="stag">OpenAI API</span>
+        <span class="stag">DALL-E</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-icon">👨‍💼</div>
+      <div class="skill-name">Team Leadership</div>
+      <div style="font-size:13px;color:var(--text2)">Mentoring developers, reviewing code, managing sprints, and delivering demos to clients across India, China, and the USA.</div>
+      <div class="skill-tags">
+        <span class="stag">Code Reviews</span>
+        <span class="stag">Task Delegation</span>
+        <span class="stag">Project Docs</span>
+        <span class="stag">QA Collaboration</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">Performance & DevOps</div>
+      <div style="font-size:13px;color:var(--text2)">App optimization, Play Store / App Store releases, version control, CI/CD, and domain management.</div>
+      <div class="skill-tags">
+        <span class="stag">GitHub · GitLab</span>
+        <span class="stag">Bitbucket</span>
+        <span class="stag">Web Hosting</span>
+        <span class="stag">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- FEATURED TOOL -->
+<div class="tool-section" id="tools">
+  <div class="tool-inner">
+    <div class="sec-eyebrow fade-up" style="margin-bottom:12px">Open Dev Tool</div>
+    <h2 class="sec-title fade-up" style="margin-bottom:48px">Built for Flutter developers,<br/>by a Flutter developer.</h2>
+    <div class="tool-card fade-up">
+      <div>
+        <div class="tool-badge">🚀 Featured Tool</div>
+        <div class="tool-title">Flutter<span>Rocket</span><br/>Prompt Generator</div>
+        <p class="tool-desc">An AI-powered developer tool that generates battle-tested, screen-specific optimisation prompts for Flutter apps. Pick your screen, choose techniques, hit launch — hand your AI coding agent a precise, safe instruction set.</p>
+        <div class="tool-features">
+          <div class="tf"><div class="tf-dot"></div>28+ optimisation techniques across 7 categories</div>
+          <div class="tf"><div class="tf-dot"></div>State management migration (GetX, Bloc, Riverpod, Provider)</div>
+          <div class="tf"><div class="tf-dot"></div>main.dart cold-start & launch time optimisation</div>
+          <div class="tf"><div class="tf-dot"></div>Safe mode — zero breaking changes enforced</div>
+          <div class="tf"><div class="tf-dot"></div>Works with Cursor, Windsurf, GitHub Copilot & more</div>
+        </div>
+        <a href="https://bhargavparmar.github.io/flutter-rocket" target="_blank" class="tool-link">Try FlutterRocket →</a>
+      </div>
+      <div class="tool-visual">
+        <div class="tv-header">
+          <div class="tv-dot" style="background:#F43F5E"></div>
+          <div class="tv-dot" style="background:#F59E0B;margin-left:4px"></div>
+          <div class="tv-dot" style="background:#10B981;margin-left:4px"></div>
+          <span style="font-size:12px;color:var(--text3);margin-left:10px">FlutterRocket</span>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Optimisations selected</div>
+        <div class="tv-opt-row">
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>Const widgets</div>
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>ListView.builder</div>
+        </div>
+        <div class="tv-opt-row">
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>Cached images</div>
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>Widget splitting</div>
+        </div>
+        <div class="tv-opt-row">
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>SVG icons</div>
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>RepaintBoundary</div>
+        </div>
+        <div class="tv-opt-row">
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>main.dart init</div>
+          <div class="tv-opt"><div class="tv-opt-check">✓</div>Async SDK init</div>
+        </div>
+        <div class="tv-btn">🚀 Launch — Generate My Rocket Prompt</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header">
+    <div>
+      <div class="sec-eyebrow fade-up">Selected Work</div>
+      <h2 class="sec-title fade-up" style="margin-bottom:0">Apps that ship,<br/>and apps that scale.</h2>
+    </div>
+    <div class="fade-up" style="font-size:14px;color:var(--text2);max-width:280px;text-align:right">Deployed across India, China, USA & Saudi Arabia. 100K+ total downloads.</div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#0B2040,#1A3A6E)">🎓</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag flutter">Flutter</span><span class="ptag android">Android</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">Future Education.ai</div>
+        <div class="proj-desc">Student-teacher ed-tech platform with interactive games, AI chatbot, assignments, tests, and offline support. Deployed on 10,000+ government school tablets.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇮🇳 India</span>
+          <span class="proj-live live">Live on stores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#1A1030,#2D1B6E)">🤝</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag flutter">Flutter</span><span class="ptag android">Android</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">Agreemo</div>
+        <div class="proj-desc">People-focused agreement app to create, manage and track agreements with friends via media-rich, chat-style functionality. Built for the US market.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇺🇸 USA</span>
+          <span class="proj-live live">Live on stores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#0D2A1A,#1A4A2A)">📚</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag android">Android</span><span class="ptag flutter">Flutter</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">Shopizen</div>
+        <div class="proj-desc">Multi-lingual digital self-publishing platform connecting writers & readers. Features eBooks, POD, poems, stories, and community. 100K+ downloads.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇮🇳 India</span>
+          <span class="proj-live live">Live on stores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#1A0A10,#3A1020)">🎬</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag android">Android</span><span class="ptag flutter">Flutter</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">Revionz</div>
+        <div class="proj-desc">Entertainment review platform for books, movies, and web series. Users rate, review, and discover favourites across categories in English and regional languages.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇮🇳 India</span>
+          <span class="proj-live live">Live on stores</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#0A1A2E,#0D3050)">💬</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag flutter">Flutter</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">CCMM</div>
+        <div class="proj-desc">Cross-language real-time messaging app. Translates messages in your native language so users across China and the US can communicate seamlessly.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇺🇸🇨🇳 US / China</span>
+          <span class="proj-live live">Live on App Store</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#1A1000,#3A2500)">🧊</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag kotlin">Kotlin</span><span class="ptag android">Android</span></div>
+        <div class="proj-name">智能小熊 (Bingxi)</div>
+        <div class="proj-desc">IoT dispenser management for ICEE machines. Real-time Modbus RTU RS485 hardware comms, WeChat Pay & Alipay QR payments, admin dashboard with sync.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇨🇳 China</span>
+          <span class="proj-live private">On-device install</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#0A2010,#0D3A20)">🏥</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag flutter">Flutter</span><span class="ptag android">Android</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">Smartlink (Smatklinik)</div>
+        <div class="proj-desc">Smart hospital management system for paperless patient tracking, ICU monitoring, OPD, lab charges, live chat, and finance — used in multi-speciality hospitals.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇮🇳 India</span>
+          <span class="proj-live private">Enterprise deploy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card fade-up">
+      <div class="proj-top" style="background:linear-gradient(135deg,#0A1830,#0D2E5A)">📦</div>
+      <div class="proj-body">
+        <div class="proj-tags"><span class="ptag kotlin">Kotlin</span><span class="ptag android">Android</span><span class="ptag ios">iOS</span></div>
+        <div class="proj-name">HyperStock for Linnworks</div>
+        <div class="proj-desc">Warehouse stock management mobile app for Linnworks. Real-time inventory tracking, SKU editing, barcode scanning, and stock audit — all on the warehouse floor.</div>
+        <div class="proj-meta">
+          <span class="proj-country">🇺🇸 USA</span>
+          <span class="proj-live live">Live on stores</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-eyebrow fade-up">Career</div>
+  <h2 class="sec-title fade-up">9 years of shipping<br/>real-world products.</h2>
+  <div class="exp-timeline">
+
+    <div class="exp-item exp-current fade-up">
+      <div class="exp-date">
+        <div class="exp-date-text">Feb 2024<br/>— Present</div>
+      </div>
+      <div class="exp-dot"></div>
+      <div class="exp-content">
+        <div class="exp-company">Prashastha Future Education Pvt. Ltd. · Bangalore (Remote)</div>
+        <div class="exp-role">Technical Lead · Mobile App Developer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Leading and mentoring a cross-functional mobile dev team, assigning tasks and guiding daily progress.</div>
+          <div class="exp-bullet">Deployed offline learning app to 10,000+ government school tablets across India.</div>
+          <div class="exp-bullet">Delivered product demos to clients; built Flutter apps for Android, iOS, and web simultaneously.</div>
+          <div class="exp-bullet">Leveraged AI tools to accelerate development and solve complex integration challenges.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item fade-up">
+      <div class="exp-date">
+        <div class="exp-date-text">Oct 2019<br/>— Jan 2024</div>
+      </div>
+      <div class="exp-dot"></div>
+      <div class="exp-content">
+        <div class="exp-company">Safari Infosoft · Ahmedabad</div>
+        <div class="exp-role">Mobile App Developer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Published 20+ apps to Play Store & App Store — reaching 100K+ downloads total.</div>
+          <div class="exp-bullet">Developed cross-platform Flutter apps and contributed across all project phases.</div>
+          <div class="exp-bullet">Identified and resolved performance bottlenecks; optimised UX for diverse user bases.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item fade-up">
+      <div class="exp-date">
+        <div class="exp-date-text">Oct 2016<br/>— Jan 2019</div>
+      </div>
+      <div class="exp-dot"></div>
+      <div class="exp-content">
+        <div class="exp-company">Safari Infosoft · Ahmedabad</div>
+        <div class="exp-role">Senior Android Developer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Integrated 6+ payment gateways: Stripe, AliPay, WeChatPay, Paytm, NearPay, RazorPay.</div>
+          <div class="exp-bullet">Implemented Google, Tencent & Baidu Maps, Firebase, and push notifications at scale.</div>
+          <div class="exp-bullet">Managed marketing via Google AdSense, Facebook Business Suite, and Instagram Ads.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item fade-up">
+      <div class="exp-date">
+        <div class="exp-date-text">May 2016<br/>— Aug 2016</div>
+      </div>
+      <div class="exp-dot"></div>
+      <div class="exp-content">
+        <div class="exp-company">Widetech Pvt. Ltd. · Ahmedabad</div>
+        <div class="exp-role">Android Developer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Developed 7+ Android apps including OLA/UBER-style ride-hailing and Maps-based apps.</div>
+          <div class="exp-bullet">Contributed to complete app lifecycle — design, build, test, and deploy.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- CERTIFICATIONS -->
+<section>
+  <div class="sec-eyebrow fade-up">Learning & Growth</div>
+  <h2 class="sec-title fade-up">Always upskilling.<br/>Especially in AI.</h2>
+  <div class="certs-grid">
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🤖</div>
+      <div><div class="cert-title">Build AI Agents & Automate Workflows with n8n</div><div class="cert-source">LinkedIn Learning · Sep 2025</div></div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🎨</div>
+      <div><div class="cert-title">Design to Code: Using AI to Build Faster</div><div class="cert-source">LinkedIn Learning · Aug 2025</div></div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🧠</div>
+      <div><div class="cert-title">Generative AI Foundations Certificate Program</div><div class="cert-source">upGrad KnowledgeHut · Jun 2025</div></div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">⏱️</div>
+      <div><div class="cert-title">Boosting Your Time Management with AI Tools</div><div class="cert-source">LinkedIn Learning · Jun 2025</div></div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🖼️</div>
+      <div><div class="cert-title">OpenAI API: Image Generation with DALL-E</div><div class="cert-source">LinkedIn Learning · May 2025</div></div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🎓</div>
+      <div><div class="cert-title">MCA — Gujarat Technical University</div><div class="cert-source">LJ Institute of Computer Application · 2017</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">Bhargav<span>.</span></div>
+  <div class="footer-right">© 2025 Bhargav Parmar · Built with ❤️ and Flutter</div>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/bhargav-parmar-6a6b476" target="_blank">LinkedIn</a>
+    <a href="#projects">Projects</a>
+    <a href="#tools">Tools</a>
+  </div>
+</footer>
+
+<script>
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
