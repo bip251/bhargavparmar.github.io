@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flutter UI Refactor — Prompt Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C12;--bg2:#0D1220;--card:#111827;--border:#1E2D47;
+  --accent:#F43F5E;--accent2:#10B981;--accent3:#3B82F6;
+  --text:#F0F4FF;--text2:#8DA3C4;--text3:#4D6280;
+  --font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,18,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(244,63,94,.1);padding:14px 5%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--text);text-decoration:none}.nav-logo span{color:var(--accent)}
+.nav-back{font-size:13px;color:var(--text2);text-decoration:none;transition:color .2s}.nav-back:hover{color:var(--text)}
+.nav-tools{font-size:13px;color:var(--text2);text-decoration:none;padding:6px 14px;border:1px solid var(--border);border-radius:8px;transition:all .2s}.nav-tools:hover{border-color:var(--accent);color:var(--text)}
+
+.hero{text-align:center;padding:56px 5% 44px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;width:600px;height:300px;background:radial-gradient(ellipse,rgba(244,63,94,.09),transparent 70%);top:0;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero-icon{font-size:48px;margin-bottom:14px;display:inline-block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.25);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:600;color:var(--accent);margin-bottom:14px;letter-spacing:.8px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-size:clamp(28px,4.5vw,50px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px}
+h1 span{color:var(--accent)}
+.hero-sub{font-size:15px;color:var(--text2);max-width:580px;margin:0 auto 28px;line-height:1.7}
+.hero-badges{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.hbadge{font-size:11px;padding:3px 12px;border-radius:20px;background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.15);color:var(--text2)}
+
+.tool-wrap{max-width:860px;margin:0 auto;padding:36px 5% 80px}
+
+/* STEP HEADER */
+.sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sec-num{width:20px;height:20px;border-radius:50%;background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.3);color:var(--accent);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.section{margin-bottom:22px}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 13px;font-size:12.5px;border-radius:100px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--font-body);white-space:nowrap}
+.chip:hover{border-color:rgba(244,63,94,.4);color:var(--text)}
+.chip.on{background:rgba(244,63,94,.12);border:1.5px solid var(--accent);color:var(--accent);font-weight:600}
+
+/* SUB PANEL */
+.sub{margin-top:12px;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;display:none;flex-direction:column;gap:14px}
+.sub.show{display:flex}
+.sub-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
+
+/* INPUT */
+input.field{width:100%;font-size:13.5px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:var(--font-body);transition:border-color .15s;outline:none}
+input.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+input.field::placeholder{color:var(--text3)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+/* SCREEN + GENERATE ROW */
+.gen-row{display:flex;gap:10px}
+.gen-row input{flex:1;font-size:14px;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:var(--font-body);outline:none;transition:border-color .15s}
+.gen-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(244,63,94,.1)}
+.gen-row input::placeholder{color:var(--text3)}
+.btn-gen{padding:11px 24px;font-size:13.5px;font-weight:700;border-radius:10px;border:none;background:linear-gradient(90deg,#7F1D1D,#BE123C,#F43F5E);color:#fff;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:var(--font-display)}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(244,63,94,.4)}
+
+/* OUTPUT */
+.out-wrap{display:none;margin-top:22px}
+.out-box{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.out-head{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.out-head-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3)}
+.btn-copy{padding:5px 14px;font-size:12px;font-weight:500;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--font-body)}
+.btn-copy:hover{background:var(--border);color:var(--text)}
+.btn-copy.done{border-color:rgba(16,185,129,.4);color:var(--accent2);background:rgba(16,185,129,.08)}
+.out-body{padding:16px 18px;background:var(--card);font-size:11.5px;line-height:1.8;color:var(--text2);white-space:pre-wrap;font-family:'Courier New',monospace;max-height:520px;overflow-y:auto}
+
+footer{border-top:1px solid var(--border);padding:24px 5%;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text3)}
+footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text)}
+@media(max-width:600px){.gen-row{flex-direction:column}.btn-gen{width:100%}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../" class="nav-logo">BP<span>.</span></a>
+  <a href="../" class="nav-back">← Portfolio</a>
+  <a href="../tools/" class="nav-tools">All Tools</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-icon">🎨</div>
+  <div><div class="hero-eyebrow">Premium UI Refactoring</div></div>
+  <h1>Flutter <span>UI Refactor</span></h1>
+  <p class="hero-sub">Choose your app type, platform, and UI style — enter a screen name — get a complete, paste-ready AI prompt for premium UI refactoring with animations, zero logic changes.</p>
+  <div class="hero-badges">
+    <span class="hbadge">🏗️ 16 app types</span>
+    <span class="hbadge">📱 Mobile + Web</span>
+    <span class="hbadge">🎨 12 UI styles</span>
+    <span class="hbadge">✨ Animation system</span>
+    <span class="hbadge">🛡️ Logic untouched</span>
+  </div>
+</div>
+
+<div class="tool-wrap">
+
+  <!-- STEP 1: APP TYPE -->
+  <div class="section">
+    <div class="sec-title"><span class="sec-num">1</span>App Type</div>
+    <div class="chips" id="grp-app">
+      <button class="chip on" data-v="logistic">🚚 Logistics</button>
+      <button class="chip" data-v="ecommerce">🛍 E-Commerce</button>
+      <button class="chip" data-v="fintech">💳 Fintech / Banking</button>
+      <button class="chip" data-v="healthcare">🏥 Healthcare</button>
+      <button class="chip" data-v="edtech">🎓 EdTech</button>
+      <button class="chip" data-v="food">🍔 Food & Delivery</button>
+      <button class="chip" data-v="travel">✈️ Travel & Booking</button>
+      <button class="chip" data-v="realestate">🏠 Real Estate</button>
+      <button class="chip" data-v="social">💬 Social / Community</button>
+      <button class="chip" data-v="crm">📊 CRM / Sales</button>
+      <button class="chip" data-v="hr">👥 HR / HRMS</button>
+      <button class="chip" data-v="erp">🏭 ERP / Manufacturing</button>
+      <button class="chip" data-v="fitness">💪 Fitness / Wellness</button>
+      <button class="chip" data-v="media">🎬 Media / Streaming</button>
+      <button class="chip" data-v="saas">☁️ SaaS / Dashboard</button>
+      <button class="chip" data-v="custom">⚙️ Custom App</button>
+    </div>
+    <div class="sub" id="sub-custom">
+      <div>
+        <div class="sub-label">Describe your custom app</div>
+        <input class="field" id="customDesc" type="text" placeholder="e.g. Fleet management SaaS, B2B procurement portal, Field service inspection app..."/>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: PLATFORM -->
+  <div class="section">
+    <div class="sec-title"><span class="sec-num">2</span>Platform</div>
+    <div class="chips" id="grp-platform">
+      <button class="chip on" data-v="mobile">📱 Mobile App</button>
+      <button class="chip" data-v="web">🌐 Web App</button>
+    </div>
+    <!-- Mobile panel -->
+    <div class="sub show" id="sub-mobile">
+      <div>
+        <div class="sub-label">Mobile type</div>
+        <div class="chips" id="grp-mtype">
+          <button class="chip on" data-v="cross">Cross-Platform</button>
+          <button class="chip" data-v="native">Native</button>
+        </div>
+      </div>
+      <div id="sub-cross">
+        <div class="sub-label">Framework</div>
+        <div class="chips" id="grp-cross">
+          <button class="chip" data-v="reactnative">React Native</button>
+          <button class="chip" data-v="expo">Expo</button>
+          <button class="chip on" data-v="flutter">Flutter</button>
+          <button class="chip" data-v="ionic">Ionic</button>
+          <button class="chip" data-v="capacitor">Capacitor</button>
+          <button class="chip" data-v="xamarin">Xamarin / MAUI</button>
+          <button class="chip" data-v="nativescript">NativeScript</button>
+          <button class="chip" data-v="kotlinmulti">Kotlin Multiplatform</button>
+        </div>
+      </div>
+      <div id="sub-native" style="display:none">
+        <div class="sub-label">Native platform</div>
+        <div class="chips" id="grp-native">
+          <button class="chip on" data-v="android">Android (Kotlin / Java)</button>
+          <button class="chip" data-v="ios">iOS (Swift / UIKit)</button>
+          <button class="chip" data-v="compose">Jetpack Compose</button>
+          <button class="chip" data-v="swiftui">SwiftUI</button>
+        </div>
+      </div>
+    </div>
+    <!-- Web panel -->
+    <div class="sub" id="sub-web">
+      <div>
+        <div class="sub-label">Framework / Technology</div>
+        <div class="chips" id="grp-web">
+          <button class="chip on" data-v="react">React</button>
+          <button class="chip" data-v="nextjs">Next.js</button>
+          <button class="chip" data-v="vue">Vue.js</button>
+          <button class="chip" data-v="nuxt">Nuxt.js</button>
+          <button class="chip" data-v="angular">Angular</button>
+          <button class="chip" data-v="svelte">Svelte / SvelteKit</button>
+          <button class="chip" data-v="astro">Astro</button>
+          <button class="chip" data-v="html">HTML / CSS / JS</button>
+          <button class="chip" data-v="other">Other →</button>
+        </div>
+        <input class="field" id="webOther" type="text" placeholder="Enter your web technology (e.g. Remix, Qwik, Laravel Blade...)" style="margin-top:10px;display:none"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: UI STYLE -->
+  <div class="section">
+    <div class="sec-title"><span class="sec-num">3</span>UI Style <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);margin-left:4px">(optional — defaults to Premium Classic)</span></div>
+    <div class="chips" id="grp-style">
+      <button class="chip on" data-v="premium">✨ Premium Classic</button>
+      <button class="chip" data-v="minimal">◻ Minimal / Clean</button>
+      <button class="chip" data-v="bold">⬛ Bold / Expressive</button>
+      <button class="chip" data-v="glass">🪟 Glassmorphism</button>
+      <button class="chip" data-v="neumorphism">🔘 Neumorphism</button>
+      <button class="chip" data-v="material">📐 Material Design 3</button>
+      <button class="chip" data-v="cupertino">🍎 Cupertino / iOS</button>
+      <button class="chip" data-v="brutalist">🧱 Brutalist</button>
+      <button class="chip" data-v="darklux">🌑 Dark Luxury</button>
+      <button class="chip" data-v="pastel">🌸 Soft Pastel</button>
+      <button class="chip" data-v="neon">⚡ Neon / Cyber</button>
+      <button class="chip" data-v="retro">📺 Retro / Y2K</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- STEP 4: SCREEN + GENERATE -->
+  <div class="sec-title" style="margin-bottom:10px"><span class="sec-num">4</span>Screen Name</div>
+  <div class="gen-row">
+    <input id="screenName" type="text" placeholder="e.g. Dashboard, Shipment Tracking, Order List, Driver Map..."/>
+    <button class="btn-gen" onclick="generate()">Generate Prompt ↗</button>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="out-wrap" id="outWrap">
+    <div class="out-box">
+      <div class="out-head">
+        <span class="out-head-label" id="outLabel">Configure above and generate</span>
+        <button class="btn-copy" id="copyBtn" onclick="copyPrompt()">Copy</button>
+      </div>
+      <div class="out-body" id="promptOut"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Built by <a href="../">Bhargav Parmar</a></span>
+  <a href="../tools/">← All Flutter Tools</a>
+</footer>
+
+<script>
+const S={app:'logistic',custom:'',platform:'mobile',mtype:'cross',cross:'flutter',native:'android',web:'react',webOther:'',style:'premium'};
+let prompt='';
+
+const APP={
+  logistic:{label:'Logistics / Supply Chain',colors:'deep navy #0A1628, electric blue #1E6BFF, amber #FFB300, white #FFFFFF, slate #64748B',icons:'truck, package box, map pin, warehouse, delivery check, timeline arrow, barcode outline',anims:'route line draw, status pulse dot, cargo progress bar, map pin drop, list stagger, badge color transition'},
+  ecommerce:{label:'E-Commerce / Retail',colors:'midnight #0D0D0D, brand purple #7C3AED, warm gold #F59E0B, white #FAFAFA, soft gray #9CA3AF',icons:'shopping bag, cart, price tag, star rating, trending arrow, wishlist heart, search lens',anims:'cart bounce, card hover lift, price count-up, star fill sweep, add-to-cart ripple, category slide reveal'},
+  fintech:{label:'Fintech / Banking',colors:'deep black #050B14, trust blue #0066FF, success green #00C896, alert red #FF3B30, silver #8899AA',icons:'credit card, chart line, shield lock, wallet, transfer arrows, coin, percent badge',anims:'number count-up, chart line draw, balance blur reveal, transaction stagger, card flip, shield pulse'},
+  healthcare:{label:'Healthcare / Medical',colors:'clinical white #F8FAFB, medical blue #1A73E8, health green #00A878, lavender #7B61FF, warm gray #6B7280',icons:'heartbeat line, cross/plus, pill capsule, clipboard, stethoscope, calendar dot',anims:'heartbeat pulse, value count-up, status breathe, card gentle rise, progress fill, alert slide'},
+  edtech:{label:'EdTech / Education',colors:'knowledge indigo #4338CA, sky blue #0EA5E9, sunny yellow #FBBF24, white #FFFFFF, chalk gray #94A3B8',icons:'graduation cap, open book, pencil, lightbulb, play circle, trophy, progress ring',anims:'progress fill, XP count-up, lesson card flip, streak pulse, completion confetti, chapter stagger'},
+  food:{label:'Food & Delivery',colors:'rich black #111111, appetite red #EF4444, warm orange #FB923C, cream #FFF8F0, charcoal #374151',icons:'fork & knife, burger, delivery scooter, flame, clock, star, bag',anims:'cart item bounce, delivery route animate, ETA countdown, card hover sizzle, rating pop, order step progress'},
+  travel:{label:'Travel & Booking',colors:'ocean blue #0369A1, sky #38BDF8, sunset gold #F59E0B, sand #FEF3C7, slate #64748B',icons:'airplane, map pin, calendar, hotel bed, passport, compass, luggage',anims:'destination parallax, price drop pulse, map pin drop, booking step progress, search shimmer, date picker slide'},
+  realestate:{label:'Real Estate / Property',colors:'luxury charcoal #1C1C1E, gold #B8953F, sage green #6B8F71, off-white #F9F7F4, gray #8E8E93',icons:'home outline, building, key, floor plan grid, location pin, graph trend, calculator',anims:'property card lift, price count-up, map cluster animate, gallery fade-slide, filter bounce, floor plan draw'},
+  social:{label:'Social / Community',colors:'deep violet #6D28D9, coral #F43F5E, electric teal #06B6D4, white #FFFFFF, gray #6B7280',icons:'chat bubble, user circle, heart, share arrow, bell, hashtag, group users',anims:'like heart burst, notification bounce, story ring pulse, post stagger, comment expand, reaction picker pop'},
+  crm:{label:'CRM / Sales',colors:'enterprise navy #1E3A5F, action blue #2563EB, teal #0D9488, amber #D97706, light gray #F1F5F9',icons:'pipeline funnel, contact card, phone, deal coin, activity chart, target circle, calendar',anims:'pipeline stage animate, deal count-up, activity timeline stagger, win rate donut draw, contact expand, KPI pulse'},
+  hr:{label:'HR / HRMS',colors:'corporate blue #1D4ED8, warm teal #0F766E, lavender #7C3AED, gray #6B7280, white #FFFFFF',icons:'people group, org tree, calendar check, payslip doc, clock, award badge, umbrella leave',anims:'org chart expand, leave calendar fill, payroll count-up, attendance bar grow, headcount donut, checklist tick'},
+  erp:{label:'ERP / Manufacturing',colors:'industrial steel #334155, process blue #0284C7, alert orange #EA580C, success green #16A34A, off-white #F8FAFC',icons:'gear cog, factory, inventory box, chart bar, workflow arrows, quality badge, purchase order',anims:'production line progress, inventory fill, KPI counter roll-up, workflow step advance, machine status pulse, order timeline draw'},
+  fitness:{label:'Fitness / Wellness',colors:'energy black #0A0A0A, electric lime #84CC16, power red #DC2626, recovery blue #3B82F6, light gray #D1D5DB',icons:'dumbbell, running figure, heart rate wave, flame, timer, trophy, muscle bolt',anims:'rep counter pulse, calories count-up, workout ring close, timer countdown, streak grow, progress chart animate'},
+  media:{label:'Media / Streaming',colors:'cinema black #09090B, brand red #EF4444, gold #EAB308, dark #18181B, muted white #A1A1AA',icons:'play button, film strip, headphones, microphone, star, bookmark, cast screen',anims:'thumbnail hover zoom, play pulse, progress scrubber, episode stagger, autoplay ring, category parallax'},
+  saas:{label:'SaaS / Dashboard',colors:'dark slate #0F172A, brand indigo #4F46E5, success green #10B981, warning amber #F59E0B, gray #64748B',icons:'grid dashboard, chart bar, settings gear, user circle, bell, data table, api plug',anims:'metric count-up, chart draw, sidebar slide, filter chip bounce, data row stagger, tooltip fade, modal spring'},
+  custom:{label:'Custom App',colors:'derive exact primary, secondary, accent, background, and text colors from the existing codebase theme/constants file',icons:'create contextually appropriate icons for the described app — pure SVG paths/shapes, zero image assets',anims:"choose animations that reinforce this screen's function — every motion must feel intentional"}
+};
+
+const CROSS={
+  reactnative:{label:'React Native',tech:'Use React Native Animated API and react-native-reanimated v3 for spring/gesture animations. Apply LayoutAnimation for list updates. useNativeDriver:true on all Animated values. Pressable for interactive states.'},
+  expo:{label:'Expo (React Native)',tech:'Use Expo with react-native-reanimated, expo-linear-gradient, and expo-haptics. Apply Expo Router shared element transitions. useNativeDriver:true for all animations. StyleSheet.create for all styles.'},
+  flutter:{label:'Flutter',tech:'Use Flutter animation APIs: AnimationController, Tween, CurvedAnimation, AnimatedContainer, AnimatedOpacity, Hero transitions. Use flutter_animate for declarative chaining. Stagger with Future.delayed. All animations run on Raster thread — avoid setState in animation callbacks.'},
+  ionic:{label:'Ionic',tech:'Use Ionic CSS animation utilities and ion-animation for complex sequences. Apply Angular/React Animations for route transitions. CSS custom properties for theme tokens. Ensure 60fps by avoiding layout-triggering properties in animations.'},
+  capacitor:{label:'Capacitor',tech:'Use Web Animations API and CSS transitions inside the Capacitor WebView. Apply Ionic Framework components with Capacitor plugins. Hardware-accelerated transforms only.'},
+  xamarin:{label:'Xamarin / MAUI',tech:'Use .NET MAUI Animation API: ViewExtensions, Animation class, Easing functions. Apply Shell transitions for page navigation. Use async animation methods — avoid blocking the UI thread.'},
+  nativescript:{label:'NativeScript',tech:'Use NativeScript animation module with CSS animations and keyframes. Apply NavigationTransition for page transitions. Avoid blocking the JS thread with synchronous animation loops.'},
+  kotlinmulti:{label:'Kotlin Multiplatform',tech:'Use KMP shared UI logic with platform-specific animation implementations. On Android use Compose animate*AsState; on iOS use SwiftUI withAnimation. Share animation timing constants as expect/actual declarations.'}
+};
+
+const NATIVE={
+  android:{label:'Android (Kotlin / Java)',tech:'Use Android Animator, ObjectAnimator, ValueAnimator. Apply MotionLayout for complex scene transitions. Follow Material Motion patterns: Shared Axis, Fade Through, Container Transform. Use RecyclerView ItemAnimator for list animations.'},
+  ios:{label:'iOS (Swift / UIKit)',tech:'Use UIView.animate, UIViewPropertyAnimator, CAAnimation, Core Animation. Apply spring animations for natural feel (damping 0.7, velocity 0). Use UICollectionView custom layouts for list transitions.'},
+  compose:{label:'Jetpack Compose',tech:'Use Compose APIs: animate*AsState, AnimatedVisibility, AnimatedContent, updateTransition, rememberInfiniteTransition. Apply spring() and tween() specs. Modifier.animateItemPlacement() for lazy list items.'},
+  swiftui:{label:'SwiftUI',tech:'Use SwiftUI: withAnimation, .animation(.spring(response:0.35,dampingFraction:0.7)), matchedGeometryEffect for shared transitions. Apply .transition() for enter/exit. TimelineView for timer-driven animations.'}
+};
+
+const WEB={
+  react:{label:'React',tech:'Use Framer Motion (motion.div, AnimatePresence, layout animations) for orchestrated sequences. CSS Transitions for micro-interactions. React.memo/useMemo to prevent re-render cascade. prefers-reduced-motion media query.'},
+  nextjs:{label:'Next.js',tech:'Next.js App Router + Framer Motion layout animations. Use next/image for optimized assets. CSS Modules or Tailwind for scoped styles. React Server Components for the non-animated shell — client components only where animation state lives.'},
+  vue:{label:'Vue.js',tech:'Vue Transition and TransitionGroup with CSS enter/leave classes. GSAP or @vueuse/motion for complex timelines. Vue 3 Composition API drives animation state. Never mutate reactive state inside animation callbacks.'},
+  nuxt:{label:'Nuxt.js',tech:'Nuxt page transitions via definePageMeta({ transition }). Vue Transition components for element-level animation. useLazyFetch for skeleton loading.'},
+  angular:{label:'Angular',tech:'Angular Animations module: trigger, state, style, animate, transition. AnimationBuilder for imperative sequences. NgZone.runOutsideAngular for RAF-based loops. OnPush ChangeDetectionStrategy to minimize re-renders.'},
+  svelte:{label:'Svelte / SvelteKit',tech:'Svelte built-in transitions (fade, fly, slide, scale, draw) and tweened/spring stores. svelte/animate for FLIP list animations. SvelteKit page transitions in +layout.svelte. No virtual DOM — animations are natively fast.'},
+  astro:{label:'Astro',tech:'Astro View Transitions API for page animations. Islands Architecture — animate only interactive components. CSS animations for static content. Minimal JS bundle — prefer CSS-only animations where possible.'},
+  html:{label:'HTML / CSS / JS',tech:'CSS transitions and @keyframes animations. Web Animations API for JS-driven sequences. requestAnimationFrame for custom animation loops. CSS custom properties for theme tokens. prefers-reduced-motion media query support.'},
+  other:{label:'Custom Web Framework',tech:'Use the framework\'s built-in animation utilities. Prefer CSS transforms and opacity. requestAnimationFrame for JS loops. CSS custom properties for design tokens.'}
+};
+
+const STYLE={
+  premium:{label:'Premium Classic',desc:'Sophisticated and polished. Rich shadows with brand-tinted elevation. Subtle gradients on hero sections and CTA buttons. High contrast text hierarchy. Micro-animations on every interactive element. Cards with 1px borders at 8% opacity and inner glow.'},
+  minimal:{label:'Minimal / Clean',desc:'Radical whitespace. Single accent color. Typography-first hierarchy. Hairline 0.5px dividers. Animations: fade + translate only, max 200ms. No decorative elements — every pixel earns its place.'},
+  bold:{label:'Bold / Expressive',desc:'High contrast. Large display type 48–72px. Saturated color blocks as backgrounds. Chunky 2–3px borders. Entrance animations with spring overshoot. Hover states with dramatic scale and shadow lift.'},
+  glass:{label:'Glassmorphism',desc:'backdrop-filter: blur(20px) on all surface cards. rgba backgrounds at 8–15% opacity. 1px white/light border at 20% opacity. Layered depth with multiple blur radii. Animated gradient mesh background. Frosted nav with live blur.'},
+  neumorphism:{label:'Neumorphism',desc:'Soft extruded surfaces from the background. Dual shadows: light top-left, dark bottom-right. Pressed state: inverted inner shadows. Monochromatic palette with ±8% lightness variation. All elements appear molded from the background material.'},
+  material:{label:'Material Design 3',desc:'Material You color system with tonal palettes. M3 components: FilledButton, OutlinedCard, NavigationBar, TopAppBar. Motion system: Container Transform, Shared Axis, Fade Through, Fade. Dynamic color from wallpaper where supported. 8dp grid spacing.'},
+  cupertino:{label:'Cupertino / iOS',desc:'iOS native design language. CupertinoNavigationBar with blur. SF Symbols-style stroke icons. Spring animations matching iOS (damping 0.7, stiffness 300). Context menus. Blurred modal sheets. System font stack. Haptic feedback on interactions.'},
+  brutalist:{label:'Brutalist',desc:'Raw and intentional. Thick 2–4px solid black borders. Offset box shadows (4px 4px 0 #000). Pure typographic hierarchy. Maximum contrast. Hover: background flood fill animation. Transitions: instant or very snappy 100ms.'},
+  darklux:{label:'Dark Luxury',desc:'True black #050505 background. Gold/champagne accents #C9A84C. Ultra-thin 300-weight typography for elegance. Soft glow effects via box-shadow in accent color. Cinematic entrance animations. Parallax depth on scroll.'},
+  pastel:{label:'Soft Pastel',desc:'Muted pastel palette: lavender, peach, mint, sky. Rounded corners everywhere (16–24px). Soft 8% opacity borders. Gentle spring animations. Illustrated empty states. Approachable and friendly — zero harsh shadows.'},
+  neon:{label:'Neon / Cyber',desc:'True dark #080808 background. Neon accent colors with 0 0 20px currentColor glow. Scan-line texture overlay. Glitch effect on hover. Terminal-style monospace for data. Animated gradient border strokes. Pulsing glow on active elements.'},
+  retro:{label:'Retro / Y2K',desc:'Chunky pixel-adjacent borders. Dithered gradient overlays. Bold complementary colors. 90s-inspired card layouts. Marquee-style text animations. Beveled button edges. Nostalgic but functional — retro aesthetic, modern UX patterns.'}
+};
+
+function bindGroup(id, key, cb) {
+  document.getElementById(id).querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(id).querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      S[key] = btn.dataset.v;
+      if (cb) cb(btn.dataset.v);
+    });
+  });
+}
+
+bindGroup('grp-app', 'app', v => {
+  const sub = document.getElementById('sub-custom');
+  v === 'custom' ? sub.classList.add('show') : sub.classList.remove('show');
+});
+
+bindGroup('grp-platform', 'platform', v => {
+  document.getElementById('sub-mobile').classList.toggle('show', v === 'mobile');
+  document.getElementById('sub-web').classList.toggle('show', v === 'web');
+});
+
+bindGroup('grp-mtype', 'mtype', v => {
+  document.getElementById('sub-cross').style.display = v === 'cross' ? '' : 'none';
+  document.getElementById('sub-native').style.display = v === 'native' ? '' : 'none';
+});
+
+bindGroup('grp-cross', 'cross');
+bindGroup('grp-native', 'native');
+bindGroup('grp-web', 'web', v => {
+  document.getElementById('webOther').style.display = v === 'other' ? '' : 'none';
+});
+bindGroup('grp-style', 'style');
+
+document.getElementById('customDesc').addEventListener('input', e => S.custom = e.target.value);
+document.getElementById('webOther').addEventListener('input', e => S.webOther = e.target.value);
+
+function getPlatform() {
+  if (S.platform === 'mobile') {
+    if (S.mtype === 'cross') {
+      const t = CROSS[S.cross];
+      return { label: `Mobile · Cross-Platform · ${t.label}`, tech: t.tech };
+    } else {
+      const t = NATIVE[S.native];
+      return { label: `Mobile · Native · ${t.label}`, tech: t.tech };
+    }
+  } else {
+    const key = S.web === 'other' ? 'other' : S.web;
+    const t = WEB[key];
+    const lbl = S.web === 'other' && S.webOther ? `Web · ${S.webOther}` : `Web · ${t.label}`;
+    return { label: lbl, tech: t.tech };
+  }
+}
+
+function generate() {
+  const screen = document.getElementById('screenName').value.trim() || '[SCREEN NAME]';
+  const app = APP[S.app];
+  const plt = getPlatform();
+  const sty = STYLE[S.style];
+  const customLine = S.app === 'custom' && S.custom ? `\nApp Description  : ${S.custom}` : '';
+
+  prompt = `╔══════════════════════════════════════════════════════════╗
+  UI REFACTOR TASK — ${screen.toUpperCase()}
+╚══════════════════════════════════════════════════════════╝
+
+APP TYPE         : ${app.label}${customLine}
+PLATFORM         : ${plt.label}
+UI STYLE         : ${sty.label}
+TARGET SCREEN    : ${screen}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Refactor the "${screen}" screen to a ${sty.label} UI — professional, premium, and visually rich with detailed animations and transition effects. This is a VISUAL-ONLY refactor. Do NOT change any existing logic, navigation flow, API calls, state management, data models, or business functionality. Only the presentation/UI layer is in scope.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PLATFORM & TECHNOLOGY RULES  [${plt.label}]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${plt.tech}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UI STYLE DIRECTION — ${sty.label.toUpperCase()}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${sty.desc}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COLOR THEME  [${app.label}]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Palette: ${app.colors}.
+• Extract exact hex values from the existing theme/constants/colors file where available
+• Every UI element must align with this palette — introduce no off-brand colors
+• Define all colors as design tokens at the top of the file
+• Apply dark mode variants where the platform supports system color scheme detection
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ICON SYSTEM — ZERO IMAGE ASSETS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Relevant icons: ${app.icons}.
+• Every icon is a self-contained inline SVG/vector component — no imported image files
+• Construct using only: <path>, <rect>, <circle>, <polygon>, <line>, <polyline>, <ellipse>
+• Stroke-based preferred (strokeWidth 1.5–2) for modern consistent weight
+• Size: 16px (inline) | 24px (standard) | 32px (section headers) | 48px (hero/empty states)
+• Zero dependencies on any icon library or file imports
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANIMATION & TRANSITION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+App-specific animations: ${app.anims}.
+
+Timing scale:
+  Micro   (feedback)    100–150ms  — press, toggle, checkbox, icon morph
+  Short   (element)     150–250ms  — card appear, badge update, tooltip
+  Medium  (component)   250–400ms  — panel slide, modal open, tab switch
+  Long    (page/reveal) 400–600ms  — screen mount, hero reveal, route transition
+
+Performance (non-negotiable):
+• Animate ONLY transform and opacity — NEVER width, height, top, left, margin, padding
+• List entrance: stagger items 30–60ms apart
+• Heavy async operations: shimmer skeleton loaders — NOT spinners
+• Honor prefers-reduced-motion: disable non-essential animations
+• Never block the main/UI thread
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UI QUALITY CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. SPACING      4px base grid. Use only: 4/8/12/16/20/24/32/48px values
+ 2. TYPOGRAPHY   Display 28–32/700 | Heading 20–24/600 | Body 14–16/400 | Caption 11–13/400
+ 3. RADIUS       Buttons 8px | Cards 12px | Modals 16–20px | Chips/badges 99px
+ 4. STATES       Default → Hover → Pressed → Disabled — all 4 on every interactive element
+ 5. CARDS        1px border 8–10% opacity | surface background | inner padding 16–20px
+ 6. BUTTONS      Primary solid | Secondary outline | Ghost text-only — all with press animation
+ 7. EMPTY STATES Inline SVG illustration + headline + subtext + CTA button
+ 8. SKELETONS    Shimmer skeleton must exactly mirror real content layout
+ 9. HEADER/NAV   Brand theme color; blur/tint backdrop on scroll
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCREEN REFACTOR SCOPE — "${screen}"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Map every distinct UI zone: header, list/grid, cards, forms, inputs, modals, bottom bar, FABs, tabs, empty states, loading states
+• Refactor each zone individually using all rules above
+• Preserve existing component types and data flow structure
+• Screen mount: staggered entrance — header first, then content zones sequentially
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STRICT BOUNDARIES — DO NOT CHANGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✗ API calls / fetch / network requests
+✗ State management (Redux, MobX, GetX, Riverpod, Provider, Bloc, Zustand)
+✗ Route / navigation / deep link configuration
+✗ Business logic functions and calculations
+✗ Form validation rules and error handling logic
+✗ Third-party SDK integrations (maps, payments, analytics, push)
+✗ Existing component file names and export signatures
+✗ Adding new third-party libraries without explicit approval
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DELIVERABLE FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For each modified file:
+  1. File path
+  2. Change summary (visual-only, 1–2 lines)
+  3. Complete updated file content
+
+Append an Animation Inventory table:
+| UI Element | Trigger | Animation Type | Duration | Easing | Platform API |
+|------------|---------|----------------|----------|--------|--------------|
+
+══════════════════════════════════════════════════════════════
+Begin refactoring the "${screen}" screen now. Apply every rule above rigorously.
+══════════════════════════════════════════════════════════════`;
+
+  document.getElementById('promptOut').textContent = prompt;
+  document.getElementById('outLabel').textContent = `${screen} · ${plt.label} · ${sty.label}`;
+  document.getElementById('outWrap').style.display = 'block';
+  const btn = document.getElementById('copyBtn');
+  btn.classList.remove('done'); btn.textContent = 'Copy';
+  document.getElementById('outWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyPrompt() {
+  if (!prompt) return;
+  navigator.clipboard.writeText(prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied ✓'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2200);
+  });
+}
+</script>
+</body>
+</html>
