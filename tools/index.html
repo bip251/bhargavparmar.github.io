@@ -34,6 +34,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .c-local{border-color:rgba(245,158,11,.2)}.c-local:hover{border-color:rgba(245,158,11,.5);box-shadow:0 20px 60px rgba(245,158,11,.12)}
 .c-optimizer{border-color:rgba(139,92,246,.2)}.c-optimizer:hover{border-color:rgba(139,92,246,.5);box-shadow:0 20px 60px rgba(139,92,246,.15)}
 .c-perf{border-color:rgba(16,185,129,.2)}.c-perf:hover{border-color:rgba(16,185,129,.5);box-shadow:0 20px 60px rgba(16,185,129,.15)}
+.c-promptforge{border-color:rgba(99,102,241,.2)}.c-promptforge:hover{border-color:rgba(99,102,241,.5);box-shadow:0 20px 60px rgba(99,102,241,.15)}
 .tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .tc-icon{font-size:34px;animation:bob 3s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -43,6 +44,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .b-green{background:rgba(16,185,129,.1);color:#10B981;border:1px solid rgba(16,185,129,.2)}
 .b-amber{background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)}
 .b-rose{background:rgba(244,63,94,.1);color:#F43F5E;border:1px solid rgba(244,63,94,.2)}
+.b-indigo{background:rgba(99,102,241,.1);color:#6366f1;border:1px solid rgba(99,102,241,.2)}
 .tc-name{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
 .tc-desc{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px}
 .tc-features{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
@@ -50,7 +52,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .tcf-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .tc-cta{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
 .tc-link{font-size:13px;font-weight:700}
-.link-blue{color:#3B82F6}.link-purple{color:#8B5CF6}.link-green{color:#10B981}.link-amber{color:#F59E0B}.link-rose{color:#F43F5E}
+.link-blue{color:#3B82F6}.link-purple{color:#8B5CF6}.link-green{color:#10B981}.link-amber{color:#F59E0B}.link-rose{color:#F43F5E}.link-indigo{color:#6366f1}
 .tc-tags{display:flex;gap:5px;flex-wrap:wrap}
 .ttag{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)}
 .bottom-cta{max-width:700px;margin:0 auto 80px;text-align:center;padding:0 5%}
@@ -75,7 +77,7 @@ footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text
   <h1><span class="hi">Flutter Dev</span><br/><span class="hi2">Toolbox</span></h1>
   <p class="hero-sub">Free, open developer tools built by a Flutter engineer for Flutter engineers. Generate AI-ready prompts that make your app faster, lighter, and better-looking — without breaking anything.</p>
   <div class="hero-stats">
-    <div><div class="stat-n">5</div><div class="stat-l">Tools</div></div>
+    <div><div class="stat-n">6</div><div class="stat-l">Tools</div></div>
     <div><div class="stat-n">28+</div><div class="stat-l">Optimisations</div></div>
     <div><div class="stat-n">100%</div><div class="stat-l">Free</div></div>
   </div>
@@ -142,6 +144,17 @@ footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text
         <div class="tcf"><div class="tcf-dot" style="background:#10B981"></div>Clean, focused output</div>
       </div>
       <div class="tc-cta"><div class="tc-link link-green">Launch tool →</div><div class="tc-tags"><span class="ttag">Quick</span><span class="ttag">Simple</span><span class="ttag">Focused</span></div></div>
+    </a>
+    <a href="../prompt-forge/" class="tool-card c-promptforge">
+      <div class="tc-top"><div class="tc-icon">✨</div><div class="tc-badge b-indigo">ALL PLATFORMS</div></div>
+      <div class="tc-name">PromptForge</div>
+      <div class="tc-desc">Configure your tech stack — get expert-crafted, copy-ready AI prompts for Cursor, Windsurf &amp; Antigravity. 10 steps. 12 prompts.</div>
+      <div class="tc-features">
+        <div class="tcf"><div class="tcf-dot" style="background:#6366f1"></div>Flutter · React Native · Next.js · NestJS · and more</div>
+        <div class="tcf"><div class="tcf-dot" style="background:#6366f1"></div>Isar · Firebase FCM · Branch.io · 15 industries</div>
+        <div class="tcf"><div class="tcf-dot" style="background:#6366f1"></div>⭐ Smart Recommended engine + Single combined prompt</div>
+      </div>
+      <div class="tc-cta"><div class="tc-link link-indigo">Launch tool →</div><div class="tc-tags"><span class="ttag">Cross-platform</span><span class="ttag">Prompts</span><span class="ttag">AI</span></div></div>
     </a>
   </div>
 </div>
