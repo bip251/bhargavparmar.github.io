@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Flutter Dev Tools — by Bhargav Parmar</title>
+<title>AI Dev Tools — by Bhargav Parmar</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -35,6 +35,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .c-optimizer{border-color:rgba(139,92,246,.2)}.c-optimizer:hover{border-color:rgba(139,92,246,.5);box-shadow:0 20px 60px rgba(139,92,246,.15)}
 .c-perf{border-color:rgba(16,185,129,.2)}.c-perf:hover{border-color:rgba(16,185,129,.5);box-shadow:0 20px 60px rgba(16,185,129,.15)}
 .c-promptforge{border-color:rgba(99,102,241,.2)}.c-promptforge:hover{border-color:rgba(99,102,241,.5);box-shadow:0 20px 60px rgba(99,102,241,.15)}
+.c-agentforge{border-color:rgba(8,145,178,.22)}.c-agentforge:hover{border-color:rgba(8,145,178,.55);box-shadow:0 20px 60px rgba(8,145,178,.16)}
 .tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .tc-icon{font-size:34px;animation:bob 3s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -45,6 +46,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .b-amber{background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)}
 .b-rose{background:rgba(244,63,94,.1);color:#F43F5E;border:1px solid rgba(244,63,94,.2)}
 .b-indigo{background:rgba(99,102,241,.1);color:#6366f1;border:1px solid rgba(99,102,241,.2)}
+.b-cyan{background:rgba(8,145,178,.1);color:#06B6D4;border:1px solid rgba(8,145,178,.2)}
 .tc-name{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
 .tc-desc{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px}
 .tc-features{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
@@ -52,7 +54,7 @@ h1{font-family:var(--font-display);font-size:clamp(30px,5vw,58px);font-weight:80
 .tcf-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .tc-cta{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
 .tc-link{font-size:13px;font-weight:700}
-.link-blue{color:#3B82F6}.link-purple{color:#8B5CF6}.link-green{color:#10B981}.link-amber{color:#F59E0B}.link-rose{color:#F43F5E}.link-indigo{color:#6366f1}
+.link-blue{color:#3B82F6}.link-purple{color:#8B5CF6}.link-green{color:#10B981}.link-amber{color:#F59E0B}.link-rose{color:#F43F5E}.link-indigo{color:#6366f1}.link-cyan{color:#06B6D4}
 .tc-tags{display:flex;gap:5px;flex-wrap:wrap}
 .ttag{font-size:10px;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3)}
 .bottom-cta{max-width:700px;margin:0 auto 80px;text-align:center;padding:0 5%}
@@ -73,11 +75,11 @@ footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text
 </nav>
 <div class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-eyebrow"><div class="hero-dot"></div>Open Source Flutter Tools</div>
-  <h1><span class="hi">Flutter Dev</span><br/><span class="hi2">Toolbox</span></h1>
-  <p class="hero-sub">Free, open developer tools built by a Flutter engineer for Flutter engineers. Generate AI-ready prompts that make your app faster, lighter, and better-looking — without breaking anything.</p>
+  <div class="hero-eyebrow"><div class="hero-dot"></div>Open Source AI Dev Tools</div>
+  <h1><span class="hi">AI Dev</span><br/><span class="hi2">Toolbox</span></h1>
+  <p class="hero-sub">Free developer tools built by Bhargav Parmar. Generate AI-ready prompts for app optimization, existing project review, multi-agent rules, and safer implementation workflows.</p>
   <div class="hero-stats">
-    <div><div class="stat-n">6</div><div class="stat-l">Tools</div></div>
+    <div><div class="stat-n">7</div><div class="stat-l">Tools</div></div>
     <div><div class="stat-n">28+</div><div class="stat-l">Optimisations</div></div>
     <div><div class="stat-n">100%</div><div class="stat-l">Free</div></div>
   </div>
@@ -95,6 +97,17 @@ footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text
         <div class="tcf"><div class="tcf-dot" style="background:#6366f1"></div>⭐ Smart Recommended engine + Single combined prompt</div>
       </div>
       <div class="tc-cta"><div class="tc-link link-indigo">Launch tool →</div><div class="tc-tags"><span class="ttag">Cross-platform</span><span class="ttag">Prompts</span><span class="ttag">AI</span></div></div>
+    </a>
+    <a href="../agent-rule-forge/" class="tool-card c-agentforge">
+      <div class="tc-top"><div class="tc-icon">🧠</div><div class="tc-badge b-cyan">AGENTS + RULES</div></div>
+      <div class="tc-name">AgentRule Forge</div>
+      <div class="tc-desc">Generate a master prompt for existing project review, AI agent setup, rule files, and safe multi-agent implementation workflows.</div>
+      <div class="tc-features">
+        <div class="tcf"><div class="tcf-dot" style="background:#06B6D4"></div>Creates AGENTS.md, rules, workflows, and review gates</div>
+        <div class="tcf"><div class="tcf-dot" style="background:#06B6D4"></div>For Codex, Cursor, Windsurf, Claude Code, Cline</div>
+        <div class="tcf"><div class="tcf-dot" style="background:#06B6D4"></div>Built by Bhargav Parmar for existing projects</div>
+      </div>
+      <div class="tc-cta"><div class="tc-link link-cyan">Launch tool →</div><div class="tc-tags"><span class="ttag">Agents</span><span class="ttag">Rules</span><span class="ttag">AI</span></div></div>
     </a>
     <a href="../flutter-rocket/" class="tool-card c-rocket">
       <div class="tc-top"><div class="tc-icon">🚀</div><div class="tc-badge b-blue">FLAGSHIP</div></div>
@@ -160,13 +173,13 @@ footer a{color:var(--text2);text-decoration:none}footer a:hover{color:var(--text
 </div>
 <div class="bottom-cta">
   <div class="cta-card">
-    <div class="cta-title">Built by a Flutter developer,<br/>for Flutter developers.</div>
-    <div class="cta-desc">These tools come from 9+ years of real-world Flutter development — shipping 30+ apps across India, China, and the USA. Every technique has been battle-tested in production.</div>
+    <div class="cta-title">Built by Bhargav Parmar,<br/>for practical developers.</div>
+    <div class="cta-desc">These tools come from 9+ years of real-world development — shipping 30+ apps across India, China, and the USA, plus hands-on AI workflow automation for modern engineering teams.</div>
     <a href="../" class="cta-btn">View full portfolio →</a>
   </div>
 </div>
 <footer>
-  <span>Built by <a href="../">Bhargav Parmar</a> · Flutter Dev Tools</span>
+  <span>Built by <a href="../">Bhargav Parmar</a> · AI Dev Tools</span>
   <span>Free & open source on <a href="https://github.com/bip251/bhargavparmar.github.io" target="_blank">GitHub</a></span>
 </footer>
 </body>

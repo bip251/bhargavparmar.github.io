@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgentRule Forge - Existing Project Prompt Generator | Bhargav Parmar</title>
+  <meta name="description" content="AgentRule Forge by Bhargav Parmar generates AI-ready prompts for existing project analysis, rule creation, multi-agent workflows, and AI coding tool setup.">
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #667085;
+      --soft: #f6f7fb;
+      --line: #d8deea;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --cyan: #0891b2;
+      --green: #16a34a;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --violet: #7c3aed;
+      --slate: #475569;
+      --shadow: 0 18px 55px rgba(23, 32, 51, 0.14);
+      --radius: 8px;
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.12), transparent 32%),
+        linear-gradient(225deg, rgba(225, 29, 72, 0.11), transparent 30%),
+        linear-gradient(315deg, rgba(22, 163, 74, 0.09), transparent 34%),
+        #f5f7fb;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app-shell {
+      width: min(1480px, calc(100vw - 32px));
+      min-height: calc(100vh - 32px);
+      margin: 16px auto;
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr) 430px;
+      gap: 14px;
+    }
+
+    .sidebar,
+    .workspace,
+    .preview {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(216, 222, 234, 0.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .brand {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(124, 58, 237, 0.12), transparent 52%),
+        linear-gradient(315deg, rgba(8, 145, 178, 0.14), transparent 48%);
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      color: white;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #2563eb, #7c3aed 48%, #e11d48);
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.28);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 10px 0 0;
+      color: #596579;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .creator-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      border-radius: 999px;
+      color: #1e3a8a;
+      background: rgba(37, 99, 235, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .step-list {
+      padding: 16px 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .step-button {
+      width: 100%;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      text-align: left;
+      border-radius: var(--radius);
+    }
+
+    .step-button[aria-current="step"],
+    .step-button.done {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.08);
+    }
+
+    .step-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      color: white;
+    }
+
+    .step-title {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .step-subtitle {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 18px 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .mini-stat {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mini-stat div {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .mini-stat b {
+      display: block;
+      font-size: 18px;
+    }
+
+    .mini-stat span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .workspace {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .topbar p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .main-content {
+      padding: 20px;
+      overflow: auto;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .section-header h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .section-header p {
+      margin: 5px 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 720px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid.platforms {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .choice-card,
+    .option-card {
+      min-height: 118px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+      padding: 14px;
+      text-align: left;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .choice-card:hover,
+    .option-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(23, 32, 51, 0.12);
+    }
+
+    .choice-card.selected,
+    .option-card.selected {
+      border-color: var(--accent);
+      background: linear-gradient(180deg, var(--soft-accent), #fff 68%);
+      box-shadow: 0 16px 40px var(--shadow-accent);
+    }
+
+    .choice-card.selected::after,
+    .option-card.selected::after {
+      content: "";
+      position: absolute;
+      inset: auto 12px 12px auto;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--soft-accent);
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: white;
+      border-radius: var(--radius);
+      background: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .choice-card h4,
+    .option-card h4 {
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .choice-card p,
+    .option-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .chip,
+    .tag,
+    .pill-button {
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      min-height: 31px;
+      padding: 6px 11px;
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .chip.strong,
+    .pill-button.selected {
+      border-color: var(--accent);
+      background: var(--soft-accent);
+      color: var(--accent-dark);
+      font-weight: 800;
+    }
+
+    .pill-button {
+      cursor: pointer;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .panel-strip {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 42%),
+        linear-gradient(315deg, rgba(22, 163, 74, 0.08), transparent 42%),
+        #fff;
+    }
+
+    .panel-strip h4 {
+      margin: 0 0 10px;
+      font-size: 13px;
+    }
+
+    .pill-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 14px;
+      font-weight: 800;
+      font-size: 13px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(23, 32, 51, 0.12);
+    }
+
+    .btn.primary {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+    }
+
+    .btn.success {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, #16a34a, #0891b2);
+    }
+
+    .btn.danger {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, #e11d48, #d97706);
+    }
+
+    .btn:disabled {
+      transform: none;
+      cursor: not-allowed;
+      opacity: 0.44;
+      box-shadow: none;
+    }
+
+    .preview {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .preview-head {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .preview-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .preview-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .preview-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .preview-stats div {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px;
+      background: var(--soft);
+    }
+
+    .preview-stats b {
+      display: block;
+      font-size: 16px;
+    }
+
+    .preview-stats span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .preview-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(246, 247, 251, 0.68);
+    }
+
+    .prompt-box {
+      flex: 1;
+      overflow: auto;
+      background: #101828;
+      color: #e7edf8;
+      min-height: 360px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.62;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 11px 16px;
+      border-radius: var(--radius);
+      color: #fff;
+      background: #172033;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      font-weight: 800;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: 0 0 auto;
+    }
+
+    .small-icon .icon {
+      width: 15px;
+      height: 15px;
+    }
+
+    @media (max-width: 1220px) {
+      .app-shell {
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+
+      .preview {
+        grid-column: 1 / -1;
+        min-height: 540px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .app-shell {
+        width: min(100vw - 18px, 760px);
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: block;
+      }
+
+      .step-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sidebar-footer {
+        display: none;
+      }
+
+      .topbar,
+      .section-header,
+      .footer-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .toolbar {
+        justify-content: stretch;
+      }
+
+      .toolbar .btn,
+      .footer-actions .btn {
+        width: 100%;
+      }
+
+      .grid.platforms,
+      .grid.three,
+      .grid.two,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="sidebar" aria-label="Generator steps">
+      <div class="brand">
+        <div class="brand-mark" data-icon="sparkles"></div>
+        <h1>AgentRule Forge</h1>
+        <p>Colorful prompt generator for creating project-specific rules, agent systems, review workflows, and AI tool instructions.</p>
+        <div class="creator-badge"><span data-icon="sparkles"></span>Created by Bhargav Parmar</div>
+      </div>
+
+      <nav class="step-list" id="stepList"></nav>
+
+      <div class="sidebar-footer">
+        <div class="mini-stat">
+          <div><b id="agentCount">10</b><span>agents planned</span></div>
+          <div><b id="ruleCount">7</b><span>rule packs</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="topbar">
+        <div>
+          <h2 id="screenTitle">Build a master prompt for an existing project</h2>
+          <p id="screenSubtitle">Select the project stack, rule packs, agents, and output files. The generated prompt tells an AI coding tool exactly how to analyze the codebase and create the right rules and agents.</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="resetBtn" type="button"><span data-icon="rotate"></span>Reset</button>
+          <button class="btn success" id="generateTopBtn" type="button"><span data-icon="zap"></span>Generate</button>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <section class="section active" data-section="0">
+          <div class="section-header">
+            <div>
+              <h3>1. Select platform</h3>
+              <p>Choose what kind of project the AI should inspect before it creates rules and agent instructions.</p>
+            </div>
+          </div>
+          <div class="grid platforms" id="platformGrid"></div>
+          <div class="footer-actions">
+            <span></span>
+            <button class="btn primary" id="toTechBtn" type="button">Technology <span data-icon="arrowRight"></span></button>
+          </div>
+        </section>
+
+        <section class="section" data-section="1">
+          <div class="section-header">
+            <div>
+              <h3>2. Choose technology</h3>
+              <p>Pick the framework or stack so the generated rules are specific, not generic boilerplate.</p>
+            </div>
+          </div>
+          <div class="flow-row" id="selectionFlow"></div>
+          <div class="grid three" id="techGrid"></div>
+          <div class="panel-strip" id="subTechPanel" hidden>
+            <h4 id="subTechTitle">Secondary choice</h4>
+            <div class="grid three" id="subTechGrid"></div>
+          </div>
+          <div class="footer-actions">
+            <button class="btn" id="backToPlatformBtn" type="button"><span data-icon="arrowLeft"></span>Platform</button>
+            <button class="btn primary" id="toProjectBtn" type="button">Project context <span data-icon="arrowRight"></span></button>
+          </div>
+        </section>
+
+        <section class="section" data-section="2">
+          <div class="section-header">
+            <div>
+              <h3>3. Existing project context</h3>
+              <p>Optional details make the output stronger. This is designed for reviewing and improving an already-existing codebase.</p>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="projectName">Project name</label>
+              <input id="projectName" placeholder="Example: Client CRM, MedTrack, SaaS Admin">
+            </div>
+            <div class="field">
+              <label for="projectPath">Project path or repository</label>
+              <input id="projectPath" placeholder="/path/to/existing-project or GitHub repo name">
+            </div>
+            <div class="field">
+              <label for="appType">Application type</label>
+              <select id="appType"></select>
+            </div>
+            <div class="field">
+              <label for="teamSize">Team size</label>
+              <select id="teamSize"></select>
+            </div>
+            <div class="field">
+              <label for="architecture">Current architecture</label>
+              <select id="architecture"></select>
+            </div>
+            <div class="field">
+              <label for="analysisDepth">Analysis depth</label>
+              <select id="analysisDepth"></select>
+            </div>
+            <div class="field full">
+              <label for="projectDesc">What should the AI understand about this project?</label>
+              <textarea id="projectDesc" placeholder="Describe business purpose, users, important modules, quality concerns, release pressure, or known problems."></textarea>
+            </div>
+            <div class="field full">
+              <label for="knownIssues">Known issues or priorities</label>
+              <textarea id="knownIssues" placeholder="Example: inconsistent auth rules, missing tests, slow dashboard, unclear folder structure, AI agents needed for code review."></textarea>
+            </div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>Databases</h4>
+            <div class="pill-wrap" id="databasePills"></div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>Authentication</h4>
+            <div class="pill-wrap" id="authPills"></div>
+          </div>
+
+          <div class="footer-actions">
+            <button class="btn" id="backToTechBtn" type="button"><span data-icon="arrowLeft"></span>Technology</button>
+            <button class="btn primary" id="toRulesBtn" type="button">Agents and rules <span data-icon="arrowRight"></span></button>
+          </div>
+        </section>
+
+        <section class="section" data-section="3">
+          <div class="section-header">
+            <div>
+              <h3>4. Agents, rules, and output files</h3>
+              <p>Select what the prompt should ask the AI coding tool to create inside the existing project.</p>
+            </div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>AI tool target</h4>
+            <div class="pill-wrap" id="targetPills"></div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>Agent team</h4>
+            <div class="grid three" id="agentGrid"></div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>Rule packs</h4>
+            <div class="grid three" id="ruleGrid"></div>
+          </div>
+
+          <div class="panel-strip">
+            <h4>Files to generate or update</h4>
+            <div class="pill-wrap" id="deliverablePills"></div>
+          </div>
+
+          <div class="footer-actions">
+            <button class="btn" id="backToProjectBtn" type="button"><span data-icon="arrowLeft"></span>Context</button>
+            <button class="btn success" id="generateBtn" type="button"><span data-icon="sparkles"></span>Create master prompt</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="preview" aria-label="Generated prompt preview">
+      <div class="preview-head">
+        <h3>Live master prompt</h3>
+        <p>Copy this into Codex, Cursor, Windsurf, Claude Code, Cline, or another AI coding tool at the root of the existing project. Created by Bhargav Parmar.</p>
+        <div class="preview-stats">
+          <div><b id="statChars">0</b><span>characters</span></div>
+          <div><b id="statAgents">0</b><span>agents</span></div>
+          <div><b id="statRules">0</b><span>rule packs</span></div>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button class="btn primary" id="copyBtn" type="button"><span data-icon="copy"></span>Copy prompt</button>
+        <button class="btn" id="downloadBtn" type="button"><span data-icon="download"></span>Download .md</button>
+      </div>
+      <div class="prompt-box">
+        <pre id="promptPreview"></pre>
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
+
+  <script>
+    const COLORS = {
+      purple: { accent: "#7c3aed", dark: "#4c1d95", soft: "#f2eafe", shadow: "rgba(124, 58, 237, 0.18)" },
+      blue: { accent: "#2563eb", dark: "#1e3a8a", soft: "#eaf1ff", shadow: "rgba(37, 99, 235, 0.18)" },
+      cyan: { accent: "#0891b2", dark: "#164e63", soft: "#e6f8fb", shadow: "rgba(8, 145, 178, 0.18)" },
+      green: { accent: "#16a34a", dark: "#14532d", soft: "#e9f9ee", shadow: "rgba(22, 163, 74, 0.18)" },
+      amber: { accent: "#d97706", dark: "#78350f", soft: "#fff3df", shadow: "rgba(217, 119, 6, 0.18)" },
+      rose: { accent: "#e11d48", dark: "#881337", soft: "#fff0f4", shadow: "rgba(225, 29, 72, 0.18)" },
+      slate: { accent: "#475569", dark: "#1f2937", soft: "#eef2f7", shadow: "rgba(71, 85, 105, 0.16)" }
+    };
+
+    const ICONS = {
+      sparkles: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.7 5.2L19 10l-5.3 1.8L12 17l-1.7-5.2L5 10l5.3-1.8L12 3z"/><path d="M5 16l.8 2.2L8 19l-2.2.8L5 22l-.8-2.2L2 19l2.2-.8L5 16z"/><path d="M19 2l.8 2.2L22 5l-2.2.8L19 8l-.8-2.2L16 5l2.2-.8L19 2z"/></svg>',
+      robot: '<svg class="icon" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4"/><path d="M8 13h.01"/><path d="M16 13h.01"/><path d="M9 17h6"/></svg>',
+      code: '<svg class="icon" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/><path d="M14 4l-4 16"/></svg>',
+      layout: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>',
+      server: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01"/><path d="M7 17h.01"/></svg>',
+      stack: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>',
+      cloud: '<svg class="icon" viewBox="0 0 24 24"><path d="M17.5 19H8a5 5 0 1 1 1-9.9A7 7 0 0 1 22 12.5 4.5 4.5 0 0 1 17.5 19z"/></svg>',
+      brain: '<svg class="icon" viewBox="0 0 24 24"><path d="M8 6a3 3 0 0 1 5-2.2A3 3 0 0 1 18 6v1a4 4 0 0 1 0 8v1a3 3 0 0 1-5 2.2A3 3 0 0 1 8 18v-1a4 4 0 0 1 0-8V6z"/><path d="M12 4v16"/><path d="M8 10h4"/><path d="M12 14h4"/></svg>',
+      monitor: '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>',
+      plug: '<svg class="icon" viewBox="0 0 24 24"><path d="M9 7V2"/><path d="M15 7V2"/><path d="M7 7h10v4a5 5 0 0 1-10 0V7z"/><path d="M12 16v6"/></svg>',
+      shield: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-5"/></svg>',
+      test: '<svg class="icon" viewBox="0 0 24 24"><path d="M9 2v6l-5 9a3 3 0 0 0 2.6 4.5h10.8A3 3 0 0 0 20 17L15 8V2"/><path d="M8 2h8"/><path d="M7 15h10"/></svg>',
+      gauge: '<svg class="icon" viewBox="0 0 24 24"><path d="M4 14a8 8 0 1 1 16 0"/><path d="M12 14l4-4"/><path d="M12 14h.01"/></svg>',
+      docs: '<svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>',
+      git: '<svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><path d="M9 6c4 0 6 2 6 6v3"/></svg>',
+      eye: '<svg class="icon" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+      copy: '<svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><rect x="2" y="2" width="13" height="13" rx="2"/></svg>',
+      download: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>',
+      rotate: '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>',
+      zap: '<svg class="icon" viewBox="0 0 24 24"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>',
+      arrowRight: '<svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>',
+      arrowLeft: '<svg class="icon" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>',
+      check: '<svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>'
+    };
+
+    const PLATFORMS = [
+      { id: "mobile", label: "Mobile", icon: "monitor", desc: "iOS, Android, Flutter, React Native", color: "purple" },
+      { id: "frontend", label: "Frontend", icon: "layout", desc: "React, Vue, Angular, Svelte, SSR apps", color: "cyan" },
+      { id: "backend", label: "Backend", icon: "server", desc: "APIs, services, queues, server logic", color: "rose" },
+      { id: "fullstack", label: "Full Stack", icon: "stack", desc: "End-to-end web applications", color: "blue" },
+      { id: "devops", label: "DevOps / Infra", icon: "cloud", desc: "CI/CD, cloud, Docker, Kubernetes", color: "amber" },
+      { id: "ai_ml", label: "AI / ML", icon: "brain", desc: "LLM apps, RAG, ML, data pipelines", color: "violet" },
+      { id: "desktop", label: "Desktop", icon: "monitor", desc: "Electron, Tauri, native desktop apps", color: "green" },
+      { id: "integration", label: "API Integration", icon: "plug", desc: "REST, GraphQL, webhooks, microservices", color: "slate" }
+    ];
+
+    const TECH = {
+      mobile: {
+        label: "Mobile approach",
+        options: [
+          { id: "native", label: "Native", desc: "Android, iOS, or both native codebases", icon: "monitor" },
+          { id: "cross_platform", label: "Cross-platform", desc: "One codebase across mobile platforms", icon: "stack" }
+        ],
+        next: {
+          native: {
+            label: "Target platform",
+            options: [
+              { id: "android", label: "Android", desc: "Kotlin, Java, Jetpack, Gradle", icon: "code" },
+              { id: "ios", label: "iOS", desc: "Swift, SwiftUI, UIKit, Xcode", icon: "code" },
+              { id: "android_ios", label: "Android + iOS", desc: "Separate native mobile apps", icon: "monitor" }
+            ]
+          },
+          cross_platform: {
+            label: "Framework",
+            options: [
+              { id: "flutter", label: "Flutter", desc: "Dart, widgets, state management", icon: "code" },
+              { id: "react_native", label: "React Native", desc: "Metro, navigation, native bridge", icon: "code" },
+              { id: "kotlin_multiplatform", label: "KMP", desc: "Shared Kotlin business logic", icon: "code" },
+              { id: "ionic", label: "Ionic", desc: "Hybrid mobile app stack", icon: "layout" }
+            ]
+          }
+        }
+      },
+      frontend: {
+        label: "Frontend framework",
+        options: [
+          { id: "react", label: "React", desc: "Component UI, hooks, SPA apps", icon: "layout" },
+          { id: "nextjs", label: "Next.js", desc: "App router, SSR, server actions", icon: "layout" },
+          { id: "vue", label: "Vue", desc: "Vue, Pinia, Vite projects", icon: "layout" },
+          { id: "angular", label: "Angular", desc: "Signals, services, RxJS apps", icon: "layout" },
+          { id: "svelte", label: "Svelte / Kit", desc: "SvelteKit applications", icon: "layout" },
+          { id: "vanilla", label: "Vanilla JS / TS", desc: "No framework or custom framework", icon: "code" }
+        ]
+      },
+      backend: {
+        label: "Backend stack",
+        options: [
+          { id: "node", label: "Node.js", desc: "Express, NestJS, Fastify, APIs", icon: "server" },
+          { id: "python", label: "Python", desc: "Django, Flask, FastAPI", icon: "server" },
+          { id: "go", label: "Go", desc: "Services, CLIs, HTTP APIs", icon: "server" },
+          { id: "java", label: "Java / Spring", desc: "Spring Boot enterprise systems", icon: "server" },
+          { id: "dotnet", label: ".NET / C#", desc: "ASP.NET, worker services", icon: "server" },
+          { id: "rust", label: "Rust", desc: "Axum, Actix, systems services", icon: "server" }
+        ]
+      },
+      fullstack: {
+        label: "Full-stack framework",
+        options: [
+          { id: "next_full", label: "Next.js Full Stack", desc: "React plus server-side capabilities", icon: "stack" },
+          { id: "mern", label: "MERN", desc: "MongoDB, Express, React, Node", icon: "stack" },
+          { id: "t3", label: "T3 Stack", desc: "TypeScript, tRPC, Prisma", icon: "stack" },
+          { id: "django_react", label: "Django + React", desc: "Python backend plus web UI", icon: "stack" },
+          { id: "laravel_vue", label: "Laravel + Vue", desc: "PHP backend plus Vue UI", icon: "stack" },
+          { id: "rails", label: "Rails", desc: "Rails, Hotwire, React, or API mode", icon: "stack" }
+        ]
+      },
+      devops: {
+        label: "Infrastructure focus",
+        options: [
+          { id: "docker_k8s", label: "Docker / Kubernetes", desc: "Containers and orchestration", icon: "cloud" },
+          { id: "aws", label: "AWS", desc: "AWS infrastructure and delivery", icon: "cloud" },
+          { id: "gcp", label: "GCP", desc: "Google Cloud Platform", icon: "cloud" },
+          { id: "azure", label: "Azure", desc: "Azure apps and pipelines", icon: "cloud" },
+          { id: "terraform", label: "Terraform / IaC", desc: "Infrastructure as code", icon: "code" },
+          { id: "cicd", label: "CI/CD", desc: "Build, test, deploy workflows", icon: "git" }
+        ]
+      },
+      ai_ml: {
+        label: "AI / ML domain",
+        options: [
+          { id: "llm_app", label: "LLM Application", desc: "AI features, tools, agents, assistants", icon: "brain" },
+          { id: "rag", label: "RAG System", desc: "Retrieval, vector DB, chunking", icon: "brain" },
+          { id: "ml_model", label: "ML Model", desc: "Training, eval, inference", icon: "brain" },
+          { id: "data_pipeline", label: "Data Pipeline", desc: "ETL, analytics, batch jobs", icon: "git" },
+          { id: "computer_vision", label: "Computer Vision", desc: "Image and video workflows", icon: "eye" },
+          { id: "mlops", label: "MLOps", desc: "Model deployment and monitoring", icon: "cloud" }
+        ]
+      },
+      desktop: {
+        label: "Desktop framework",
+        options: [
+          { id: "electron", label: "Electron", desc: "Desktop apps with web stack", icon: "monitor" },
+          { id: "tauri", label: "Tauri", desc: "Rust-powered desktop apps", icon: "monitor" },
+          { id: "native_mac", label: "Native macOS", desc: "Swift, AppKit, SwiftUI", icon: "monitor" },
+          { id: "dotnet_desktop", label: ".NET Desktop", desc: "WPF, WinUI, MAUI", icon: "monitor" },
+          { id: "qt", label: "Qt / C++", desc: "Cross-platform native desktop", icon: "monitor" }
+        ]
+      },
+      integration: {
+        label: "Integration style",
+        options: [
+          { id: "rest", label: "REST API", desc: "HTTP resources and contracts", icon: "plug" },
+          { id: "graphql", label: "GraphQL", desc: "Schema, resolvers, clients", icon: "plug" },
+          { id: "grpc", label: "gRPC", desc: "Protobuf and service contracts", icon: "plug" },
+          { id: "webhook", label: "Webhooks", desc: "Inbound and outbound events", icon: "plug" },
+          { id: "microservices", label: "Microservices", desc: "Service boundaries and messages", icon: "stack" },
+          { id: "event_driven", label: "Event-driven", desc: "Queues, streams, async flows", icon: "git" }
+        ]
+      }
+    };
+
+    const APP_TYPES = ["Not specified", "E-Commerce / Marketplace", "SaaS Platform", "Social / Community", "Enterprise / B2B Tool", "Healthcare / MedTech", "FinTech / Banking", "EdTech / Learning", "Productivity / Utility", "Content / Media", "Real Estate", "Logistics", "Gaming", "IoT / Hardware", "Internal Tool / Dashboard", "Other"];
+    const TEAM_SIZES = ["Not specified", "Solo Developer", "2-5 Small Team", "6-15 Mid Team", "16-50 Large Team", "50+ Enterprise"];
+    const ARCHITECTURES = ["Auto-detect from codebase", "Monolith", "Microservices", "Serverless / FaaS", "Monorepo", "Event-Driven", "Clean Architecture", "Domain-Driven Design", "Layered Architecture", "Feature-Sliced", "Not sure yet"];
+    const ANALYSIS_DEPTH = ["Enterprise deep analysis", "Fast project audit", "Security-focused review", "Architecture-focused review", "Testing and quality review", "AI-agent setup only"];
+    const DATABASES = ["PostgreSQL", "MySQL", "MongoDB", "SQLite", "Redis", "Supabase", "Firebase", "DynamoDB", "Elasticsearch", "PlanetScale", "Prisma", "None / TBD"];
+    const AUTH = ["JWT", "OAuth2 / Social", "Session-based", "Clerk", "Auth0", "Firebase Auth", "Supabase Auth", "API Keys", "SSO / SAML", "No Auth"];
+    const TARGETS = ["Generic AI coding tool", "Codex", "Cursor", "Windsurf", "Claude Code", "Cline", "Antigravity"];
+    const DELIVERABLES = ["AGENTS.md", ".cursorrules", ".windsurfrules", "CLAUDE.md", ".clinerules", "rules/architecture.md", "rules/security.md", "agents/registry.md", "docs/ai-workflow.md"];
+
+    const AGENTS = [
+      { id: "orchestrator", label: "Orchestrator", desc: "Coordinates agents and GO / NO-GO gates", icon: "robot", color: "purple" },
+      { id: "architect", label: "Architect", desc: "Owns structure, boundaries, and ADRs", icon: "stack", color: "blue" },
+      { id: "quality", label: "Code Quality", desc: "Naming, type safety, lint, maintainability", icon: "code", color: "cyan" },
+      { id: "security", label: "Security", desc: "Threat model, secrets, auth, OWASP checks", icon: "shield", color: "rose" },
+      { id: "tests", label: "Test Guardian", desc: "Coverage, regression tests, critical paths", icon: "test", color: "green" },
+      { id: "performance", label: "Performance", desc: "SLOs, bundles, queries, latency, memory", icon: "gauge", color: "amber" },
+      { id: "impact", label: "Impact Analysis", desc: "Blast radius before every code change", icon: "git", color: "slate" },
+      { id: "implementation", label: "Implementation", desc: "Scoped coding agent with rollback plans", icon: "zap", color: "violet" },
+      { id: "documentation", label: "Documentation", desc: "README, ADR, API, and workflow updates", icon: "docs", color: "blue" },
+      { id: "refactor", label: "Refactoring", desc: "Behavior-preserving improvements only", icon: "rotate", color: "green" }
+    ];
+
+    const RULES = [
+      { id: "architecture", label: "Architecture", desc: "Boundaries, imports, folders, patterns", icon: "stack", color: "blue" },
+      { id: "code_quality", label: "Code Quality", desc: "Naming, complexity, typing, style", icon: "code", color: "cyan" },
+      { id: "testing", label: "Testing", desc: "Coverage, mocks, E2E, regression gates", icon: "test", color: "green" },
+      { id: "security", label: "Security", desc: "Secrets, auth, input validation, CVEs", icon: "shield", color: "rose" },
+      { id: "performance", label: "Performance", desc: "SLOs, profiling, budgets, bottlenecks", icon: "gauge", color: "amber" },
+      { id: "workflow", label: "Git Workflow", desc: "Branches, PRs, commits, CI gates", icon: "git", color: "slate" },
+      { id: "documentation", label: "Documentation", desc: "ADRs, README, API and changelog rules", icon: "docs", color: "purple" },
+      { id: "ai_safety", label: "AI Safety", desc: "Prompt injection, token budget, evals", icon: "brain", color: "violet" }
+    ];
+
+    const STEPS = [
+      { title: "Platform", subtitle: "project type", icon: "stack", color: "purple" },
+      { title: "Technology", subtitle: "framework", icon: "code", color: "cyan" },
+      { title: "Context", subtitle: "existing project", icon: "docs", color: "amber" },
+      { title: "Agents & Rules", subtitle: "outputs", icon: "robot", color: "rose" }
+    ];
+
+    const state = {
+      step: 0,
+      platform: "fullstack",
+      tech: "next_full",
+      subTech: "",
+      projectName: "",
+      projectPath: "",
+      appType: "Not specified",
+      teamSize: "Not specified",
+      architecture: "Auto-detect from codebase",
+      analysisDepth: "Enterprise deep analysis",
+      projectDesc: "",
+      knownIssues: "",
+      databases: ["PostgreSQL", "Redis"],
+      auth: ["JWT"],
+      target: "Generic AI coding tool",
+      agents: AGENTS.map((a) => a.id),
+      rules: RULES.map((r) => r.id),
+      deliverables: ["AGENTS.md", ".cursorrules", "CLAUDE.md", "agents/registry.md", "docs/ai-workflow.md"]
+    };
+
+    function icon(name) {
+      return ICONS[name] || ICONS.sparkles;
+    }
+
+    function colorVars(color) {
+      const c = COLORS[color] || COLORS.blue;
+      return `--accent:${c.accent};--accent-dark:${c.dark};--soft-accent:${c.soft};--shadow-accent:${c.shadow};`;
+    }
+
+    function setIconMarkup(root = document) {
+      root.querySelectorAll("[data-icon]").forEach((node) => {
+        node.innerHTML = icon(node.dataset.icon);
+        node.classList.add("small-icon");
+      });
+    }
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function getPlatform() {
+      return PLATFORMS.find((p) => p.id === state.platform) || PLATFORMS[0];
+    }
+
+    function getTechLabel() {
+      const tech = TECH[state.platform];
+      const selected = tech?.options.find((item) => item.id === state.tech);
+      const next = selected && tech?.next?.[selected.id];
+      const sub = next?.options.find((item) => item.id === state.subTech);
+      return [getPlatform().label, selected?.label, sub?.label].filter(Boolean).join(" -> ");
+    }
+
+    function selectedItems(list, selectedIds) {
+      return list.filter((item) => selectedIds.includes(item.id));
+    }
+
+    function makeCard(item, selected, handler, className = "choice-card") {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `${className}${selected ? " selected" : ""}`;
+      button.style.cssText = colorVars(item.color || getPlatform().color);
+      button.innerHTML = `
+        <span class="card-icon">${icon(item.icon)}</span>
+        <h4>${item.label}</h4>
+        <p>${item.desc || ""}</p>
+      `;
+      button.addEventListener("click", handler);
+      return button;
+    }
+
+    function makePill(label, selected, handler, color = "blue") {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `pill-button${selected ? " selected" : ""}`;
+      button.style.cssText = colorVars(color);
+      button.innerHTML = selected ? `${icon("check")} ${label}` : label;
+      button.addEventListener("click", handler);
+      return button;
+    }
+
+    function populateSelect(id, items) {
+      const select = byId(id);
+      select.innerHTML = items.map((item) => `<option value="${item}">${item}</option>`).join("");
+    }
+
+    function updateFromFields() {
+      state.projectName = byId("projectName").value.trim();
+      state.projectPath = byId("projectPath").value.trim();
+      state.appType = byId("appType").value;
+      state.teamSize = byId("teamSize").value;
+      state.architecture = byId("architecture").value;
+      state.analysisDepth = byId("analysisDepth").value;
+      state.projectDesc = byId("projectDesc").value.trim();
+      state.knownIssues = byId("knownIssues").value.trim();
+    }
+
+    function syncFields() {
+      byId("projectName").value = state.projectName;
+      byId("projectPath").value = state.projectPath;
+      byId("appType").value = state.appType;
+      byId("teamSize").value = state.teamSize;
+      byId("architecture").value = state.architecture;
+      byId("analysisDepth").value = state.analysisDepth;
+      byId("projectDesc").value = state.projectDesc;
+      byId("knownIssues").value = state.knownIssues;
+    }
+
+    function renderSteps() {
+      const root = byId("stepList");
+      root.innerHTML = "";
+      STEPS.forEach((step, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `step-button${index < state.step ? " done" : ""}`;
+        if (index === state.step) button.setAttribute("aria-current", "step");
+        button.style.cssText = colorVars(step.color);
+        button.innerHTML = `
+          <span class="step-icon" style="background: var(--accent)">${icon(index < state.step ? "check" : step.icon)}</span>
+          <span><span class="step-title">${step.title}</span><span class="step-subtitle">${step.subtitle}</span></span>
+        `;
+        button.addEventListener("click", () => setStep(index));
+        root.appendChild(button);
+      });
+    }
+
+    function renderPlatformGrid() {
+      const grid = byId("platformGrid");
+      grid.innerHTML = "";
+      PLATFORMS.forEach((platform) => {
+        grid.appendChild(makeCard(platform, platform.id === state.platform, () => {
+          state.platform = platform.id;
+          const firstTech = TECH[platform.id].options[0];
+          state.tech = firstTech.id;
+          state.subTech = "";
+          render();
+        }));
+      });
+    }
+
+    function renderTechGrid() {
+      const tech = TECH[state.platform];
+      const platform = getPlatform();
+      const grid = byId("techGrid");
+      grid.innerHTML = "";
+      byId("selectionFlow").innerHTML = `
+        <span class="chip strong" style="${colorVars(platform.color)}">${icon(platform.icon)} ${platform.label}</span>
+        <span class="chip">${tech.label}</span>
+      `;
+      tech.options.forEach((item) => {
+        grid.appendChild(makeCard({ ...item, color: platform.color }, item.id === state.tech, () => {
+          state.tech = item.id;
+          state.subTech = "";
+          const next = tech.next?.[item.id];
+          if (next) state.subTech = next.options[0].id;
+          render();
+        }, "option-card"));
+      });
+
+      const selected = tech.options.find((item) => item.id === state.tech);
+      const next = selected && tech.next?.[selected.id];
+      const panel = byId("subTechPanel");
+      if (!next) {
+        panel.hidden = true;
+        return;
+      }
+      panel.hidden = false;
+      byId("subTechTitle").textContent = next.label;
+      const subGrid = byId("subTechGrid");
+      subGrid.innerHTML = "";
+      next.options.forEach((item) => {
+        subGrid.appendChild(makeCard({ ...item, color: platform.color }, item.id === state.subTech, () => {
+          state.subTech = item.id;
+          render();
+        }, "option-card"));
+      });
+    }
+
+    function renderPillGroups() {
+      const groups = [
+        ["databasePills", DATABASES, "databases", "green"],
+        ["authPills", AUTH, "auth", "rose"],
+        ["targetPills", TARGETS, "target", "blue"],
+        ["deliverablePills", DELIVERABLES, "deliverables", "purple"]
+      ];
+
+      groups.forEach(([rootId, items, key, color]) => {
+        const root = byId(rootId);
+        root.innerHTML = "";
+        items.forEach((label) => {
+          const isTarget = key === "target";
+          const selected = isTarget ? state.target === label : state[key].includes(label);
+          root.appendChild(makePill(label, selected, () => {
+            if (isTarget) {
+              state.target = label;
+            } else {
+              const set = new Set(state[key]);
+              selected ? set.delete(label) : set.add(label);
+              state[key] = Array.from(set);
+            }
+            render();
+          }, color));
+        });
+      });
+    }
+
+    function renderAgentRuleCards() {
+      const agentRoot = byId("agentGrid");
+      agentRoot.innerHTML = "";
+      AGENTS.forEach((agent) => {
+        agentRoot.appendChild(makeCard(agent, state.agents.includes(agent.id), () => {
+          toggleId("agents", agent.id);
+          render();
+        }, "option-card"));
+      });
+
+      const ruleRoot = byId("ruleGrid");
+      ruleRoot.innerHTML = "";
+      RULES.forEach((rule) => {
+        ruleRoot.appendChild(makeCard(rule, state.rules.includes(rule.id), () => {
+          toggleId("rules", rule.id);
+          render();
+        }, "option-card"));
+      });
+    }
+
+    function toggleId(key, id) {
+      const set = new Set(state[key]);
+      set.has(id) ? set.delete(id) : set.add(id);
+      state[key] = Array.from(set);
+    }
+
+    function setStep(step) {
+      updateFromFields();
+      state.step = Math.max(0, Math.min(3, step));
+      render();
+    }
+
+    function renderSections() {
+      document.querySelectorAll(".section").forEach((section) => {
+        section.classList.toggle("active", Number(section.dataset.section) === state.step);
+      });
+      const title = ["Select platform", "Choose technology", "Describe existing project", "Select agents, rules, and files"][state.step];
+      byId("screenTitle").textContent = title;
+      byId("screenSubtitle").textContent = "Generate a master prompt that asks an AI coding tool to audit the existing project, create project-specific rules, define agents, and prepare workflow files.";
+    }
+
+    function generatePrompt() {
+      updateFromFields();
+      const techStack = getTechLabel() || "Auto-detected stack";
+      const platform = getPlatform();
+      const agents = selectedItems(AGENTS, state.agents);
+      const rules = selectedItems(RULES, state.rules);
+      const db = state.databases.length ? state.databases.join(", ") : "Auto-detect";
+      const auth = state.auth.length ? state.auth.join(", ") : "Auto-detect";
+      const deliverables = state.deliverables.length ? state.deliverables : ["AGENTS.md", "AI rules file"];
+      const agentLines = agents.map((agent, index) => {
+        const num = String(index + 1).padStart(3, "0");
+        return `AGENT-${num}: ${agent.label}
+- Purpose: ${agent.desc}
+- Must inspect existing project patterns before proposing new rules.
+- Must output findings, risks, exact files affected, and confidence score.`;
+      }).join("\n\n");
+      const ruleLines = rules.map((rule, index) => {
+        const num = String(index + 1).padStart(2, "0");
+        return `RULE-PACK-${num}: ${rule.label}
+- Focus: ${rule.desc}
+- Create project-specific rules based on detected code patterns.
+- Each rule must include: reason, examples, anti-patterns, enforcement method, severity.`;
+      }).join("\n\n");
+      const platformRules = platformSpecificRules(state.platform, state.tech, state.subTech);
+
+      return `# AGENTRULE FORGE MASTER PROMPT
+
+You are a senior AI engineering architect working inside an existing project.
+Your job is to analyze the current codebase and generate practical AI rules,
+multi-agent instructions, and workflow files that can be used by AI coding tools.
+
+## TARGET AI TOOL
+${state.target}
+
+## PROJECT CONTEXT
+- Project name: ${state.projectName || "Auto-detect from repository"}
+- Project path / repository: ${state.projectPath || "Use current working directory"}
+- Platform: ${platform.label}
+- Technology stack: ${techStack}
+- Application type: ${state.appType}
+- Team size: ${state.teamSize}
+- Current architecture: ${state.architecture}
+- Analysis depth: ${state.analysisDepth}
+- Databases: ${db}
+- Authentication: ${auth}
+
+${state.projectDesc ? `## PROJECT DESCRIPTION\n${state.projectDesc}\n` : "## PROJECT DESCRIPTION\nAuto-detect the project purpose, major domains, and critical workflows from source files, docs, routes, schemas, tests, and configuration.\n"}
+${state.knownIssues ? `## KNOWN ISSUES AND PRIORITIES\n${state.knownIssues}\n` : "## KNOWN ISSUES AND PRIORITIES\nDiscover quality gaps, architectural drift, security concerns, missing tests, inconsistent conventions, and unclear AI-agent workflows.\n"}
+## PRIMARY OBJECTIVE
+Create a complete, project-specific AI operating system for this existing codebase:
+1. Review the entire project before creating any rules.
+2. Detect actual stack, frameworks, conventions, folder patterns, test tools, CI, and deployment flow.
+3. Audit existing AI rule files, if present, including AGENTS.md, .cursorrules, .windsurfrules, CLAUDE.md, .clinerules, and docs.
+4. Generate or update the requested rule and agent files.
+5. Make all output specific to this codebase, not generic advice.
+
+## NON-NEGOTIABLE BEHAVIOR
+- Do not invent project facts. If uncertain, label it as "needs confirmation".
+- Do not overwrite existing rule files blindly. First audit, merge, and preserve valuable project-specific rules.
+- Do not create generic rules that could apply to any project.
+- Every rule must be traceable to code, config, tests, docs, package files, or architecture discovered in this repository.
+- Prefer small, enforceable rules with examples over long abstract guidance.
+- If a file should be changed, explain why and provide the exact content or patch.
+
+## PHASE 1: FULL EXISTING PROJECT ANALYSIS
+Scan the complete repository:
+- Directory tree, hidden files, config files, package files, lockfiles, scripts, CI/CD, Docker, infrastructure files.
+- Entry points, routing, modules, services, components, data layer, auth layer, API contracts, tests, docs.
+- Dependencies, framework versions, runtime versions, linting, formatting, type checking, build tools.
+- Existing AI instructions and rule files.
+- Naming conventions, folder patterns, component/service patterns, error handling, logging, state management.
+- High-risk areas: auth, payments, admin actions, data writes, migrations, external APIs, secrets, AI prompts.
+
+${platformRules}
+
+## PHASE 2: EXISTING RULE FILE AUDIT
+For every existing AI/rule file, output this schema:
+
+\`\`\`yaml
+file: path/to/rule-file
+status: keep | merge | refactor | replace | delete
+valuable_rules:
+  - rule text or summary
+problems:
+  - stale, generic, conflicting, unsafe, duplicated, too broad, not enforceable
+recommendation: exact action
+priority: critical | high | medium | low
+\`\`\`
+
+After the audit, create one consolidated rule strategy that avoids conflicts between tools.
+
+## PHASE 3: MULTI-AGENT SYSTEM TO CREATE
+Create the following agent registry for this project:
+
+${agentLines || "Create a minimal Orchestrator, Architect, Security, Test, and Implementation agent set."}
+
+Each agent definition must include:
+- Mission
+- When to run
+- Inputs required
+- Output schema
+- Blocking conditions
+- Collaboration rules with other agents
+- Tooling or files it should inspect
+- Example prompt template calibrated to this repository
+
+## PHASE 4: RULE PACKS TO CREATE
+Generate these project-specific rule packs:
+
+${ruleLines || "Generate architecture, code quality, testing, security, performance, workflow, and documentation rules."}
+
+Each rule must follow this structure:
+
+\`\`\`yaml
+id: short-stable-id
+title: concise rule name
+severity: blocking | high | medium | low
+applies_to:
+  - files, folders, modules, or workflows
+rule: exact instruction
+why: project-specific reason
+good_example: code or pattern from this project when possible
+bad_example: anti-pattern to avoid
+enforcement: lint | test | CI | review checklist | agent review
+owner_agent: responsible agent
+\`\`\`
+
+## PHASE 5: CHANGE WORKFLOW
+Create a workflow that every AI coding session must follow:
+1. Orchestrator receives task and identifies impacted areas.
+2. Impact Analysis maps files, dependencies, tests, and risk.
+3. Architect, Security, Test Guardian, and Performance agents review in parallel when relevant.
+4. Implementation agent edits only approved files.
+5. Post-change validation runs lint, type check, tests, security checks, and targeted project commands.
+6. Documentation agent updates rule files, docs, ADRs, API docs, or changelog when needed.
+7. Orchestrator gives final GO / NO-GO result.
+
+Include a strict rule that no implementation happens before impact analysis.
+
+## PHASE 6: FILES TO GENERATE OR UPDATE
+Create or update these deliverables:
+${deliverables.map((file) => `- ${file}`).join("\n")}
+
+For each file:
+- Explain purpose.
+- Show final proposed content.
+- Mention whether it is new, merged, or replacing stale content.
+- Keep content concise enough for AI coding tools to use reliably.
+
+## PHASE 7: FINAL OUTPUT REQUIRED
+Return the answer in this exact order:
+1. Repository analysis summary.
+2. Existing rules audit.
+3. Detected stack and architecture.
+4. Risk map and critical workflows.
+5. Agent registry.
+6. Rule packs.
+7. Generated file contents.
+8. Setup instructions for ${state.target}.
+9. Validation checklist.
+10. Open questions that need human confirmation.
+
+## QUALITY BAR
+- Use concrete filenames, scripts, packages, and directories from the repo.
+- Keep rules short, explicit, and enforceable.
+- Include confidence percentages for major findings.
+- Mark speculative items clearly.
+- Prefer project reality over best-practice templates.
+- Do not make unrelated code changes unless asked.
+
+Prompt created with AgentRule Forge by Bhargav Parmar.
+`;
+    }
+
+    function platformSpecificRules(platform, tech, subTech) {
+      const stack = getTechLabel();
+      const common = `## PLATFORM-SPECIFIC ANALYSIS FOR ${stack}
+- Detect language versions, framework versions, package managers, and build commands.
+- Identify project conventions already used successfully.
+- Identify conflicting conventions and recommend one standard.`;
+
+      if (platform === "frontend") {
+        return `${common}
+- Review component structure, routing, state management, data fetching, styling, accessibility, bundle size, and rendering mode.
+- Create rules for component size, hooks, API clients, forms, loading states, error boundaries, responsive UI, and WCAG checks.`;
+      }
+      if (platform === "backend") {
+        return `${common}
+- Review API routes, controllers, services, repositories, jobs, validation, auth middleware, database access, migrations, and logs.
+- Create rules for layer separation, input validation, error shapes, transactions, rate limits, secrets, and integration tests.`;
+      }
+      if (platform === "fullstack") {
+        return `${common}
+- Review client/server boundaries, routes, API handlers, database models, auth flows, forms, data fetching, tests, and deployment configs.
+- Create rules for server-only code, shared types, schema validation, UI state, API contracts, migrations, and E2E coverage.`;
+      }
+      if (platform === "mobile") {
+        return `${common}
+- Review navigation, screen structure, state management, native modules, offline behavior, permissions, local storage, crash reporting, and release configs.
+- Create rules for platform-specific code, secure storage, API usage, UI performance, background work, and device testing.`;
+      }
+      if (platform === "ai_ml") {
+        return `${common}
+- Review prompts, model calls, evaluation datasets, vector stores, chunking, embeddings, telemetry, cost controls, and output validation.
+- Create rules for prompt versioning, prompt injection defense, token budgets, schema validation, golden evals, and model fallback behavior.`;
+      }
+      if (platform === "devops") {
+        return `${common}
+- Review CI/CD, environments, secrets, Dockerfiles, IaC, deployment targets, monitoring, logs, rollbacks, and access policies.
+- Create rules for environment parity, approvals, secret handling, drift checks, release gates, and incident runbooks.`;
+      }
+      return `${common}
+- Review architecture, packaging, data flow, user flows, dependencies, platform APIs, tests, release process, and security-sensitive paths.
+- Create rules matched to detected framework and repository structure.`;
+    }
+
+    function renderPrompt() {
+      const prompt = generatePrompt();
+      byId("promptPreview").textContent = prompt;
+      byId("statChars").textContent = prompt.length.toLocaleString();
+      byId("statAgents").textContent = state.agents.length.toLocaleString();
+      byId("statRules").textContent = state.rules.length.toLocaleString();
+      byId("agentCount").textContent = state.agents.length.toLocaleString();
+      byId("ruleCount").textContent = state.rules.length.toLocaleString();
+    }
+
+    function render() {
+      renderSteps();
+      renderSections();
+      renderPlatformGrid();
+      renderTechGrid();
+      renderPillGroups();
+      renderAgentRuleCards();
+      syncFields();
+      renderPrompt();
+      setIconMarkup();
+    }
+
+    function showToast(message) {
+      const toast = byId("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    async function copyPrompt() {
+      const prompt = generatePrompt();
+      try {
+        await navigator.clipboard.writeText(prompt);
+        showToast("Master prompt copied");
+      } catch (error) {
+        const area = document.createElement("textarea");
+        area.value = prompt;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+        showToast("Master prompt copied");
+      }
+    }
+
+    function downloadPrompt() {
+      const prompt = generatePrompt();
+      const blob = new Blob([prompt], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const name = (state.projectName || "existing-project").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      link.href = url;
+      link.download = `${name || "project"}-agent-rule-master-prompt.md`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("Markdown prompt downloaded");
+    }
+
+    function resetState() {
+      Object.assign(state, {
+        step: 0,
+        platform: "fullstack",
+        tech: "next_full",
+        subTech: "",
+        projectName: "",
+        projectPath: "",
+        appType: "Not specified",
+        teamSize: "Not specified",
+        architecture: "Auto-detect from codebase",
+        analysisDepth: "Enterprise deep analysis",
+        projectDesc: "",
+        knownIssues: "",
+        databases: ["PostgreSQL", "Redis"],
+        auth: ["JWT"],
+        target: "Generic AI coding tool",
+        agents: AGENTS.map((a) => a.id),
+        rules: RULES.map((r) => r.id),
+        deliverables: ["AGENTS.md", ".cursorrules", "CLAUDE.md", "agents/registry.md", "docs/ai-workflow.md"]
+      });
+      render();
+      showToast("Generator reset");
+    }
+
+    function bindEvents() {
+      populateSelect("appType", APP_TYPES);
+      populateSelect("teamSize", TEAM_SIZES);
+      populateSelect("architecture", ARCHITECTURES);
+      populateSelect("analysisDepth", ANALYSIS_DEPTH);
+
+      ["projectName", "projectPath", "appType", "teamSize", "architecture", "analysisDepth", "projectDesc", "knownIssues"].forEach((id) => {
+        byId(id).addEventListener("input", () => {
+          updateFromFields();
+          renderPrompt();
+        });
+      });
+
+      byId("toTechBtn").addEventListener("click", () => setStep(1));
+      byId("backToPlatformBtn").addEventListener("click", () => setStep(0));
+      byId("toProjectBtn").addEventListener("click", () => setStep(2));
+      byId("backToTechBtn").addEventListener("click", () => setStep(1));
+      byId("toRulesBtn").addEventListener("click", () => setStep(3));
+      byId("backToProjectBtn").addEventListener("click", () => setStep(2));
+      byId("generateBtn").addEventListener("click", () => {
+        renderPrompt();
+        showToast("Master prompt generated");
+      });
+      byId("generateTopBtn").addEventListener("click", () => {
+        setStep(3);
+        showToast("Master prompt generated");
+      });
+      byId("copyBtn").addEventListener("click", copyPrompt);
+      byId("downloadBtn").addEventListener("click", downloadPrompt);
+      byId("resetBtn").addEventListener("click", resetState);
+    }
+
+    bindEvents();
+    render();
+  </script>
+</body>
+</html>
