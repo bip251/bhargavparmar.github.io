@@ -176,22 +176,11 @@ a {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 900;
+  font-size: 20px;
   letter-spacing: 0;
-}
-
-.brand-mark {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  color: #061018;
-  background: linear-gradient(135deg, var(--cyan), var(--green));
-  box-shadow: 0 0 24px rgba(34, 211, 238, 0.34);
 }
 
 .nav-links {
