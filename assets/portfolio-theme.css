@@ -711,7 +711,7 @@ a {
 }
 
 .tool-grid {
-  grid-template-columns: repeat(7, minmax(230px, 1fr));
+  grid-template-columns: repeat(8, minmax(230px, 1fr));
   overflow-x: auto;
   padding: 4px 4px 18px;
   scroll-snap-type: x mandatory;

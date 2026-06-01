@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backend Prompt Suite — Bhargav Parmar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root {
+  --blue-900: #0a1628;
+  --blue-800: #0f2040;
+  --blue-700: #163058;
+  --blue-600: #1e4080;
+  --blue-500: #2655a8;
+  --blue-400: #3470d4;
+  --blue-300: #5a90e8;
+  --blue-200: #94b8f2;
+  --blue-100: #d0e3fc;
+  --blue-50:  #eaf2ff;
+  --slate-900: #0d1117;
+  --slate-800: #161c26;
+  --slate-700: #1f2937;
+  --slate-600: #2d3a4a;
+  --slate-500: #3d4f62;
+  --slate-400: #556678;
+  --slate-300: #7b8fa3;
+  --slate-200: #a8b8c8;
+  --slate-100: #d4dde6;
+  --slate-50:  #f0f4f8;
+  --white: #ffffff;
+  --gold: #c9a84c;
+  --gold-light: #f0d88a;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.14), 0 2px 6px rgba(0,0,0,.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.1);
+  --font-body: 'DM Sans', sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+  --font-mono: 'DM Mono', monospace;
+  --transition: 150ms cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--slate-900);
+  color: var(--slate-100);
+  min-height: 100vh;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--blue-900);
+  border-bottom: 1px solid rgba(52,112,212,.2);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--blue-500);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: .01em;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: var(--blue-200);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.header-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(52,112,212,.18);
+  color: var(--blue-200);
+  border: 1px solid rgba(52,112,212,.3);
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.header-link {
+  font-size: 11px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.05);
+  color: var(--slate-100);
+  border: 1px solid rgba(255,255,255,.12);
+  text-decoration: none;
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition);
+}
+
+.header-link:hover {
+  border-color: rgba(52,112,212,.45);
+  color: var(--white);
+  background: rgba(52,112,212,.14);
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--blue-900);
+  padding: 2.5rem 2rem 2rem;
+  border-bottom: 1px solid rgba(52,112,212,.15);
+}
+
+.hero-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--blue-300);
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.hero-title span {
+  color: var(--blue-300);
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--slate-200);
+  max-width: 600px;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--slate-300);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ── TABS ── */
+.tab-section {
+  margin-bottom: 1.5rem;
+}
+
+.tab-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--slate-300);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.tab {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-600);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--blue-500);
+  transform: scaleX(0);
+  transition: transform var(--transition);
+  transform-origin: left;
+}
+
+.tab.active::before,
+.tab:hover::before { transform: scaleX(1); }
+
+.tab.active {
+  background: var(--slate-700);
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 1px rgba(52,112,212,.2), var(--shadow-sm);
+}
+
+.tab:hover:not(.active) {
+  background: var(--slate-700);
+  border-color: var(--slate-400);
+}
+
+.tab-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.tab-db .tab-icon-wrap { background: rgba(52,112,212,.15); color: var(--blue-300); }
+.tab-api .tab-icon-wrap { background: rgba(34,197,94,.12); color: #4ade80; }
+.tab-full .tab-icon-wrap { background: rgba(201,168,76,.12); color: var(--gold); }
+
+.tab.active.tab-db .tab-icon-wrap { background: rgba(52,112,212,.25); }
+.tab.active.tab-api .tab-icon-wrap { background: rgba(34,197,94,.2); }
+.tab.active.tab-full .tab-icon-wrap { background: rgba(201,168,76,.2); }
+
+.tab-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+
+.tab-desc {
+  font-size: 11px;
+  color: var(--slate-300);
+  line-height: 1.4;
+}
+
+.tab-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+.badge-db { background: rgba(52,112,212,.18); color: var(--blue-200); }
+.badge-api { background: rgba(34,197,94,.12); color: #86efac; }
+.badge-full { background: rgba(201,168,76,.12); color: var(--gold-light); }
+
+/* ── GENERATOR PANELS ── */
+.generator { display: none; }
+.generator.active { display: block; }
+
+/* ── GEN META BAR ── */
+.gen-meta {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-600);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.gen-meta-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.meta-db { background: rgba(52,112,212,.2); color: var(--blue-300); }
+.meta-api { background: rgba(34,197,94,.15); color: #4ade80; }
+.meta-full { background: rgba(201,168,76,.15); color: var(--gold); }
+
+.gen-meta-body { flex: 1; }
+
+.gen-meta-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.gen-meta-desc {
+  font-size: 13px;
+  color: var(--slate-200);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.gen-meta-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.mt-blue { background: rgba(52,112,212,.12); color: var(--blue-200); border-color: rgba(52,112,212,.25); }
+.mt-green { background: rgba(34,197,94,.1); color: #86efac; border-color: rgba(34,197,94,.2); }
+.mt-gold { background: rgba(201,168,76,.1); color: var(--gold-light); border-color: rgba(201,168,76,.2); }
+.mt-slate { background: rgba(255,255,255,.05); color: var(--slate-200); border-color: rgba(255,255,255,.1); }
+
+/* ── SECTION CARD ── */
+.section-card {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-600);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.section-head {
+  padding: .85rem 1.25rem;
+  border-bottom: 1px solid var(--slate-600);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.02);
+}
+
+.section-head-icon {
+  font-size: 16px;
+  color: var(--blue-300);
+}
+
+.section-head-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  flex: 1;
+}
+
+.section-head-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--blue-700);
+  color: var(--blue-200);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── FIELDS ── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+
+.field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--slate-200);
+  letter-spacing: .01em;
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--slate-400);
+  margin-top: 2px;
+}
+
+.field input[type="text"],
+.field select,
+.field textarea {
+  background: var(--slate-700);
+  border: 1px solid var(--slate-500);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 9px 12px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+  outline: none;
+  appearance: none;
+}
+
+.field input[type="text"]:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--blue-400);
+  box-shadow: 0 0 0 3px rgba(52,112,212,.18);
+}
+
+.field input[type="text"]::placeholder,
+.field textarea::placeholder { color: var(--slate-400); }
+
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b8fa3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.field select option {
+  background: var(--slate-700);
+  color: var(--white);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.55;
+}
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── TAG SELECTOR (multi-select with custom) ── */
+.tag-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 36px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--slate-500);
+  background: var(--slate-700);
+  color: var(--slate-200);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+  line-height: 1;
+}
+
+.tag-chip:hover {
+  border-color: var(--blue-400);
+  color: var(--white);
+  background: var(--slate-600);
+}
+
+.tag-chip.selected {
+  background: var(--blue-600);
+  border-color: var(--blue-400);
+  color: var(--white);
+}
+
+.tag-chip.selected .chip-check { display: inline; }
+.tag-chip .chip-check { display: none; font-size: 11px; }
+
+.tag-chip.custom-chip {
+  border-style: dashed;
+  color: var(--slate-300);
+}
+
+.tag-chip.custom-chip:hover {
+  border-color: var(--blue-300);
+  color: var(--blue-200);
+}
+
+.custom-tag-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.custom-tag-input {
+  flex: 1;
+  background: var(--slate-700);
+  border: 1px solid var(--slate-500);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.custom-tag-input:focus { border-color: var(--blue-400); }
+.custom-tag-input::placeholder { color: var(--slate-400); }
+
+.add-custom-btn {
+  background: var(--blue-600);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background var(--transition);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+}
+
+.add-custom-btn:hover { background: var(--blue-500); }
+
+/* ── CHECKBOX GROUP (check-style) ── */
+.check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.check-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--slate-500);
+  background: var(--slate-700);
+  color: var(--slate-200);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.check-chip:hover {
+  border-color: var(--blue-400);
+  color: var(--white);
+}
+
+.check-chip.checked {
+  background: rgba(52,112,212,.2);
+  border-color: var(--blue-400);
+  color: var(--blue-100);
+}
+
+.check-chip .chip-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1.5px solid var(--slate-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition);
+  font-size: 9px;
+}
+
+.check-chip.checked .chip-icon {
+  background: var(--blue-400);
+  border-color: var(--blue-400);
+  color: var(--white);
+}
+
+/* ── RISK SELECTOR ── */
+.risk-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.risk-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--slate-500);
+  background: var(--slate-700);
+  color: var(--slate-200);
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.risk-btn:hover { border-color: var(--slate-300); color: var(--white); }
+.risk-btn.rl-low.active { background: rgba(34,197,94,.15); border-color: #22c55e; color: #86efac; }
+.risk-btn.rl-med.active { background: rgba(245,158,11,.12); border-color: #f59e0b; color: #fcd34d; }
+.risk-btn.rl-high.active { background: rgba(239,68,68,.15); border-color: #ef4444; color: #fca5a5; }
+
+/* ── DYNAMIC ROWS ── */
+.dyn-rows { display: flex; flex-direction: column; gap: 6px; }
+
+.drow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.drow input {
+  flex: 1;
+  background: var(--slate-700);
+  border: 1px solid var(--slate-500);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.drow input:focus { border-color: var(--blue-400); }
+.drow input::placeholder { color: var(--slate-400); }
+
+.drow-del {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--slate-700);
+  border: 1px solid var(--slate-500);
+  color: var(--slate-300);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.drow-del:hover { background: rgba(239,68,68,.15); border-color: #ef4444; color: #fca5a5; }
+
+.add-row-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px dashed var(--slate-500);
+  border-radius: var(--radius-md);
+  color: var(--slate-300);
+  font-size: 12px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-body);
+  margin-top: 4px;
+}
+
+.add-row-btn:hover { border-color: var(--blue-400); color: var(--blue-200); background: rgba(52,112,212,.08); }
+
+/* ── NO-CONTEXT TOGGLE ── */
+.no-context-card {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-600);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.no-context-card:hover { border-color: var(--blue-500); background: var(--slate-700); }
+
+.no-context-card.active {
+  border-color: var(--blue-400);
+  background: rgba(52,112,212,.1);
+}
+
+.no-ctx-toggle {
+  width: 42px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--slate-600);
+  position: relative;
+  transition: background var(--transition);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.no-ctx-toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--white);
+  top: 3px;
+  left: 3px;
+  transition: transform var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.no-context-card.active .no-ctx-toggle { background: var(--blue-500); }
+.no-context-card.active .no-ctx-toggle::after { transform: translateX(18px); }
+
+.no-ctx-body { flex: 1; }
+
+.no-ctx-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.no-ctx-desc {
+  font-size: 12px;
+  color: var(--slate-300);
+  line-height: 1.5;
+}
+
+.no-ctx-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.no-ctx-item {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(52,112,212,.15);
+  color: var(--blue-200);
+  border: 1px solid rgba(52,112,212,.25);
+}
+
+/* ── GENERATE BUTTON ── */
+.gen-btn-wrap {
+  margin-bottom: 1.25rem;
+}
+
+.gen-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--blue-500);
+  border: none;
+  border-radius: var(--radius-lg);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: .01em;
+  box-shadow: 0 2px 12px rgba(52,112,212,.35);
+}
+
+.gen-btn:hover {
+  background: var(--blue-400);
+  box-shadow: 0 4px 20px rgba(52,112,212,.45);
+  transform: translateY(-1px);
+}
+
+.gen-btn:active { transform: translateY(0); }
+
+.gen-btn-api {
+  background: #16a34a;
+  box-shadow: 0 2px 12px rgba(22,163,74,.35);
+}
+
+.gen-btn-api:hover {
+  background: #15803d;
+  box-shadow: 0 4px 20px rgba(22,163,74,.45);
+}
+
+.gen-btn-full {
+  background: linear-gradient(135deg, var(--blue-600), #854d0e);
+  box-shadow: 0 2px 12px rgba(133,77,14,.25);
+}
+
+.gen-btn-full:hover {
+  box-shadow: 0 4px 20px rgba(133,77,14,.35);
+  transform: translateY(-1px);
+}
+
+/* ── OUTPUT ── */
+.output-card {
+  background: var(--slate-900);
+  border: 1px solid var(--slate-600);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: none;
+  margin-bottom: 2rem;
+  animation: slideIn .2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.output-card.visible { display: block; }
+
+.output-header {
+  background: var(--slate-800);
+  border-bottom: 1px solid var(--slate-600);
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.output-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.output-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.output-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.output-subtitle {
+  font-size: 11px;
+  color: var(--slate-300);
+}
+
+.output-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--slate-500);
+  background: var(--slate-700);
+  color: var(--slate-200);
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn:hover { background: var(--slate-600); border-color: var(--slate-300); color: var(--white); }
+
+.action-btn.success {
+  background: rgba(34,197,94,.15);
+  border-color: #22c55e;
+  color: #86efac;
+}
+
+.output-body {
+  padding: 1.25rem;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.output-body::-webkit-scrollbar { width: 5px; }
+.output-body::-webkit-scrollbar-track { background: transparent; }
+.output-body::-webkit-scrollbar-thumb { background: var(--slate-500); border-radius: 10px; }
+
+.output-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--slate-100);
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.output-footer {
+  background: var(--slate-800);
+  border-top: 1px solid var(--slate-600);
+  padding: .75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.char-count {
+  font-size: 11px;
+  color: var(--slate-400);
+  font-family: var(--font-mono);
+}
+
+.usage-tip {
+  font-size: 11px;
+  color: var(--slate-400);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--blue-900);
+  border-top: 1px solid rgba(52,112,212,.15);
+  padding: 1.5rem 2rem;
+  margin-top: 1rem;
+}
+
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.footer-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: var(--slate-300);
+}
+
+.footer-right {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(52,112,212,.1);
+  color: var(--blue-200);
+  border: 1px solid rgba(52,112,212,.2);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--slate-600);
+  margin: .25rem 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .tabs { grid-template-columns: 1fr; }
+  .row2, .row3 { grid-template-columns: 1fr; }
+  .hero-title { font-size: 24px; }
+  .main { padding: 1rem; }
+  .hero { padding: 1.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon"><i class="ti ti-terminal-2"></i></div>
+      <div class="brand-text">
+        <span class="brand-name">Bhargav Parmar</span>
+        <span class="brand-sub">Backend Prompt Suite</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <a class="header-link" href="../tools/"><i class="ti ti-arrow-left" style="font-size:12px"></i> All tools</a>
+      <div class="header-badge">
+        <i class="ti ti-shield-check" style="font-size:12px"></i>
+        Production-safe prompts
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <i class="ti ti-sparkles" style="font-size:13px"></i>
+      AI Prompt Engineering Tool
+    </div>
+    <h1 class="hero-title">Backend Change <span>Prompt Suite</span></h1>
+    <p class="hero-desc">Generate robust, AI-ready prompts for safe backend changes. Fill minimal details — get a comprehensive analysis prompt that covers database migrations, API impacts, web & mobile breakage, and rollback strategies.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Prompt generators</span></div>
+      <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Safety checks</span></div>
+      <div class="stat"><span class="stat-num">∞</span><span class="stat-label">AI tools compatible</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TABS -->
+  <div class="tab-section">
+    <div class="tab-label">Select prompt generator</div>
+    <div class="tabs">
+      <button class="tab tab-db active" onclick="switchTab('db')">
+        <div class="tab-badge badge-db">Schema</div>
+        <div class="tab-icon-wrap"><i class="ti ti-database"></i></div>
+        <div class="tab-name">DB Schema Guard</div>
+        <div class="tab-desc">Safe database schema changes with full impact analysis</div>
+      </button>
+      <button class="tab tab-api" onclick="switchTab('api')">
+        <div class="tab-badge badge-api">API</div>
+        <div class="tab-icon-wrap"><i class="ti ti-api"></i></div>
+        <div class="tab-name">API Change Shield</div>
+        <div class="tab-desc">Add or modify APIs without breaking web or mobile</div>
+      </button>
+      <button class="tab tab-full" onclick="switchTab('full')">
+        <div class="tab-badge badge-full">Combined</div>
+        <div class="tab-icon-wrap"><i class="ti ti-layers-intersect"></i></div>
+        <div class="tab-name">Full-Stack Sync</div>
+        <div class="tab-desc">End-to-end DB + API changes with one master prompt</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- GENERATOR 1: DB SCHEMA GUARD -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="generator active" id="gen-db">
+    <div class="gen-meta">
+      <div class="gen-meta-icon meta-db"><i class="ti ti-database"></i></div>
+      <div class="gen-meta-body">
+        <div class="gen-meta-name">DB Schema Guard</div>
+        <div class="gen-meta-desc">Use when adding new tables, modifying columns, adding indexes, altering constraints, or renaming schema objects. Generates a comprehensive prompt that forces thorough migration safety analysis, downstream API impact review, and web/mobile breakage assessment before any schema is touched.</div>
+        <div class="gen-meta-tags">
+          <span class="meta-tag mt-blue"><i class="ti ti-table" style="font-size:10px"></i> New table</span>
+          <span class="meta-tag mt-blue"><i class="ti ti-edit" style="font-size:10px"></i> Modify columns</span>
+          <span class="meta-tag mt-blue"><i class="ti ti-trash" style="font-size:10px"></i> Drop columns</span>
+          <span class="meta-tag mt-blue"><i class="ti ti-link" style="font-size:10px"></i> FK / relations</span>
+          <span class="meta-tag mt-slate"><i class="ti ti-shield-check" style="font-size:10px"></i> Rollback plan</span>
+          <span class="meta-tag mt-slate"><i class="ti ti-clock" style="font-size:10px"></i> Zero-downtime</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Table Details -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-table section-head-icon"></i>
+        <span class="section-head-title">Table details</span>
+        <span class="section-head-num">1</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Change type</label>
+          <select id="db-change-type">
+            <option value="add_table">Add new table</option>
+            <option value="add_column">Add column(s) to existing table</option>
+            <option value="modify_column">Modify existing column(s)</option>
+            <option value="drop_column">Remove / drop column(s)</option>
+            <option value="add_index">Add index or constraint</option>
+            <option value="rename">Rename table or column</option>
+            <option value="relationship">Add / change table relationship (FK)</option>
+            <option value="split_table">Split or refactor table structure</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Table name(s) involved</label>
+          <input type="text" id="db-table" placeholder="e.g. users, orders, user_addresses">
+        </div>
+        <div class="field">
+          <label class="field-label">Describe your changes (plain language)</label>
+          <textarea id="db-change-desc" placeholder="e.g. Add 'is_verified' (boolean, default false) and 'verified_at' (timestamp, nullable) columns to the users table. This is needed for the new email verification feature."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Reason for this change</label>
+          <input type="text" id="db-reason" placeholder="e.g. New email verification feature for mobile onboarding flow">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: System Context -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-server section-head-icon"></i>
+        <span class="section-head-title">System context</span>
+        <span class="section-head-num">2</span>
+      </div>
+      <div class="section-body">
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Database type</label>
+            <select id="db-type">
+              <option>MySQL / MariaDB</option>
+              <option>PostgreSQL</option>
+              <option>SQLite</option>
+              <option>Microsoft SQL Server</option>
+              <option>MongoDB</option>
+              <option>Oracle DB</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Approximate table size</label>
+            <select id="db-size">
+              <option value="">Unknown / small</option>
+              <option>Small (under 10k rows)</option>
+              <option>Medium (10k–500k rows)</option>
+              <option>Large (500k–5M rows)</option>
+              <option>Very large (5M+ rows)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Backend technology / ORM</label>
+          <span class="field-hint">Select all that apply. Add custom if not listed.</span>
+          <div class="tag-selector" id="db-backend-selector">
+            <div class="tags-wrap" id="db-backend-tags">
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Laravel Eloquent</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Node.js / Sequelize</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Node.js / TypeORM</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Django ORM</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Spring JPA / Hibernate</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Rails ActiveRecord</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Prisma</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>Raw SQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'db-backend')"><i class="ti ti-check chip-check"></i>.NET Entity Framework</span>
+            </div>
+            <div class="custom-tag-row">
+              <input class="custom-tag-input" id="db-backend-custom" placeholder="Add custom tech (e.g. Go GORM, Drizzle ORM)..." onkeydown="if(event.key==='Enter')addCustomTag('db-backend')">
+              <button class="add-custom-btn" onclick="addCustomTag('db-backend')"><i class="ti ti-plus" style="font-size:12px"></i> Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Platforms that consume this data</label>
+          <div class="check-group" id="db-platforms">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Web app</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>iOS app</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Android app</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Admin panel</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Third-party integrations</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Background jobs / cron</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Webhooks / event bus</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Known modules / features that touch this table</label>
+          <textarea id="db-modules" placeholder="e.g. User registration, login flow, profile page, admin user list, notification service" style="min-height:64px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Safety Preferences -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-shield-check section-head-icon"></i>
+        <span class="section-head-title">Safety preferences</span>
+        <span class="section-head-num">3</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Change risk level</label>
+          <div class="risk-row">
+            <button class="risk-btn rl-low" onclick="selectRisk('db','low',this)"><i class="ti ti-circle-check" style="font-size:14px"></i> Low — additive only</button>
+            <button class="risk-btn rl-med active" onclick="selectRisk('db','med',this)"><i class="ti ti-alert-triangle" style="font-size:14px"></i> Medium — modifying</button>
+            <button class="risk-btn rl-high" onclick="selectRisk('db','high',this)"><i class="ti ti-flame" style="font-size:14px"></i> High — destructive</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">What must the AI check for?</label>
+          <div class="check-group" id="db-checks">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Migration script safety</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Rollback strategy</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Zero-downtime deployment</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>API response impact</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Seed / test data impact</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Performance / index analysis</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Data backfill requirement</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>GDPR / data compliance</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Schema design review</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Foreign key / constraint check</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Additional constraints or notes</label>
+          <input type="text" id="db-notes" placeholder="e.g. Production has 2M+ user rows, no table locks allowed during deploy">
+        </div>
+      </div>
+    </div>
+
+    <!-- No-Context Toggle -->
+    <div class="no-context-card" id="db-no-ctx-card" onclick="toggleNoCtx('db')">
+      <div class="no-ctx-toggle" id="db-no-ctx-toggle"></div>
+      <div class="no-ctx-body">
+        <div class="no-ctx-title">
+          <i class="ti ti-eye-search" style="font-size:15px;color:var(--blue-300)"></i>
+          I don't have full context — let AI discover it
+        </div>
+        <div class="no-ctx-desc">Enable this if you don't know all the modules, APIs, or consumers. The generated prompt will instruct the AI to first scan your codebase, identify all usages of this table, and map out the full impact before suggesting any changes.</div>
+        <div class="no-ctx-items">
+          <span class="no-ctx-item">Auto-scan codebase</span>
+          <span class="no-ctx-item">Find all table usages</span>
+          <span class="no-ctx-item">Identify hidden dependencies</span>
+          <span class="no-ctx-item">Map API consumers</span>
+          <span class="no-ctx-item">List affected modules</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gen-btn-wrap">
+      <button class="gen-btn" onclick="generatePrompt('db')">
+        <i class="ti ti-wand" style="font-size:16px"></i>
+        Generate DB Schema Guard prompt
+        <i class="ti ti-arrow-right" style="font-size:14px;margin-left:4px"></i>
+      </button>
+    </div>
+
+    <div class="output-card" id="output-db">
+      <div class="output-header">
+        <div class="output-header-left">
+          <div class="output-dot"></div>
+          <div>
+            <div class="output-title">DB Schema Guard — generated prompt</div>
+            <div class="output-subtitle">Paste into Claude, ChatGPT, Gemini, or any AI tool</div>
+          </div>
+        </div>
+        <div class="output-actions">
+          <button class="action-btn" onclick="copyOutput('db')" id="copy-db"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+      </div>
+      <div class="output-body">
+        <pre class="output-text" id="output-db-text"></pre>
+      </div>
+      <div class="output-footer">
+        <span class="char-count" id="db-charcount">0 characters</span>
+        <span class="usage-tip"><i class="ti ti-bulb" style="font-size:12px;color:var(--warning)"></i> Attach your schema file for best results</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- GENERATOR 2: API CHANGE SHIELD -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="generator" id="gen-api">
+    <div class="gen-meta">
+      <div class="gen-meta-icon meta-api"><i class="ti ti-api"></i></div>
+      <div class="gen-meta-body">
+        <div class="gen-meta-name">API Change Shield</div>
+        <div class="gen-meta-desc">Use when creating new endpoints or modifying existing API responses, request parameters, authentication, status codes, or deprecating old routes. Ensures every web and mobile consumer is analyzed before any change is deployed to production.</div>
+        <div class="gen-meta-tags">
+          <span class="meta-tag mt-green">New endpoint</span>
+          <span class="meta-tag mt-green">Response changes</span>
+          <span class="meta-tag mt-green">Auth changes</span>
+          <span class="meta-tag mt-green">Deprecation</span>
+          <span class="meta-tag mt-slate">Backward compatibility</span>
+          <span class="meta-tag mt-slate">Mobile crash guard</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Endpoint Details -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-route section-head-icon"></i>
+        <span class="section-head-title">Endpoint details</span>
+        <span class="section-head-num">1</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Change type</label>
+          <select id="api-change-type">
+            <option>Create new endpoint</option>
+            <option>Modify response structure</option>
+            <option>Modify request params / body</option>
+            <option>Change authentication / authorization</option>
+            <option>Change HTTP status codes</option>
+            <option>Deprecate / remove endpoint</option>
+            <option>Add API versioning</option>
+            <option>Add pagination to existing endpoint</option>
+          </select>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">HTTP method</label>
+            <select id="api-method">
+              <option>GET</option><option>POST</option><option>PUT</option>
+              <option>PATCH</option><option>DELETE</option><option>Multiple methods</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Endpoint URL</label>
+            <input type="text" id="api-endpoint" placeholder="e.g. /api/v1/users/:id/profile">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Describe the change in plain language</label>
+          <textarea id="api-change-desc" placeholder="e.g. Add 'subscription_status' field to the response. Currently returns only user profile fields. Need to include subscription tier and expiry date for the mobile paywall screen."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Current request / response structure</label>
+          <textarea id="api-current" placeholder='e.g. Currently returns: { id, name, email, avatar_url }&#10;Need to add: subscription: { tier: "pro", expires_at: "2025-12-01" }'></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Reason for this change</label>
+          <input type="text" id="api-reason" placeholder="e.g. Mobile paywall screen needs subscription tier to show/hide premium features">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Consumer Context -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-devices section-head-icon"></i>
+        <span class="section-head-title">Consumer context</span>
+        <span class="section-head-num">2</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Backend / API framework</label>
+          <div class="tag-selector">
+            <div class="tags-wrap" id="api-framework-tags">
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Laravel</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Express.js</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>NestJS</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Django REST</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>FastAPI</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Spring Boot</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Ruby on Rails</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>Go (Gin/Fiber)</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>GraphQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'api-framework')"><i class="ti ti-check chip-check"></i>ASP.NET Core</span>
+            </div>
+            <div class="custom-tag-row">
+              <input class="custom-tag-input" id="api-framework-custom" placeholder="Add custom framework..." onkeydown="if(event.key==='Enter')addCustomTag('api-framework')">
+              <button class="add-custom-btn" onclick="addCustomTag('api-framework')"><i class="ti ti-plus" style="font-size:12px"></i> Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Who currently calls this endpoint?</label>
+          <div class="check-group" id="api-consumers">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Web frontend</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>iOS app</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Android app</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Admin dashboard</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Third-party / webhook</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Background worker</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Other microservice</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Modules / screens that use this endpoint</label>
+          <textarea id="api-modules" placeholder="e.g. Login screen, profile page, settings screen, admin user detail" style="min-height:64px"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Current API version</label>
+            <input type="text" id="api-version" placeholder="e.g. v1, no versioning yet">
+          </div>
+          <div class="field">
+            <label class="field-label">Live mobile app versions in market</label>
+            <input type="text" id="api-app-version" placeholder="e.g. iOS 2.1.0, Android 2.0.5">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Safety -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-shield-check section-head-icon"></i>
+        <span class="section-head-title">Safety preferences</span>
+        <span class="section-head-num">3</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Change risk level</label>
+          <div class="risk-row">
+            <button class="risk-btn rl-low" onclick="selectRisk('api','low',this)"><i class="ti ti-circle-check" style="font-size:14px"></i> Low — additive</button>
+            <button class="risk-btn rl-med active" onclick="selectRisk('api','med',this)"><i class="ti ti-alert-triangle" style="font-size:14px"></i> Medium — modifying</button>
+            <button class="risk-btn rl-high" onclick="selectRisk('api','high',this)"><i class="ti ti-flame" style="font-size:14px"></i> High — breaking</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">What must the AI check for?</label>
+          <div class="check-group" id="api-checks">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Backward compatibility</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Breaking change detection</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Mobile crash risk</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Web UI breakage risk</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Auth / token changes</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Rate limiting impact</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Pagination changes</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Error response format</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>API docs update needed</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Swagger / OpenAPI spec</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Additional constraints or notes</label>
+          <input type="text" id="api-notes" placeholder="e.g. Mobile apps live, cannot force update — must be non-breaking for old clients">
+        </div>
+      </div>
+    </div>
+
+    <!-- No-Context Toggle -->
+    <div class="no-context-card" id="api-no-ctx-card" onclick="toggleNoCtx('api')">
+      <div class="no-ctx-toggle" id="api-no-ctx-toggle"></div>
+      <div class="no-ctx-body">
+        <div class="no-ctx-title">
+          <i class="ti ti-eye-search" style="font-size:15px;color:var(--blue-300)"></i>
+          I don't have full context — let AI discover it
+        </div>
+        <div class="no-ctx-desc">Enable this if you're unsure which modules or clients use this endpoint. The AI will scan your codebase for all usages of this route, identify every consumer, check all response parsers, and map the full impact before suggesting any changes.</div>
+        <div class="no-ctx-items">
+          <span class="no-ctx-item">Scan all API consumers</span>
+          <span class="no-ctx-item">Find response parsers</span>
+          <span class="no-ctx-item">Detect field dependencies</span>
+          <span class="no-ctx-item">Audit frontend usage</span>
+          <span class="no-ctx-item">Check mobile data models</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gen-btn-wrap">
+      <button class="gen-btn gen-btn-api" onclick="generatePrompt('api')">
+        <i class="ti ti-wand" style="font-size:16px"></i>
+        Generate API Change Shield prompt
+        <i class="ti ti-arrow-right" style="font-size:14px;margin-left:4px"></i>
+      </button>
+    </div>
+
+    <div class="output-card" id="output-api">
+      <div class="output-header">
+        <div class="output-header-left">
+          <div class="output-dot"></div>
+          <div>
+            <div class="output-title">API Change Shield — generated prompt</div>
+            <div class="output-subtitle">Paste into Claude, ChatGPT, Gemini, or any AI tool</div>
+          </div>
+        </div>
+        <div class="output-actions">
+          <button class="action-btn" onclick="copyOutput('api')" id="copy-api"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+      </div>
+      <div class="output-body">
+        <pre class="output-text" id="output-api-text"></pre>
+      </div>
+      <div class="output-footer">
+        <span class="char-count" id="api-charcount">0 characters</span>
+        <span class="usage-tip"><i class="ti ti-bulb" style="font-size:12px;color:var(--warning)"></i> Attach your controller / route file for best results</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- GENERATOR 3: FULL-STACK SYNC -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="generator" id="gen-full">
+    <div class="gen-meta">
+      <div class="gen-meta-icon meta-full"><i class="ti ti-layers-intersect"></i></div>
+      <div class="gen-meta-body">
+        <div class="gen-meta-name">Full-Stack Sync</div>
+        <div class="gen-meta-desc">Use when a feature requires simultaneous changes at both the database schema level AND the API layer. Generates one master prompt covering the full chain — schema migration → backend logic → API contract → web/mobile impact — with a phased, safe implementation order.</div>
+        <div class="gen-meta-tags">
+          <span class="meta-tag mt-gold">DB + API combined</span>
+          <span class="meta-tag mt-gold">Phased rollout</span>
+          <span class="meta-tag mt-gold">Dependency chain</span>
+          <span class="meta-tag mt-slate">Zero-downtime</span>
+          <span class="meta-tag mt-slate">Full impact map</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Feature Overview -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-bulb section-head-icon"></i>
+        <span class="section-head-title">Feature overview</span>
+        <span class="section-head-num">1</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Feature / change name</label>
+          <input type="text" id="full-feature" placeholder="e.g. User subscription management system">
+        </div>
+        <div class="field">
+          <label class="field-label">What do you want to achieve? (plain language)</label>
+          <textarea id="full-overview" placeholder="e.g. Add a subscription system. Users can be free or pro tier. Need a new subscriptions table linked to users, and the user profile API must return subscription status so web and mobile can show/hide premium features."></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Backend technology stack</label>
+          <div class="tag-selector">
+            <div class="tags-wrap" id="full-stack-tags">
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Laravel + MySQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Node.js + PostgreSQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Django + PostgreSQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Spring Boot + MySQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Rails + PostgreSQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>FastAPI + PostgreSQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>NestJS + MySQL</span>
+              <span class="tag-chip" onclick="toggleTag(this,'full-stack')"><i class="ti ti-check chip-check"></i>Go + PostgreSQL</span>
+            </div>
+            <div class="custom-tag-row">
+              <input class="custom-tag-input" id="full-stack-custom" placeholder="Add custom stack..." onkeydown="if(event.key==='Enter')addCustomTag('full-stack')">
+              <button class="add-custom-btn" onclick="addCustomTag('full-stack')"><i class="ti ti-plus" style="font-size:12px"></i> Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: DB Changes -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-table section-head-icon"></i>
+        <span class="section-head-title">Database changes</span>
+        <span class="section-head-num">2</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Tables being added or modified</label>
+          <span class="field-hint">One entry per table change. Be specific about what changes.</span>
+          <div class="dyn-rows" id="full-db-rows" style="margin-bottom:6px">
+            <div class="drow"><input placeholder="Table: users — Change: add subscription_id FK column (nullable)"><button class="drow-del" onclick="delRow(this)"><i class="ti ti-x"></i></button></div>
+            <div class="drow"><input placeholder="Table: subscriptions — Change: new table (id, user_id, tier, starts_at, expires_at)"><button class="drow-del" onclick="delRow(this)"><i class="ti ti-x"></i></button></div>
+          </div>
+          <button class="add-row-btn" onclick="addRow('full-db-rows','Table: [name] — Change: [description]')"><i class="ti ti-plus" style="font-size:12px"></i> Add table change</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: API Changes -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-api section-head-icon"></i>
+        <span class="section-head-title">API changes</span>
+        <span class="section-head-num">3</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Endpoints being added or modified</label>
+          <span class="field-hint">Include HTTP method, URL, and what changes.</span>
+          <div class="dyn-rows" id="full-api-rows" style="margin-bottom:6px">
+            <div class="drow"><input placeholder="GET /api/v1/users/:id — Add subscription object to response"><button class="drow-del" onclick="delRow(this)"><i class="ti ti-x"></i></button></div>
+            <div class="drow"><input placeholder="POST /api/v1/subscriptions — New endpoint to create/upgrade subscription"><button class="drow-del" onclick="delRow(this)"><i class="ti ti-x"></i></button></div>
+          </div>
+          <button class="add-row-btn" onclick="addRow('full-api-rows','METHOD /api/path — Change description')"><i class="ti ti-plus" style="font-size:12px"></i> Add endpoint change</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Impact & Safety -->
+    <div class="section-card">
+      <div class="section-head">
+        <i class="ti ti-shield-check section-head-icon"></i>
+        <span class="section-head-title">Impact & safety</span>
+        <span class="section-head-num">4</span>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label class="field-label">Platforms that will be impacted</label>
+          <div class="check-group" id="full-platforms">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Web app</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>iOS app</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Android app</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Admin panel</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Third-party integrations</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Background jobs</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Existing modules / features that MUST NOT break</label>
+          <textarea id="full-dontbreak" placeholder="e.g. Login flow, user registration, profile edit, push notifications, payment checkout — these all use the users table and user profile API" style="min-height:64px"></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">Overall change risk level</label>
+          <div class="risk-row">
+            <button class="risk-btn rl-low" onclick="selectRisk('full','low',this)"><i class="ti ti-circle-check" style="font-size:14px"></i> Low — additive</button>
+            <button class="risk-btn rl-med active" onclick="selectRisk('full','med',this)"><i class="ti ti-alert-triangle" style="font-size:14px"></i> Medium — modifying</button>
+            <button class="risk-btn rl-high" onclick="selectRisk('full','high',this)"><i class="ti ti-flame" style="font-size:14px"></i> High — restructure</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">What must the AI ensure?</label>
+          <div class="check-group" id="full-checks">
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Migration + rollback plan</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Zero-downtime deployment</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Backward-compatible APIs</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>No mobile crash</span>
+            <span class="check-chip checked" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>No web breakage</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Data backfill plan</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>API versioning advice</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Test cases</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Documentation checklist</span>
+            <span class="check-chip" onclick="toggleCheck(this)"><span class="chip-icon"><i class="ti ti-check"></i></span>Performance impact</span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Additional constraints or notes</label>
+          <input type="text" id="full-notes" placeholder="e.g. Live app 50k users, mobile v2.1 still in market — cannot force update">
+        </div>
+      </div>
+    </div>
+
+    <!-- No-Context Toggle -->
+    <div class="no-context-card" id="full-no-ctx-card" onclick="toggleNoCtx('full')">
+      <div class="no-ctx-toggle" id="full-no-ctx-toggle"></div>
+      <div class="no-ctx-body">
+        <div class="no-ctx-title">
+          <i class="ti ti-eye-search" style="font-size:15px;color:var(--blue-300)"></i>
+          I don't have full context — let AI discover it
+        </div>
+        <div class="no-ctx-desc">Enable this if you're not sure about all affected modules, tables, or API consumers. The AI will perform a full codebase scan to discover the complete dependency chain before planning any changes.</div>
+        <div class="no-ctx-items">
+          <span class="no-ctx-item">Full codebase scan</span>
+          <span class="no-ctx-item">Discover all table usages</span>
+          <span class="no-ctx-item">Map API dependency chain</span>
+          <span class="no-ctx-item">Identify hidden impacts</span>
+          <span class="no-ctx-item">List all affected modules</span>
+          <span class="no-ctx-item">Audit mobile data models</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gen-btn-wrap">
+      <button class="gen-btn gen-btn-full" onclick="generatePrompt('full')">
+        <i class="ti ti-wand" style="font-size:16px"></i>
+        Generate Full-Stack Sync prompt
+        <i class="ti ti-arrow-right" style="font-size:14px;margin-left:4px"></i>
+      </button>
+    </div>
+
+    <div class="output-card" id="output-full">
+      <div class="output-header">
+        <div class="output-header-left">
+          <div class="output-dot"></div>
+          <div>
+            <div class="output-title">Full-Stack Sync — generated prompt</div>
+            <div class="output-subtitle">Paste into Claude, ChatGPT, Gemini, or any AI tool</div>
+          </div>
+        </div>
+        <div class="output-actions">
+          <button class="action-btn" onclick="copyOutput('full')" id="copy-full"><i class="ti ti-copy"></i> Copy</button>
+        </div>
+      </div>
+      <div class="output-body">
+        <pre class="output-text" id="output-full-text"></pre>
+      </div>
+      <div class="output-footer">
+        <span class="char-count" id="full-charcount">0 characters</span>
+        <span class="usage-tip"><i class="ti ti-bulb" style="font-size:12px;color:var(--warning)"></i> Attach schema + API spec files for best results</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-name">Bhargav Parmar — Backend Prompt Suite</div>
+      <div class="footer-copy">Built for backend teams. Generate safe, AI-ready prompts for production changes.</div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-tag"><i class="ti ti-database" style="font-size:11px"></i> DB Guard</span>
+      <span class="footer-tag"><i class="ti ti-api" style="font-size:11px"></i> API Shield</span>
+      <span class="footer-tag"><i class="ti ti-layers-intersect" style="font-size:11px"></i> Full-Stack Sync</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const risks = { db: 'med', api: 'med', full: 'med' };
+const noCtx = { db: false, api: false, full: false };
+const customTags = { 'db-backend': [], 'api-framework': [], 'full-stack': [] };
+
+function switchTab(id) {
+  ['db','api','full'].forEach(t => {
+    document.getElementById('gen-'+t).classList.toggle('active', t===id);
+    document.querySelectorAll('.tab').forEach((tab, i) => {
+      const ids = ['db','api','full'];
+      tab.classList.toggle('active', ids[i]===id);
+    });
+  });
+  document.querySelectorAll('.tab')[['db','api','full'].indexOf(id)].scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+document.querySelectorAll('.tab').forEach((tab, i) => {
+  const ids = ['db','api','full'];
+  tab.addEventListener('click', () => switchTab(ids[i]));
+});
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+
+function toggleTag(el, groupKey) {
+  el.classList.toggle('selected');
+}
+
+function addCustomTag(groupKey) {
+  const input = document.getElementById(groupKey+'-custom');
+  const val = input.value.trim();
+  if (!val) return;
+  const wrap = document.getElementById(groupKey+'-tags');
+  const chip = document.createElement('span');
+  chip.className = 'tag-chip selected';
+  chip.dataset.custom = '1';
+  chip.onclick = function() { this.classList.toggle('selected'); };
+  chip.innerHTML = '<i class="ti ti-check chip-check"></i>' + val + '<span onclick="event.stopPropagation();this.parentElement.remove()" style="margin-left:4px;font-size:11px;opacity:.7;cursor:pointer"><i class="ti ti-x"></i></span>';
+  wrap.appendChild(chip);
+  input.value = '';
+  customTags[groupKey].push(val);
+}
+
+function selectRisk(gen, level, el) {
+  risks[gen] = level;
+  el.closest('.risk-row').querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleNoCtx(gen) {
+  noCtx[gen] = !noCtx[gen];
+  document.getElementById(gen+'-no-ctx-card').classList.toggle('active', noCtx[gen]);
+}
+
+function getSelectedTags(containerId) {
+  return Array.from(document.querySelectorAll('#'+containerId+' .tag-chip.selected')).map(c => {
+    return c.textContent.replace(/[\u2713]/g,'').trim().replace(/×$/,'').trim();
+  });
+}
+
+function getChecked(groupId) {
+  return Array.from(document.querySelectorAll('#'+groupId+' .check-chip.checked')).map(c => c.textContent.trim());
+}
+
+function getDynRows(id) {
+  return Array.from(document.querySelectorAll('#'+id+' input')).map(i => i.value).filter(v => v.trim());
+}
+
+function addRow(id, ph) {
+  const c = document.getElementById(id);
+  const d = document.createElement('div');
+  d.className = 'drow';
+  d.innerHTML = '<input placeholder="'+ph+'"><button class="drow-del" onclick="delRow(this)"><i class="ti ti-x"></i></button>';
+  c.appendChild(d);
+}
+
+function delRow(btn) {
+  const rows = btn.closest('.dyn-rows');
+  if (rows.children.length > 1) btn.closest('.drow').remove();
+}
+
+const riskMap = {
+  low: 'LOW — additive/non-breaking only',
+  med: 'MEDIUM — modifying existing data or structure',
+  high: 'HIGH — destructive, renaming, or removing items'
+};
+
+function generatePrompt(type) {
+  let prompt = '';
+
+  if (type === 'db') {
+    const ct = document.getElementById('db-change-type');
+    const changeType = ct.options[ct.selectedIndex].text;
+    const table = document.getElementById('db-table').value || '[not specified]';
+    const desc = document.getElementById('db-change-desc').value || '[no description]';
+    const reason = document.getElementById('db-reason').value || '[not specified]';
+    const dbType = document.getElementById('db-type').value;
+    const dbSize = document.getElementById('db-size').value || 'Unknown';
+    const backend = getSelectedTags('db-backend-tags').join(', ') || '[not specified]';
+    const platforms = getChecked('db-platforms').join(', ') || 'Web and mobile';
+    const modules = document.getElementById('db-modules').value || '[not specified]';
+    const risk = riskMap[risks.db];
+    const checks = getChecked('db-checks').join(', ');
+    const notes = document.getElementById('db-notes').value;
+    const discover = noCtx.db;
+
+    prompt = `You are a senior backend architect and database engineer reviewing a proposed schema change for a live production system. Your responsibility is to perform a thorough safety analysis before any migration runs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHANGE REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Change type      : ${changeType}
+Table(s)         : ${table}
+Database engine  : ${dbType}
+Table size       : ${dbSize}
+Backend / ORM    : ${backend}
+
+Description of change:
+${desc}
+
+Reason / business context:
+${reason}
+
+Risk level: ${risk}
+${notes ? '\nAdditional constraints:\n' + notes : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM CONTEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Platforms consuming this data : ${platforms}
+Known modules using this table: ${modules}
+${discover ? '\n⚠️  NOTE: Full context is not available. Before proceeding with any analysis, you MUST first scan the entire codebase to:\n  1. Find every file, model, repository, service, or query that references these table(s)\n  2. Identify all API endpoints that directly or indirectly return data from these table(s)\n  3. Discover all web and mobile consumers of those endpoints\n  4. List every module, screen, or feature affected\n  Only after completing this discovery step should you proceed with the analysis below.\n' : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYSIS REQUIRED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CHANGE SAFETY REVIEW
+   - Is the proposed change safe as described? Verdict: SAFE / RISKY / UNSAFE
+   - What are the specific risks if applied without precautions?
+   - Are there any schema design issues? Flag naming, normalization, or type problems.
+
+2. MIGRATION PLAN
+   - Provide the complete migration script with inline comments
+   - Zero-downtime deployment: Is it possible? If yes, exact strategy (e.g. expand-contract pattern)
+   - Rollback script for every migration step
+
+3. DOWNSTREAM IMPACT — APIs
+   - Which API endpoints query this table (by name/pattern)?
+   - Which endpoints will have their response implicitly changed?
+   - Will consumers receive unexpected null, missing, or type-changed fields?
+
+4. DOWNSTREAM IMPACT — WEB & MOBILE
+   - List every affected frontend module / screen
+   - For each: what breaks and how to fix it safely
+   - Will old mobile app versions in the market be impacted by this schema change?
+
+5. REQUIRED SAFETY CHECKS
+   Provide a dedicated paragraph for each of the following:
+   ${checks}
+
+6. SAFE IMPLEMENTATION ORDER
+   - Step-by-step ordered execution plan
+   - What to test in staging before production?
+   - Feature flag recommendation (if applicable)
+
+7. POST-DEPLOY VERIFICATION
+   - SQL queries to confirm migration success
+   - API test cases to run immediately after deploy
+   - Metrics / logs to monitor for 30 minutes post-deploy
+
+8. SCHEMA DESIGN FEEDBACK
+   - Are there naming, normalization, indexing, or constraint issues?
+   - Suggest improvements if the approach has design problems
+
+If you need additional codebase context to answer precisely, list exactly which files or code snippets to share next. Do NOT proceed with implementation until this analysis is reviewed and confirmed safe.`;
+  }
+
+  else if (type === 'api') {
+    const ct = document.getElementById('api-change-type');
+    const changeType = ct.options[ct.selectedIndex].text;
+    const method = document.getElementById('api-method').value;
+    const endpoint = document.getElementById('api-endpoint').value || '[endpoint not specified]';
+    const desc = document.getElementById('api-change-desc').value || '[no description]';
+    const current = document.getElementById('api-current').value || '[not provided]';
+    const reason = document.getElementById('api-reason').value || '[not specified]';
+    const framework = getSelectedTags('api-framework-tags').join(', ') || '[not specified]';
+    const consumers = getChecked('api-consumers').join(', ') || 'Web and mobile';
+    const modules = document.getElementById('api-modules').value || '[not specified]';
+    const version = document.getElementById('api-version').value || 'no versioning';
+    const appVersion = document.getElementById('api-app-version').value || '[not specified]';
+    const risk = riskMap[risks.api];
+    const checks = getChecked('api-checks').join(', ');
+    const notes = document.getElementById('api-notes').value;
+    const discover = noCtx.api;
+
+    prompt = `You are a senior API architect reviewing a proposed change to a live production API. Your responsibility is to ensure no existing web or mobile consumer is silently broken by this change.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHANGE REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Change type       : ${changeType}
+Endpoint          : ${method} ${endpoint}
+Framework         : ${framework}
+Current API ver.  : ${version}
+Live app versions : ${appVersion}
+
+Description of change:
+${desc}
+
+Current request / response structure:
+${current}
+
+Reason / business context:
+${reason}
+
+Risk level: ${risk}
+${notes ? '\nAdditional constraints:\n' + notes : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM CONTEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Current consumers : ${consumers}
+Modules / screens : ${modules}
+${discover ? '\n⚠️  NOTE: Full context is not available. Before proceeding with any analysis, you MUST first scan the entire codebase to:\n  1. Find every file, component, screen, or service that calls this endpoint\n  2. Identify all response parsers, data models, and field mappings on web and mobile\n  3. Find any SDK wrapper, interceptor, or middleware that processes this route\n  4. List every module or screen affected by the response structure\n  Only after completing this discovery step should you proceed with the analysis below.\n' : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYSIS REQUIRED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. BREAKING CHANGE ASSESSMENT
+   - Verdict: BREAKING / NON-BREAKING / PARTIALLY BREAKING
+   - List every field, param, or status code change that could break existing clients
+   - Which platform is at highest risk: Web, iOS, Android, or all?
+
+2. BACKWARD COMPATIBILITY STRATEGY
+   - Can this be done without breaking old clients? Exact approach.
+   - API versioning decision: New v2 endpoint or modify in-place? With full reasoning.
+   - If adding fields: are all new fields optional with safe defaults?
+   - If removing fields: full deprecation and sunset plan with timeline.
+
+3. SAFE IMPLEMENTATION PLAN
+   - Step-by-step implementation in correct order
+   - Feature flag / gradual rollout recommendation
+   - Zero-downtime deployment strategy
+
+4. DOWNSTREAM IMPACT — WEB
+   - Specific screens or components affected
+   - What breaks if web is NOT updated before API deploy?
+   - Required frontend changes and in what order
+
+5. DOWNSTREAM IMPACT — MOBILE (iOS & Android)
+   - Specific screens or features at risk
+   - Impact on existing app store versions that cannot be force-updated
+   - Graceful degradation strategy for older client versions
+
+6. REQUIRED SAFETY CHECKS
+   Provide a dedicated paragraph for each:
+   ${checks}
+
+7. ROLLBACK PLAN
+   - How to revert if issues arise post-deploy
+   - Monitoring / alerts to configure before deploying
+
+8. VERIFICATION CHECKLIST
+   - curl / HTTP test requests for every changed endpoint
+   - Regression tests for existing consumers
+   - What to check in logs for 30 minutes post-deploy
+
+9. DOCUMENTATION UPDATE CHECKLIST
+   - Swagger / OpenAPI spec changes
+   - Postman collection updates
+   - Internal changelog entry
+
+If you need the actual controller code, serializer, or current API spec, list exactly what to share. Do NOT implement until the full analysis is reviewed.`;
+  }
+
+  else if (type === 'full') {
+    const feature = document.getElementById('full-feature').value || 'New feature';
+    const overview = document.getElementById('full-overview').value || '[no overview]';
+    const stack = getSelectedTags('full-stack-tags').join(', ') || '[not specified]';
+    const dbChanges = getDynRows('full-db-rows').map((r,i) => `  ${i+1}. ${r}`).join('\n') || '  [no DB changes listed]';
+    const apiChanges = getDynRows('full-api-rows').map((r,i) => `  ${i+1}. ${r}`).join('\n') || '  [no API changes listed]';
+    const platforms = getChecked('full-platforms').join(', ') || 'Web and mobile';
+    const dontBreak = document.getElementById('full-dontbreak').value || '[not specified]';
+    const risk = riskMap[risks.full];
+    const checks = getChecked('full-checks').join(', ');
+    const notes = document.getElementById('full-notes').value;
+    const discover = noCtx.full;
+
+    prompt = `You are a senior full-stack backend architect. I need a comprehensive safety analysis and implementation plan for a feature that touches BOTH the database schema AND the API layer of a live production system. Your analysis must be end-to-end: schema migration through to how web and mobile consumers are impacted.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FEATURE OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Feature name : ${feature}
+Tech stack   : ${stack}
+Risk level   : ${risk}
+
+What we want to achieve:
+${overview}
+${notes ? '\nAdditional constraints:\n' + notes : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATABASE CHANGES REQUIRED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${dbChanges}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+API CHANGES REQUIRED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${apiChanges}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM CONTEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Platforms impacted             : ${platforms}
+Features that MUST NOT break   : ${dontBreak}
+${discover ? '\n⚠️  NOTE: Full context is not available. Before proceeding with any analysis, you MUST first perform a complete codebase discovery:\n  1. Scan all files that reference the tables listed above\n  2. Find all API endpoints that touch these tables directly or via ORM/service layer\n  3. Identify all web and mobile consumers of those endpoints\n  4. Map the full dependency chain from DB → API → Frontend\n  5. Discover any background jobs, webhooks, or external consumers\n  Only after completing this full discovery should you proceed with the analysis below.\n' : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYSIS REQUIRED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CHANGE DEPENDENCY MAP
+   - Full dependency chain: schema changes → API changes → frontend modules
+   - Identify any circular dependencies or ordering conflicts
+   - Which change must happen first and why?
+
+2. DATABASE MIGRATION PLAN
+   - Complete migration script with comments for each table change
+   - Backward-compatibility assessment per change (safe / risky)
+   - Rollback script for each migration step
+   - Zero-downtime deployment: possible? If yes, exact strategy.
+
+3. API IMPACT ANALYSIS
+   - For each existing endpoint: does any DB change affect its query results?
+   - Which endpoints will have new/changed fields in their response?
+   - Backward compatibility verdict per endpoint: SAFE / NEEDS VERSIONING / NEEDS FEATURE FLAG
+   - Are any changes breaking for current web/mobile consumers?
+
+4. DOWNSTREAM IMPACT — WEB APP
+   - Every screen / component affected by DB and API changes
+   - What breaks if web is not updated before API deploy?
+   - Required web changes and in what order
+
+5. DOWNSTREAM IMPACT — MOBILE APP (iOS & Android)
+   - Every screen or feature at risk
+   - Impact on existing app store versions that cannot be force-updated
+   - Graceful degradation strategy for older app versions
+
+6. SAFE PHASED IMPLEMENTATION ORDER
+   Provide a phased plan. Example structure (adjust based on your analysis):
+   Phase 1 — Schema additions (non-breaking, nullable columns, new tables)
+   Phase 2 — Backend logic + new/updated API endpoints (behind feature flag)
+   Phase 3 — Web and mobile frontend updates deployed
+   Phase 4 — Feature flag enabled; validate on production traffic
+   Phase 5 — Cleanup, remove old columns/endpoints (if any)
+
+7. REQUIRED SAFETY CHECKS
+   Provide a dedicated paragraph for each:
+   ${checks}
+
+8. ROLLBACK STRATEGY
+   - Per-phase rollback plan
+   - Data cleanup needed if rolling back after phase 2 or 3
+
+9. VERIFICATION CHECKLIST
+   - DB: queries to confirm schema state post-migration
+   - API: test requests for every changed endpoint
+   - Web: smoke test list for all critical flows
+   - Mobile: QA checklist for iOS and Android
+   - Monitoring: metrics and logs to watch for 1 hour post full-deploy
+
+10. OPEN RISKS & DESIGN FEEDBACK
+    - List anything ambiguous that needs clarification before starting
+    - Flag any design concerns with the proposed approach
+    - Suggest better alternatives if the approach has hidden risks
+
+If you need actual code files, schema dumps, or existing API specs, list exactly what to share. Do NOT begin implementation until this full analysis is reviewed and approved.`;
+  }
+
+  const textEl = document.getElementById('output-'+type+'-text');
+  const cardEl = document.getElementById('output-'+type);
+  const countEl = document.getElementById(type+'-charcount');
+
+  textEl.textContent = prompt;
+  cardEl.classList.add('visible');
+  countEl.textContent = prompt.length.toLocaleString() + ' characters';
+  cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyOutput(type) {
+  const text = document.getElementById('output-'+type+'-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-'+type);
+    btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+    btn.classList.add('success');
+    setTimeout(() => {
+      btn.innerHTML = '<i class="ti ti-copy"></i> Copy';
+      btn.classList.remove('success');
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
