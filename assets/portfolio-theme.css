@@ -700,10 +700,47 @@ a {
 }
 
 .tool-grid {
-  grid-template-columns: repeat(8, minmax(230px, 1fr));
-  overflow-x: auto;
-  padding: 4px 4px 18px;
-  scroll-snap-type: x mandatory;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  overflow: visible;
+  padding: 4px 0 18px;
+}
+
+.tool-category {
+  display: grid;
+  gap: 14px;
+}
+
+.tool-category-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 4px;
+}
+
+.tool-category-head span {
+  color: var(--cyan);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tool-category-head p {
+  max-width: 540px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.tool-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .tool-card {
@@ -923,8 +960,8 @@ a {
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto 80px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: 1fr;
+  gap: 24px;
 }
 
 .tools-page-grid .tool-card {
@@ -970,7 +1007,7 @@ a {
   }
 
   .project-grid,
-  .tools-page-grid {
+  .tool-category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1019,13 +1056,17 @@ a {
   .skill-grid,
   .project-grid,
   .cert-grid,
-  .tools-page-grid {
+  .tool-category-grid {
     grid-template-columns: 1fr;
   }
 
-  .tool-grid {
-    grid-template-columns: 1fr;
-    overflow: visible;
+  .tool-category-head {
+    display: grid;
+    gap: 6px;
+  }
+
+  .tool-category-head p {
+    text-align: left;
   }
 
   .experience-card {

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Timesheet Prompt Architect — Bhargav Parmar</title>
+<meta name="description" content="Generate production-ready AI prompts that convert WhatsApp chat exports into attendance, timesheet, and daily task Excel reports. Built by Bhargav Parmar.">
+<meta name="theme-color" content="#070a10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/portfolio-theme.css">
+<style>
+  :root {
+    --tool-accent: #22d3ee;
+    --tool-accent-2: #34d399;
+    --tool-warn: #fbbf24;
+    --tool-danger: #fb7185;
+    --tool-panel: rgba(8, 13, 23, 0.78);
+    --mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  .tool-shell {
+    width: min(1240px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 132px 0 80px;
+  }
+
+  .tool-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.72fr);
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 22px;
+  }
+
+  .hero-panel,
+  .generator-panel,
+  .preview-panel,
+  .mini-panel {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(145deg, rgba(255,255,255,.095), rgba(255,255,255,.035));
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.07);
+  }
+
+  .hero-panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(26px, 5vw, 48px);
+  }
+
+  .hero-panel::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    right: -120px;
+    top: -110px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,211,238,.2), transparent 66%);
+    pointer-events: none;
+  }
+
+  .hero-panel h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: 820px;
+    font-family: var(--font-display);
+    font-size: clamp(42px, 6vw, 78px);
+    line-height: .96;
+    letter-spacing: 0;
+  }
+
+  .hero-panel p {
+    position: relative;
+    z-index: 1;
+    max-width: 740px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .hero-tags {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .status-board {
+    display: grid;
+    gap: 12px;
+  }
+
+  .mini-panel {
+    min-height: 128px;
+    padding: 18px;
+  }
+
+  .mini-panel strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .mini-panel span {
+    display: block;
+    margin-top: 8px;
+    color: var(--soft);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(400px, 0.78fr);
+    gap: 22px;
+    align-items: start;
+  }
+
+  .generator-panel,
+  .preview-panel {
+    overflow: hidden;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.04);
+  }
+
+  .panel-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+  }
+
+  .panel-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .panel-body {
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 22px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    background: rgba(5, 9, 16, .36);
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    color: var(--tool-accent);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .section-label::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 99px;
+    background: var(--tool-accent);
+    box-shadow: 0 0 18px var(--tool-accent);
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .field {
+    display: grid;
+    gap: 7px;
+  }
+
+  .field.full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .hint {
+    color: var(--soft);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 14px;
+    outline: none;
+    color: var(--text);
+    background: rgba(7, 10, 16, .72);
+    padding: 12px 13px;
+    font: inherit;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: rgba(34,211,238,.7);
+    box-shadow: 0 0 0 4px rgba(34,211,238,.12);
+    background: rgba(7, 10, 16, .92);
+  }
+
+  input[type="file"] {
+    cursor: pointer;
+  }
+
+  textarea {
+    min-height: 104px;
+    resize: vertical;
+    line-height: 1.55;
+  }
+
+  .file-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .holiday-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .holiday-row {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1fr) 52px;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .icon-btn,
+  .secondary-action,
+  .primary-action,
+  .copy-action {
+    border: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease, border-color .2s ease;
+  }
+
+  .icon-btn {
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    display: inline-grid;
+    place-items: center;
+    align-self: stretch;
+    padding: 0;
+    color: #fff;
+    background: rgba(251,113,133,.18);
+    border: 1px solid rgba(251,113,133,.3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    font-size: 0;
+  }
+
+  .icon-btn::before {
+    content: "×";
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 900;
+  }
+
+  .secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 14px;
+    color: var(--tool-accent);
+    background: rgba(34,211,238,.08);
+    border: 1px solid rgba(34,211,238,.24);
+  }
+
+  .primary-action {
+    width: 100%;
+    min-height: 52px;
+    color: #061018;
+    background: linear-gradient(135deg, var(--tool-accent), var(--tool-accent-2));
+    box-shadow: 0 18px 46px rgba(34,211,238,.22);
+    font-size: 16px;
+  }
+
+  .copy-action {
+    min-height: 38px;
+    padding: 9px 12px;
+    color: #061018;
+    background: linear-gradient(135deg, var(--tool-accent), var(--tool-accent-2));
+  }
+
+  .primary-action:hover,
+  .secondary-action:hover,
+  .copy-action:hover,
+  .icon-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .preview-panel {
+    position: sticky;
+    top: 96px;
+  }
+
+  .preview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .preview-stat {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    background: rgba(5,9,16,.36);
+  }
+
+  .preview-stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 22px;
+  }
+
+  .preview-stat span {
+    color: var(--soft);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .prompt-output {
+    min-height: 520px;
+    max-height: 68vh;
+    overflow: auto;
+    margin: 0;
+    padding: 20px;
+    color: #e5f5ff;
+    background:
+      linear-gradient(135deg, rgba(34,211,238,.08), transparent 42%),
+      rgba(3, 7, 13, .92);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.68;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .ai-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 14px 20px 20px;
+  }
+
+  .ai-links a {
+    display: inline-flex;
+    justify-content: center;
+    padding: 9px 10px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 13px;
+    color: var(--text);
+    background: rgba(255,255,255,.05);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    z-index: 50;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    color: var(--text);
+    background: rgba(7,10,16,.9);
+    backdrop-filter: blur(14px);
+    box-shadow: var(--shadow);
+    font-weight: 900;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 1020px) {
+    .tool-hero,
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .preview-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .tool-shell {
+      width: min(100% - 28px, 720px);
+      padding-top: 116px;
+    }
+
+    .field-grid,
+    .preview-stats,
+    .ai-links {
+      grid-template-columns: 1fr;
+    }
+
+    .holiday-row {
+      grid-template-columns: 1fr;
+    }
+
+    .icon-btn {
+      width: 100%;
+      min-height: 42px;
+      height: 46px;
+      border-radius: 14px;
+    }
+
+    .icon-btn::before {
+      content: "Remove";
+      font-size: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#generator">Skip to generator</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="depth-scene" aria-hidden="true">
+  <div class="depth-plane one"></div>
+  <div class="depth-plane two"></div>
+  <div class="depth-plane three"></div>
+</div>
+
+<header class="nav" role="banner">
+  <a class="brand" href="../" aria-label="Back to Bhargav Parmar portfolio">
+    <span>Bhargav Parmar</span>
+  </a>
+  <nav aria-label="Timesheet tool navigation">
+    <ul class="nav-links">
+      <li><a href="../#tools">Portfolio tools</a></li>
+      <li><a href="../tools/">All tools</a></li>
+    </ul>
+  </nav>
+  <a class="ghost-action" href="../tools/">All tools</a>
+</header>
+
+<main class="tool-shell">
+  <section class="tool-hero" aria-labelledby="tool-title">
+    <div class="hero-panel reveal">
+      <div class="eyebrow"><span class="signal"></span>AI prompt engineering tool</div>
+      <h1 id="tool-title">AI Timesheet <span class="gradient-text">Prompt Architect</span></h1>
+      <p>Convert WhatsApp chat exports into production-ready prompts for attendance, daily task reports, and styled Excel timesheets. Built for teams that need clean reporting without manually reading every chat message.</p>
+      <div class="hero-tags">
+        <span class="tag">WhatsApp chat parser</span>
+        <span class="tag">Attendance report</span>
+        <span class="tag">Excel output</span>
+        <span class="tag">Manual overrides</span>
+      </div>
+    </div>
+    <div class="status-board reveal">
+      <div class="mini-panel"><strong>1</strong><span>Master prompt</span></div>
+      <div class="mini-panel"><strong>3</strong><span>Validation layers</span></div>
+      <div class="mini-panel"><strong>XLSX</strong><span>Final output target</span></div>
+    </div>
+  </section>
+
+  <section id="generator" class="workspace-grid">
+    <form class="generator-panel reveal" onsubmit="event.preventDefault(); generatePrompt();">
+      <div class="panel-head">
+        <div>
+          <h2>Report Configuration</h2>
+          <p>Upload a WhatsApp export, choose a member, then generate a stronger AI prompt.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="form-section">
+          <div class="section-label">1. Data source</div>
+          <div class="field">
+            <label for="chatFile">WhatsApp chat export (.txt)</label>
+            <input type="file" id="chatFile" accept=".txt">
+            <div id="fileStatus" class="file-status">Upload a chat to automatically extract team members.</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">2. Configuration</div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="userNameInput">Target team member</label>
+              <select id="userNameSelect" style="display:none"></select>
+              <input type="text" id="userNameInput" placeholder="Select from upload or type manually">
+            </div>
+            <div class="field">
+              <label for="eodPatternInput">EOD keyword / pattern</label>
+              <input type="text" id="eodPatternInput" placeholder="Optional: #EOD, Daily Status, Update:">
+              <div class="hint">Leave blank for smart detection using update keywords, task lists, and ticket IDs.</div>
+            </div>
+            <div class="field">
+              <label for="month">Target month</label>
+              <select id="month">
+                <option>January</option><option>February</option><option>March</option><option>April</option>
+                <option selected>May</option><option>June</option><option>July</option><option>August</option>
+                <option>September</option><option>October</option><option>November</option><option>December</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="year">Target year</label>
+              <select id="year">
+                <option>2025</option><option selected>2026</option><option>2027</option><option>2028</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="weekendMode">Weekend rule</label>
+              <select id="weekendMode">
+                <option value="Sundays only" selected>Sundays only</option>
+                <option value="Saturdays and Sundays">Saturdays and Sundays</option>
+                <option value="Sundays and 2nd/4th Saturdays">Sundays and 2nd/4th Saturdays</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="timezone">Timezone / locale</label>
+              <input type="text" id="timezone" value="Asia/Kolkata" placeholder="Asia/Kolkata">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">3. Schedule and overrides</div>
+          <div class="field full">
+            <label>Company holidays</label>
+            <div id="holidays-container" class="holiday-list">
+              <div class="holiday-row">
+                <input type="text" class="holiday-date" placeholder="Date, e.g. 1st May">
+                <input type="text" class="holiday-title" placeholder="Title, e.g. Labour Day">
+                <button class="icon-btn" type="button" aria-label="Remove holiday" title="Remove holiday" onclick="this.closest('.holiday-row').remove()">Remove</button>
+              </div>
+            </div>
+            <div style="margin-top:10px">
+              <button id="add-holiday-btn" class="secondary-action" type="button">Add holiday</button>
+            </div>
+          </div>
+          <div class="field full" style="margin-top:14px">
+            <label for="manualUpdates">Manual chat overrides</label>
+            <textarea id="manualUpdates" placeholder="Example: 8th May: Fixed login issue and completed release notes."></textarea>
+            <div class="hint">Use this for missed updates, corrected attendance, or known task entries that are not present in the chat export.</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">4. Output preferences</div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="outputStyle">Report style</label>
+              <select id="outputStyle">
+                <option value="Professional HR timesheet" selected>Professional HR timesheet</option>
+                <option value="Project manager daily work report">Project manager daily work report</option>
+                <option value="Developer EOD task summary">Developer EOD task summary</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="strictness">Validation strictness</label>
+              <select id="strictness">
+                <option value="Strict: do not infer presence without a clear update" selected>Strict: no presence without clear update</option>
+                <option value="Balanced: infer only when message context is obvious">Balanced: infer obvious context</option>
+                <option value="Audit mode: mark uncertain days separately">Audit mode: mark uncertain days separately</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="primary-action" type="submit">Generate production-ready prompt</button>
+      </div>
+    </form>
+
+    <aside class="preview-panel reveal" aria-label="Generated prompt preview">
+      <div class="panel-head">
+        <div>
+          <h2>Generated Prompt</h2>
+          <p>Copy this into ChatGPT, Gemini, Claude, Copilot, or another AI tool with the chat file attached.</p>
+        </div>
+        <button class="copy-action" type="button" onclick="copyPrompt()">Copy</button>
+      </div>
+      <div class="preview-stats">
+        <div class="preview-stat"><strong id="charCount">0</strong><span>characters</span></div>
+        <div class="preview-stat"><strong id="holidayCount">0</strong><span>holidays</span></div>
+        <div class="preview-stat"><strong id="memberCount">0</strong><span>members found</span></div>
+      </div>
+      <pre id="promptOutput" class="prompt-output">Configure the form and click “Generate production-ready prompt”.</pre>
+      <div class="ai-links">
+        <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a>
+        <a href="https://claude.ai/" target="_blank" rel="noopener">Claude</a>
+        <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener">Copilot</a>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite">Copied</div>
+<script src="../assets/portfolio-theme.js" defer></script>
+<script>
+  let extractedMembers = 0;
+
+  const chatFile = document.getElementById("chatFile");
+  chatFile.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      const text = loadEvent.target.result;
+      const users = new Set();
+      const patterns = [
+        /\[\d{1,2}\/\d{1,2}\/\d{2,4}[^\]]*\]\s+([^:]+):/g,
+        /^\d{1,2}\/\d{1,2}\/\d{2,4}[^-]+-\s+([^:]+):/gm,
+        /^\d{1,2}\/\d{1,2}\/\d{2,4},\s+\d{1,2}:\d{2}\s*(?:am|pm|AM|PM)?\s+-\s+([^:]+):/gm
+      ];
+
+      function cleanName(raw) {
+        return raw
+          .trim()
+          .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202C]/g, "")
+          .replace(/\s+/g, " ");
+      }
+
+      function isSystemMessage(name) {
+        const lower = name.toLowerCase();
+        return [
+          "added", "changed the subject", "messages and calls", "created group",
+          "joined using this group", "left", "removed", "security code"
+        ].some((item) => lower.includes(item));
+      }
+
+      patterns.forEach((pattern) => {
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+          const name = cleanName(match[1]);
+          if (name.length > 0 && name.length < 45 && !isSystemMessage(name)) users.add(name);
+        }
+      });
+
+      const select = document.getElementById("userNameSelect");
+      const input = document.getElementById("userNameInput");
+      const status = document.getElementById("fileStatus");
+      select.innerHTML = "";
+      extractedMembers = users.size;
+      document.getElementById("memberCount").textContent = extractedMembers;
+
+      if (users.size) {
+        Array.from(users).sort().forEach((user) => {
+          const option = document.createElement("option");
+          option.value = user;
+          option.textContent = user;
+          select.appendChild(option);
+        });
+        select.style.display = "block";
+        input.value = select.value;
+        select.onchange = () => { input.value = select.value; };
+        status.textContent = `Extracted ${users.size} team member${users.size === 1 ? "" : "s"} from the chat export.`;
+      } else {
+        select.style.display = "none";
+        status.textContent = "Could not auto-detect names. Type the team member manually.";
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("add-holiday-btn").addEventListener("click", () => {
+    const row = document.createElement("div");
+    row.className = "holiday-row";
+    row.innerHTML = `
+      <input type="text" class="holiday-date" placeholder="Date, e.g. 16th May">
+      <input type="text" class="holiday-title" placeholder="Title, e.g. Company holiday">
+      <button class="icon-btn" type="button" aria-label="Remove holiday" title="Remove holiday" onclick="this.closest('.holiday-row').remove()">Remove</button>
+    `;
+    document.getElementById("holidays-container").appendChild(row);
+  });
+
+  function getHolidays() {
+    const dates = Array.from(document.querySelectorAll(".holiday-date"));
+    const titles = Array.from(document.querySelectorAll(".holiday-title"));
+    return dates.map((date, index) => {
+      const d = date.value.trim();
+      const t = titles[index].value.trim();
+      return d ? `${d}${t ? ` (${t})` : ""}` : "";
+    }).filter(Boolean);
+  }
+
+  function generatePrompt() {
+    const userName = document.getElementById("userNameInput").value.trim() || "[Target team member]";
+    const eodPattern = document.getElementById("eodPatternInput").value.trim();
+    const month = document.getElementById("month").value;
+    const year = document.getElementById("year").value;
+    const weekendMode = document.getElementById("weekendMode").value;
+    const timezone = document.getElementById("timezone").value.trim() || "Asia/Kolkata";
+    const manualUpdates = document.getElementById("manualUpdates").value.trim();
+    const outputStyle = document.getElementById("outputStyle").value;
+    const strictness = document.getElementById("strictness").value;
+    const holidays = getHolidays();
+    const holidayText = holidays.length ? holidays.map((h) => `- ${h}`).join("\n") : "- None specified";
+
+    const prompt = `You are an expert operations analyst, HR timesheet auditor, and Python automation engineer.
+
+Your task is to convert the attached WhatsApp .txt chat export into a clean ${outputStyle} for ${userName} for ${month} ${year}.
+
+CONTEXT
+- Target employee: ${userName}
+- Reporting period: ${month} ${year}
+- Timezone / locale: ${timezone}
+- Weekend rule: ${weekendMode}
+- Validation strictness: ${strictness}
+- Company holidays:
+${holidayText}
+
+${eodPattern ? `EOD DETECTION RULE
+Only treat a message as an EOD/task update if it contains this exact keyword or pattern:
+"${eodPattern}"
+Messages from ${userName} that do not contain this pattern must not count as presence unless a manual override says otherwise.` : `EOD DETECTION RULE
+Use smart detection for ${userName}'s daily updates. Look for:
+- "Today's update", "Today update", "Daily status", "EOD", "Done today", "Update:"
+- Numbered/bulleted task lists
+- JIRA/task IDs such as ABC-123, DEV-45, BUG-99
+- Clear work-summary language sent by ${userName}
+Do not count casual messages, reactions, greetings, forwards, or unrelated discussion as attendance.`}
+
+MANDATORY DISCOVERY
+1. Parse the chat export and identify every message sent by exactly "${userName}".
+2. Support common WhatsApp formats:
+   - [DD/MM/YY, HH:MM:SS AM] Name: Message
+   - DD/MM/YY, HH:MM - Name: Message
+   - DD/MM/YYYY, HH:MM am/pm - Name: Message
+3. Preserve multiline WhatsApp messages as one update until the next timestamp starts.
+4. Remove @mentions, phone numbers used as mentions, invisible bidi characters, and repeated whitespace from the final task text.
+5. If the exported file has ambiguous names or duplicate display names, stop and list the exact ambiguity instead of guessing.
+
+CALENDAR AND ATTENDANCE RULES
+1. Generate one row for every calendar date in ${month} ${year}.
+2. Mark weekends according to this rule: ${weekendMode}.
+3. Mark company holidays exactly as provided above.
+4. A working day is present only when a valid update by ${userName} exists or a manual override supplies the update.
+5. If there is no update on a working day, leave the task/update cell blank and mark status as Missing Update.
+6. If multiple updates exist for the same day, merge them into one concise bullet-style summary without losing task IDs.
+7. If a message appears after midnight but clearly belongs to the previous day, flag it in a Notes column instead of silently moving it.
+
+${manualUpdates ? `MANUAL OVERRIDES
+Apply these manual updates after parsing the chat. Manual overrides have priority over chat-derived data:
+${manualUpdates}` : `MANUAL OVERRIDES
+No manual overrides provided.`}
+
+OUTPUT REQUIRED
+Create a Python script using pandas and openpyxl that:
+1. Builds the final day-by-day data table.
+2. Creates a styled .xlsx workbook with:
+   - Summary sheet
+   - Daily Timesheet sheet
+   - Audit Notes sheet
+3. Daily Timesheet columns:
+   - Date
+   - Day
+   - Status
+   - Task / EOD Update
+   - Source
+   - Notes
+4. Status values:
+   - Present
+   - Weekend
+   - Holiday
+   - Missing Update
+   - Manual Override
+   - Needs Review
+5. Styling:
+   - Bold frozen header row
+   - Auto-width columns
+   - Weekend rows light yellow
+   - Holiday rows light orange
+   - Missing Update rows light red
+   - Present rows light green
+   - Summary metrics in a clean dashboard style
+
+SUMMARY METRICS
+At the top of the response and in the Summary sheet include:
+- Total days in month
+- Total weekends
+- Total holidays
+- Net working days
+- Present days
+- Missing update days
+- Manual override days
+- Attendance percentage = Present days / Net working days
+- List of dates needing review
+
+QUALITY AND AUDIT CHECKS
+Before finalizing:
+1. Verify total generated rows equals the number of days in ${month} ${year}.
+2. Verify weekend + holiday + working day classification is internally consistent.
+3. Verify no task text contains @mentions or unrelated chat metadata.
+4. Verify no date is counted twice.
+5. Provide an "Assumptions and Ambiguities" section.
+
+FINAL RESPONSE FORMAT
+1. Brief summary of what was parsed.
+2. Assumptions and ambiguities.
+3. The complete Python script.
+4. Instructions to run it.
+5. Attach or provide the generated .xlsx file if your environment supports file generation.
+
+Do not invent missing work updates. If data is missing, mark it clearly as Missing Update or Needs Review.`;
+
+    document.getElementById("promptOutput").textContent = prompt;
+    document.getElementById("charCount").textContent = prompt.length.toLocaleString();
+    document.getElementById("holidayCount").textContent = holidays.length;
+    document.getElementById("memberCount").textContent = extractedMembers;
+    showToast("Prompt generated");
+  }
+
+  async function copyPrompt() {
+    const text = document.getElementById("promptOutput").textContent;
+    if (!text || text.startsWith("Configure the form")) {
+      showToast("Generate a prompt first");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast("Prompt copied");
+    } catch (error) {
+      const area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      showToast("Prompt copied");
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+  }
+</script>
+</body>
+</html>

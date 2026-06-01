@@ -149,58 +149,82 @@
       </div>
     </div>
 
-    <div class="tool-grid" aria-label="Featured tools">
-      <a class="tool-card featured reveal" href="prompt-forge/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">PF</div><span class="tool-badge">All platforms</span></div>
-        <h3>PromptForge</h3>
-        <p>Configure your stack and generate copy-ready AI prompts for Cursor, Windsurf, Antigravity, and more.</p>
-        <div class="tag-row"><span class="tag">Prompts</span><span class="tag">AI</span><span class="tag">Cross-platform</span></div>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card featured reveal" href="agent-rule-forge/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">AR</div><span class="tool-badge">Agents + rules</span></div>
-        <h3>AgentRule Forge</h3>
-        <p>Create master prompts for existing project review, AGENTS.md, rule files, and multi-agent workflows.</p>
-        <div class="tag-row"><span class="tag">Agents</span><span class="tag">Rules</span><span class="tag">Review</span></div>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card featured reveal" href="backend-prompt-suite/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">DB</div><span class="tool-badge">Backend safety</span></div>
-        <h3>Backend Prompt Suite</h3>
-        <p>Generate safe AI prompts for database migrations, API changes, full-stack impact analysis, and rollback planning.</p>
-        <div class="tag-row"><span class="tag">Database</span><span class="tag">API</span><span class="tag">Rollback</span></div>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card reveal" href="flutter-rocket/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">FR</div><span class="tool-badge">Flagship</span></div>
-        <h3>FlutterRocket</h3>
-        <p>28+ optimization prompts across cold start, memory, FPS, size, and release-readiness.</p>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card reveal" href="flutter-ui-refactor/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">UI</div><span class="tool-badge">Premium UI</span></div>
-        <h3>Flutter UI Refactor</h3>
-        <p>Generate a safe AI prompt for premium visual refactoring while preserving business logic.</p>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card reveal" href="flutter-localization/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">L10</div><span class="tool-badge">i18n</span></div>
-        <h3>Flutter Localization</h3>
-        <p>Detect hardcoded strings, reuse keys, and produce clean translation instructions.</p>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card reveal" href="flutter-optimizer/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">FO</div><span class="tool-badge">Focused</span></div>
-        <h3>Flutter Optimizer</h3>
-        <p>Target one screen, discover related files, and apply isolated performance improvements.</p>
-        <div class="tool-link">Launch tool</div>
-      </a>
-      <a class="tool-card reveal" href="flutter-perf/" data-tilt>
-        <div class="tool-meta"><div class="card-mark">FP</div><span class="tool-badge">Quick fix</span></div>
-        <h3>Flutter Perf</h3>
-        <p>Fast route to a clean performance prompt with eight core fixes and a simple checklist.</p>
-        <div class="tool-link">Launch tool</div>
-      </a>
+    <div class="tool-grid" aria-label="Featured tools by category">
+      <div class="tool-category reveal">
+        <div class="tool-category-head"><span>Universal prompt systems</span><p>Use these when the prompt needs to work across AI coding tools, platforms, or whole project workflows.</p></div>
+        <div class="tool-category-grid">
+          <a class="tool-card featured reveal" href="prompt-forge/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">PF</div><span class="tool-badge">All platforms</span></div>
+            <h3>PromptForge</h3>
+            <p>Configure your stack and generate copy-ready AI prompts for Cursor, Windsurf, Antigravity, and more.</p>
+            <div class="tag-row"><span class="tag">Prompts</span><span class="tag">AI</span><span class="tag">Cross-platform</span></div>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card featured reveal" href="agent-rule-forge/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">AR</div><span class="tool-badge">Agents + rules</span></div>
+            <h3>AgentRule Forge</h3>
+            <p>Create master prompts for existing project review, AGENTS.md, rule files, and multi-agent workflows.</p>
+            <div class="tag-row"><span class="tag">Agents</span><span class="tag">Rules</span><span class="tag">Review</span></div>
+            <div class="tool-link">Launch tool</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-category-head"><span>Project review and operations</span><p>Focused generators for safer backend changes, reporting workflows, audits, and existing project analysis.</p></div>
+        <div class="tool-category-grid">
+          <a class="tool-card featured reveal" href="backend-prompt-suite/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">DB</div><span class="tool-badge">Backend safety</span></div>
+            <h3>Backend Prompt Suite</h3>
+            <p>Generate safe AI prompts for database migrations, API changes, full-stack impact analysis, and rollback planning.</p>
+            <div class="tag-row"><span class="tag">Database</span><span class="tag">API</span><span class="tag">Rollback</span></div>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card featured reveal" href="timesheet-prompt-architect/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">TS</div><span class="tool-badge">Timesheet AI</span></div>
+            <h3>Timesheet Prompt Architect</h3>
+            <p>Generate AI prompts that convert WhatsApp chat exports into attendance, daily work, and styled Excel reports.</p>
+            <div class="tag-row"><span class="tag">WhatsApp</span><span class="tag">Attendance</span><span class="tag">Excel</span></div>
+            <div class="tool-link">Launch tool</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="tool-category reveal">
+        <div class="tool-category-head"><span>Flutter and mobile app prompts</span><p>Specialized prompt generators for mobile app performance, UI refactors, localization, and screen-level optimization.</p></div>
+        <div class="tool-category-grid">
+          <a class="tool-card reveal" href="flutter-rocket/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">FR</div><span class="tool-badge">Flagship</span></div>
+            <h3>FlutterRocket</h3>
+            <p>28+ optimization prompts across cold start, memory, FPS, size, and release-readiness.</p>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card reveal" href="flutter-ui-refactor/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">UI</div><span class="tool-badge">Premium UI</span></div>
+            <h3>Flutter UI Refactor</h3>
+            <p>Generate a safe AI prompt for premium visual refactoring while preserving business logic.</p>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card reveal" href="flutter-localization/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">L10</div><span class="tool-badge">i18n</span></div>
+            <h3>Flutter Localization</h3>
+            <p>Detect hardcoded strings, reuse keys, and produce clean translation instructions.</p>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card reveal" href="flutter-optimizer/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">FO</div><span class="tool-badge">Focused</span></div>
+            <h3>Flutter Optimizer</h3>
+            <p>Target one screen, discover related files, and apply isolated performance improvements.</p>
+            <div class="tool-link">Launch tool</div>
+          </a>
+          <a class="tool-card reveal" href="flutter-perf/" data-tilt>
+            <div class="tool-meta"><div class="card-mark">FP</div><span class="tool-badge">Quick fix</span></div>
+            <h3>Flutter Perf</h3>
+            <p>Fast route to a clean performance prompt with eight core fixes and a simple checklist.</p>
+            <div class="tool-link">Launch tool</div>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
