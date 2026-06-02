@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlutterSweep — Bhargav Parmar</title>
+<meta name="description" content="Generate production-ready AI prompts, Bash scripts, and PowerShell scripts to safely clean Flutter workspaces and reclaim disk space. Built by Bhargav Parmar.">
+<meta name="theme-color" content="#070a10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/portfolio-theme.css">
+<style>
+  :root {
+    --tool-accent: #34d399;
+    --tool-accent-2: #22d3ee;
+    --tool-warn: #fbbf24;
+    --tool-danger: #fb7185;
+    --tool-panel: rgba(8, 13, 23, 0.78);
+    --mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  .tool-shell {
+    width: min(1240px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 132px 0 80px;
+  }
+
+  .tool-hero {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(340px, .72fr);
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 22px;
+  }
+
+  .hero-panel,
+  .generator-panel,
+  .preview-panel,
+  .mini-panel,
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(145deg, rgba(255,255,255,.095), rgba(255,255,255,.035));
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.07);
+  }
+
+  .hero-panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(26px, 5vw, 48px);
+  }
+
+  .hero-panel::after {
+    content: "";
+    position: absolute;
+    width: 390px;
+    height: 390px;
+    right: -120px;
+    top: -120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(52,211,153,.22), transparent 66%);
+    pointer-events: none;
+  }
+
+  .hero-panel h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: 760px;
+    font-family: var(--font-display);
+    font-size: clamp(46px, 7vw, 86px);
+    line-height: .94;
+    letter-spacing: 0;
+  }
+
+  .hero-panel p {
+    position: relative;
+    z-index: 1;
+    max-width: 740px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .hero-tags {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .status-board {
+    display: grid;
+    gap: 12px;
+  }
+
+  .mini-panel {
+    min-height: 128px;
+    padding: 18px;
+  }
+
+  .mini-panel strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .mini-panel span {
+    display: block;
+    margin-top: 8px;
+    color: var(--soft);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(420px, .8fr);
+    gap: 22px;
+    align-items: start;
+  }
+
+  .generator-panel,
+  .preview-panel {
+    overflow: hidden;
+  }
+
+  .preview-panel {
+    position: sticky;
+    top: 96px;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.04);
+  }
+
+  .panel-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+  }
+
+  .panel-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .panel-body {
+    padding: 20px;
+  }
+
+  .form-section {
+    margin-bottom: 18px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    background: rgba(5, 9, 16, .36);
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    color: var(--tool-accent);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .field,
+  .toggle-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .field + .field {
+    margin-top: 14px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  label {
+    color: var(--soft);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 14px;
+    outline: none;
+    padding: 12px 13px;
+    color: var(--text);
+    background: rgba(3,7,14,.66);
+    font: 500 14px var(--font-body);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: rgba(52,211,153,.72);
+    box-shadow: 0 0 0 4px rgba(52,211,153,.1);
+  }
+
+  textarea {
+    min-height: 92px;
+    resize: vertical;
+    line-height: 1.55;
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .toggle-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+    cursor: pointer;
+  }
+
+  .toggle-row input {
+    width: 20px;
+    min-height: 20px;
+    margin-top: 2px;
+    accent-color: var(--tool-accent);
+  }
+
+  .toggle-row strong {
+    display: block;
+    font-size: 13px;
+  }
+
+  .toggle-row span {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .primary-action,
+  .copy-action,
+  .tab-action {
+    border: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease, border-color .2s ease;
+  }
+
+  .primary-action {
+    width: 100%;
+    min-height: 52px;
+    color: #061018;
+    background: linear-gradient(135deg, var(--tool-accent), var(--tool-accent-2));
+    box-shadow: 0 18px 46px rgba(52,211,153,.2);
+    font-size: 16px;
+  }
+
+  .copy-action {
+    min-height: 38px;
+    padding: 9px 12px;
+    color: #061018;
+    background: linear-gradient(135deg, var(--tool-accent), var(--tool-accent-2));
+  }
+
+  .primary-action:hover,
+  .copy-action:hover,
+  .tab-action:hover {
+    transform: translateY(-2px);
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.035);
+  }
+
+  .tab-action {
+    min-height: 38px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    font-size: 12px;
+  }
+
+  .tab-action.active {
+    color: var(--tool-accent);
+    background: rgba(52,211,153,.1);
+    border-color: rgba(52,211,153,.28);
+  }
+
+  .preview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .preview-stat {
+    padding: 14px;
+    border-right: 1px solid var(--line);
+  }
+
+  .preview-stat:last-child {
+    border-right: 0;
+  }
+
+  .preview-stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 24px;
+  }
+
+  .preview-stat span {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .prompt-output {
+    min-height: 520px;
+    max-height: 680px;
+    margin: 0;
+    padding: 18px;
+    overflow: auto;
+    color: #c7f9e6;
+    background: rgba(2, 6, 12, .8);
+    font: 12px/1.72 var(--mono);
+    white-space: pre-wrap;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .info-card {
+    padding: 18px;
+  }
+
+  .info-card h3 {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .info-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    z-index: 10;
+    padding: 10px 14px;
+    border: 1px solid rgba(52,211,153,.34);
+    border-radius: 999px;
+    color: var(--tool-accent);
+    background: rgba(5, 12, 20, .88);
+    box-shadow: var(--shadow);
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 980px) {
+    .tool-hero,
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .preview-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .tool-shell {
+      width: min(100% - 28px, 720px);
+      padding-top: 116px;
+    }
+
+    .field-grid,
+    .preview-stats,
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tabs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#generator">Skip to generator</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="depth-scene" aria-hidden="true">
+  <div class="depth-plane one"></div>
+  <div class="depth-plane two"></div>
+  <div class="depth-plane three"></div>
+</div>
+
+<header class="nav" role="banner">
+  <a class="brand" href="../" aria-label="Back to Bhargav Parmar portfolio">
+    <span>Bhargav Parmar</span>
+  </a>
+  <nav aria-label="FlutterSweep navigation">
+    <ul class="nav-links">
+      <li><a href="../#tools">Portfolio tools</a></li>
+      <li><a href="../tools/">All tools</a></li>
+    </ul>
+  </nav>
+  <a class="ghost-action" href="../tools/">All tools</a>
+</header>
+
+<main class="tool-shell">
+  <section class="tool-hero" aria-labelledby="tool-title">
+    <div class="hero-panel reveal">
+      <div class="eyebrow"><span class="signal"></span>Flutter workspace cleanup prompt generator</div>
+      <h1 id="tool-title">Flutter<span class="gradient-text">Sweep</span></h1>
+      <p>Generate safe, production-ready AI prompts and cleanup scripts that scan Flutter workspaces, remove build artifacts, preserve source code, and report reclaimed storage.</p>
+      <div class="hero-tags">
+        <span class="tag">Flutter cleanup</span>
+        <span class="tag">Bash + PowerShell</span>
+        <span class="tag">Dry-run first</span>
+        <span class="tag">CSV report</span>
+      </div>
+    </div>
+    <div class="status-board reveal">
+      <div class="mini-panel"><strong>3</strong><span>Platforms</span></div>
+      <div class="mini-panel"><strong>7</strong><span>AI tools supported</span></div>
+      <div class="mini-panel"><strong>0</strong><span>Source files touched</span></div>
+    </div>
+  </section>
+
+  <section id="generator" class="workspace-grid">
+    <form class="generator-panel reveal" onsubmit="event.preventDefault(); generateAll();">
+      <div class="panel-head">
+        <div>
+          <h2>Cleanup Configuration</h2>
+          <p>Choose your workspace, platform, and cleanup scope before generating.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="form-section">
+          <div class="section-label">1. Workspace target</div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="workDir">Working directory</label>
+              <input id="workDir" type="text" placeholder="/Users/username/Development">
+              <div class="hint">Folder that contains one or more Flutter projects.</div>
+            </div>
+            <div class="field">
+              <label for="platform">Platform</label>
+              <select id="platform">
+                <option>macOS</option>
+                <option>Linux</option>
+                <option>Windows</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aiTool">Target AI tool</label>
+              <select id="aiTool">
+                <option>Claude</option>
+                <option>ChatGPT</option>
+                <option>Cursor</option>
+                <option>Codex</option>
+                <option>Kimi</option>
+                <option>Antigravity IDE</option>
+                <option>Antigravity 2.0</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="scriptMode">Script output focus</label>
+              <select id="scriptMode">
+                <option value="Prompt and both scripts" selected>Prompt and both scripts</option>
+                <option value="AI prompt only">AI prompt only</option>
+                <option value="Primary platform script">Primary platform script</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">2. Cleanup scope</div>
+          <div class="toggle-list">
+            <label class="toggle-row"><input id="includeAndroid" type="checkbox" checked><span><strong>Android build artifacts</strong><span>Remove android/app/build and android/build folders.</span></span></label>
+            <label class="toggle-row"><input id="includeIOS" type="checkbox" checked><span><strong>iOS build artifacts</strong><span>Remove ios/build folders while preserving project files.</span></span></label>
+            <label class="toggle-row"><input id="includeApkAab" type="checkbox" checked><span><strong>APK and AAB release files</strong><span>Find and remove generated *.apk and *.aab files.</span></span></label>
+            <label class="toggle-row"><input id="includeIpa" type="checkbox" checked><span><strong>IPA files</strong><span>Find and remove generated iOS *.ipa build outputs.</span></span></label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">3. Safety controls</div>
+          <div class="toggle-list">
+            <label class="toggle-row"><input id="dryRun" type="checkbox" checked><span><strong>Dry-run mode</strong><span>Preview what would be removed before real deletion.</span></span></label>
+            <label class="toggle-row"><input id="removeLockfile" type="checkbox"><span><strong>Remove pubspec.lock</strong><span>Optional and risky; use only when dependency re-resolution is expected.</span></span></label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">4. Notes for the AI</div>
+          <div class="field">
+            <label for="extraNotes">Extra requirements</label>
+            <textarea id="extraNotes" placeholder="Example: Skip archived client folders, add a total reclaimed storage summary, and keep logs in the workspace root."></textarea>
+          </div>
+        </div>
+
+        <button class="primary-action" type="submit">Generate FlutterSweep output</button>
+      </div>
+    </form>
+
+    <aside class="preview-panel reveal" aria-label="Generated FlutterSweep output">
+      <div class="panel-head">
+        <div>
+          <h2>Generated Output</h2>
+          <p>Switch between prompt, scripts, and usage notes.</p>
+        </div>
+        <button class="copy-action" type="button" onclick="copyOutput()">Copy</button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Output type">
+        <button class="tab-action active" type="button" data-tab="prompt" onclick="setTab('prompt')">AI Prompt</button>
+        <button class="tab-action" type="button" data-tab="bash" onclick="setTab('bash')">Bash</button>
+        <button class="tab-action" type="button" data-tab="powershell" onclick="setTab('powershell')">PowerShell</button>
+        <button class="tab-action" type="button" data-tab="instructions" onclick="setTab('instructions')">Instructions</button>
+      </div>
+      <div class="preview-stats">
+        <div class="preview-stat"><strong id="projectSignal">Safe</strong><span>mode</span></div>
+        <div class="preview-stat"><strong id="scopeCount">4</strong><span>scope items</span></div>
+        <div class="preview-stat"><strong id="charCount">0</strong><span>characters</span></div>
+      </div>
+      <pre id="promptOutput" class="prompt-output">Configure the form and click “Generate FlutterSweep output”.</pre>
+    </aside>
+  </section>
+
+  <section class="info-grid reveal" aria-label="FlutterSweep safety summary">
+    <article class="info-card">
+      <h3>Safe by design</h3>
+      <p>The generated script must list detected projects first, require confirmation, preserve lib, assets, pubspec.yaml, .env, README, and .git, and log every action.</p>
+    </article>
+    <article class="info-card">
+      <h3>Built by Bhargav Parmar</h3>
+      <p>Designed for mobile developers who manage many Flutter projects and want AI-assisted cleanup without risking source code or client project files.</p>
+    </article>
+  </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite">Copied</div>
+
+<script src="../assets/portfolio-theme.js"></script>
+<script>
+  const output = document.getElementById("promptOutput");
+  let activeTab = "prompt";
+  let generated = {};
+
+  const get = (id) => document.getElementById(id);
+  const checked = (id) => get(id).checked;
+
+  function config() {
+    const platform = get("platform").value;
+    return {
+      workDir: get("workDir").value.trim() || (platform === "Windows" ? "C:\\Users\\username\\Development" : "/Users/username/Development"),
+      platform,
+      aiTool: get("aiTool").value,
+      scriptMode: get("scriptMode").value,
+      includeAndroid: checked("includeAndroid"),
+      includeIOS: checked("includeIOS"),
+      includeApkAab: checked("includeApkAab"),
+      includeIpa: checked("includeIpa"),
+      dryRun: checked("dryRun"),
+      removeLockfile: checked("removeLockfile"),
+      extraNotes: get("extraNotes").value.trim()
+    };
+  }
+
+  function generatePrompt(cfg) {
+    const scope = [
+      "- Always run `flutter clean` in each detected Flutter project.",
+      "- Remove `build/`, `.dart_tool/`, `.flutter-plugins`, `.flutter-plugins-dependencies`, and `.packages`."
+    ];
+    if (cfg.includeAndroid) scope.push("- Remove Android build outputs: `android/app/build/` and `android/build/`.");
+    if (cfg.includeIOS) scope.push("- Remove iOS build outputs: `ios/build/`.");
+    if (cfg.includeApkAab) scope.push("- Remove generated Android release artifacts: `*.apk` and `*.aab`.");
+    if (cfg.includeIpa) scope.push("- Remove generated iOS artifacts: `*.ipa`.");
+    if (cfg.removeLockfile) scope.push("- Remove `pubspec.lock` only after a separate explicit confirmation because it can change dependency resolution.");
+
+    return `# FlutterSweep - AI Workspace Cleanup Prompt
+
+Target AI tool: ${cfg.aiTool}
+Target platform: ${cfg.platform}
+Workspace directory: ${cfg.workDir}
+Requested output: ${cfg.scriptMode}
+
+## Role
+Act as a senior Flutter build engineer and DevOps automation reviewer. Create a production-ready cleanup solution that safely reclaims disk space from a workspace containing multiple Flutter projects.
+
+## Detection Rules
+1. Recursively scan \`${cfg.workDir}\` for Flutter projects.
+2. Treat a directory as a Flutter project only when it contains \`pubspec.yaml\` and a \`lib/\` directory.
+3. List all detected projects before making any changes.
+4. Show a clear warning if no Flutter projects are found.
+
+## Cleanup Scope
+${scope.join("\n")}
+
+## Safety Requirements
+- ${cfg.dryRun ? "Include dry-run mode by default and make it obvious that no files are deleted during preview." : "Include an optional dry-run flag even if the default run is active cleanup."}
+- Require explicit user confirmation before deleting anything.
+- Never delete or modify: \`lib/\`, \`assets/\`, \`pubspec.yaml\`, \`.env\`, \`README.md\`, \`.git/\`, source files, app configuration, keystores, certificates, or signing files.
+- Use quoted paths and safe path handling so spaces in folder names do not break the script.
+- Log every cleanup action to a timestamped log file.
+- Produce a CSV report with Project, Path, Before Size, After Size, Reclaimed, and Date.
+- Continue safely if one project fails; summarize failures at the end.
+
+## Platform Requirements
+${cfg.platform === "Windows"
+  ? "- Generate a PowerShell 5.1+ compatible script.\n- Use `Test-Path`, `Get-ChildItem`, `Remove-Item`, and clear console output."
+  : "- Generate a Bash script compatible with macOS/Linux.\n- Use `set -euo pipefail`, safe `find`, quoted variables, and clear terminal output."}
+
+## Final Answer Format
+1. Brief safety summary.
+2. The full cleanup script.
+3. Usage instructions.
+4. Rollback/rebuild notes.
+5. QA checklist explaining how the script avoids deleting source code.
+
+${cfg.extraNotes ? `## Extra Requirements\n${cfg.extraNotes}` : ""}`;
+  }
+
+  function generateBash(cfg) {
+    const folders = ["build", ".dart_tool"];
+    if (cfg.includeAndroid) folders.push("android/app/build", "android/build");
+    if (cfg.includeIOS) folders.push("ios/build");
+
+    return `#!/usr/bin/env bash
+# FlutterSweep - Workspace Cleanup and Storage Optimization
+set -euo pipefail
+
+WORK_DIR="${cfg.workDir}"
+DRY_RUN="${cfg.dryRun ? "true" : "false"}"
+REMOVE_LOCKFILE="${cfg.removeLockfile ? "true" : "false"}"
+LOG_FILE="$HOME/.flutter_sweep_$(date +%Y%m%d_%H%M%S).log"
+REPORT_FILE="$HOME/.flutter_sweep_report.csv"
+
+log(){ printf "%s\\n" "$1" | tee -a "$LOG_FILE"; }
+size_of(){ du -sh "$1" 2>/dev/null | cut -f1 || printf "0"; }
+remove_path(){
+  local path="$1"
+  [ -e "$path" ] || return 0
+  if [ "$DRY_RUN" = "true" ]; then
+    log "[DRY RUN] Would remove: $path"
+  else
+    rm -rf "$path"
+    log "Removed: $path"
+  fi
+}
+
+find_flutter_projects(){
+  find "$WORK_DIR" -type f -name "pubspec.yaml" 2>/dev/null | while read -r file; do
+    dir="$(dirname "$file")"
+    [ -d "$dir/lib" ] && printf "%s\\n" "$dir"
+  done
+}
+
+cleanup_project(){
+  local project="$1"
+  local name before after
+  name="$(basename "$project")"
+  before="$(size_of "$project")"
+  log ""
+  log "Processing: $name"
+  log "Path: $project"
+
+  if [ "$DRY_RUN" = "true" ]; then
+    log "[DRY RUN] Would run flutter clean"
+  elif command -v flutter >/dev/null 2>&1; then
+    (cd "$project" && flutter clean >> "$LOG_FILE" 2>&1) || log "flutter clean failed; continuing"
+  else
+    log "Flutter CLI not found; skipping flutter clean"
+  fi
+
+  for item in ${folders.map((item) => `"${item}"`).join(" ")}; do
+    remove_path "$project/$item"
+  done
+  for file in ".flutter-plugins" ".flutter-plugins-dependencies" ".packages"; do
+    remove_path "$project/$file"
+  done
+${cfg.includeApkAab ? `  find "$project" \\( -name "*.apk" -o -name "*.aab" \\) 2>/dev/null | while read -r file; do remove_path "$file"; done\n` : ""}${cfg.includeIpa ? `  find "$project" -name "*.ipa" 2>/dev/null | while read -r file; do remove_path "$file"; done\n` : ""}${cfg.removeLockfile ? `  remove_path "$project/pubspec.lock"\n` : ""}
+  after="$(size_of "$project")"
+  printf "%s,%s,%s,%s,%s\\n" "$name" "$project" "$before" "$after" "$(date +%Y-%m-%d)" >> "$REPORT_FILE"
+}
+
+main(){
+  [ -d "$WORK_DIR" ] || { log "Directory not found: $WORK_DIR"; exit 1; }
+  mapfile -t projects < <(find_flutter_projects)
+  [ "\${#projects[@]}" -gt 0 ] || { log "No Flutter projects found."; exit 0; }
+
+  log "FlutterSweep found \${#projects[@]} Flutter project(s):"
+  for project in "\${projects[@]}"; do log " - $project"; done
+  [ "$DRY_RUN" = "true" ] && log "DRY RUN MODE: no files will be deleted."
+  read -rp "Proceed with cleanup? [y/N]: " confirm
+  [[ "$confirm" = "y" || "$confirm" = "Y" ]] || { log "Aborted."; exit 0; }
+
+  printf "Project,Path,Before,After,Date\\n" > "$REPORT_FILE"
+  for project in "\${projects[@]}"; do cleanup_project "$project"; done
+  log ""
+  log "Done. Log: $LOG_FILE"
+  log "Report: $REPORT_FILE"
+}
+
+main "$@"`;
+  }
+
+  function generatePowerShell(cfg) {
+    const removeItems = ["build", ".dart_tool", ".flutter-plugins", ".flutter-plugins-dependencies", ".packages"];
+    if (cfg.includeAndroid) removeItems.push("android\\app\\build", "android\\build");
+    if (cfg.includeIOS) removeItems.push("ios\\build");
+    if (cfg.removeLockfile) removeItems.push("pubspec.lock");
+
+    return `# FlutterSweep - Workspace Cleanup and Storage Optimization
+param(
+  [string]$WorkDir = "${cfg.workDir.replaceAll("\\", "\\\\")}",
+  [switch]$DryRun = $${cfg.dryRun ? "true" : "false"}
+)
+
+$ErrorActionPreference = "Continue"
+$LogFile = "$env:USERPROFILE\\.flutter_sweep_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
+$ReportFile = "$env:USERPROFILE\\.flutter_sweep_report.csv"
+
+function Write-SweepLog($Message) {
+  Write-Host $Message
+  Add-Content -Path $LogFile -Value $Message
+}
+
+function Get-DirSizeMb($Path) {
+  if (-not (Test-Path $Path)) { return 0 }
+  $sum = (Get-ChildItem -Recurse -Force $Path -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum).Sum
+  return [math]::Round(($sum / 1MB), 2)
+}
+
+function Remove-Safe($Path) {
+  if (-not (Test-Path $Path)) { return }
+  if ($DryRun) {
+    Write-SweepLog "[DRY RUN] Would remove: $Path"
+  } else {
+    Remove-Item -Recurse -Force $Path -ErrorAction SilentlyContinue
+    Write-SweepLog "Removed: $Path"
+  }
+}
+
+function Find-FlutterProjects {
+  Get-ChildItem -Path $WorkDir -Recurse -Filter "pubspec.yaml" -ErrorAction SilentlyContinue |
+    Where-Object { Test-Path (Join-Path $_.DirectoryName "lib") } |
+    Select-Object -ExpandProperty DirectoryName
+}
+
+function Cleanup-Project($Project) {
+  $name = Split-Path $Project -Leaf
+  $before = Get-DirSizeMb $Project
+  Write-SweepLog ""
+  Write-SweepLog "Processing: $name"
+  Write-SweepLog "Path: $Project"
+
+  if ($DryRun) {
+    Write-SweepLog "[DRY RUN] Would run flutter clean"
+  } else {
+    Push-Location $Project
+    try { flutter clean 2>&1 | Add-Content $LogFile } catch { Write-SweepLog "flutter clean failed; continuing" }
+    Pop-Location
+  }
+
+${removeItems.map((item) => `  Remove-Safe (Join-Path $Project "${item}")`).join("\n")}
+${cfg.includeApkAab ? `  Get-ChildItem -Recurse $Project -Include "*.apk","*.aab" -ErrorAction SilentlyContinue | ForEach-Object { Remove-Safe $_.FullName }\n` : ""}${cfg.includeIpa ? `  Get-ChildItem -Recurse $Project -Include "*.ipa" -ErrorAction SilentlyContinue | ForEach-Object { Remove-Safe $_.FullName }\n` : ""}
+  $after = Get-DirSizeMb $Project
+  "$name,$Project,$before,$after,$(Get-Date -Format 'yyyy-MM-dd')" | Add-Content $ReportFile
+}
+
+if (-not (Test-Path $WorkDir)) { Write-SweepLog "Directory not found: $WorkDir"; exit 1 }
+$projects = @(Find-FlutterProjects)
+if ($projects.Count -eq 0) { Write-SweepLog "No Flutter projects found."; exit 0 }
+
+Write-SweepLog "FlutterSweep found $($projects.Count) Flutter project(s):"
+$projects | ForEach-Object { Write-SweepLog " - $_" }
+if ($DryRun) { Write-SweepLog "DRY RUN MODE: no files will be deleted." }
+$confirm = Read-Host "Proceed with cleanup? [y/N]"
+if ($confirm -ne "y" -and $confirm -ne "Y") { Write-SweepLog "Aborted."; exit 0 }
+
+"Project,Path,BeforeMB,AfterMB,Date" | Set-Content $ReportFile
+$projects | ForEach-Object { Cleanup-Project $_ }
+Write-SweepLog ""
+Write-SweepLog "Done. Log: $LogFile"
+Write-SweepLog "Report: $ReportFile"`;
+  }
+
+  function instructions(cfg) {
+    return `# FlutterSweep Usage Instructions
+
+1. Generate the AI prompt first and review the cleanup rules.
+2. Paste the prompt into ${cfg.aiTool}, or copy the generated script directly.
+3. Always run dry-run mode first on a new workspace.
+4. Review the detected Flutter projects before confirming cleanup.
+5. After cleanup, run \`flutter pub get\` or \`flutter build\` when caches need to be rebuilt.
+
+macOS/Linux:
+\`\`\`bash
+chmod +x flutter_sweep.sh
+./flutter_sweep.sh
+\`\`\`
+
+Windows PowerShell:
+\`\`\`powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+.\\flutter_sweep.ps1 -WorkDir "${cfg.platform === "Windows" ? cfg.workDir : "C:\\Dev"}" -DryRun
+\`\`\`
+
+Expected outputs:
+- Timestamped log file in the user home directory.
+- CSV cleanup report.
+- Terminal summary of each project processed.
+- Source code untouched.`;
+  }
+
+  function setTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll(".tab-action").forEach((button) => {
+      button.classList.toggle("active", button.dataset.tab === tab);
+    });
+    renderOutput();
+  }
+
+  function renderOutput() {
+    output.textContent = generated[activeTab] || "Configure the form and click “Generate FlutterSweep output”.";
+    get("charCount").textContent = output.textContent.length;
+  }
+
+  function generateAll() {
+    const cfg = config();
+    const scopeCount = ["includeAndroid", "includeIOS", "includeApkAab", "includeIpa"].filter(checked).length;
+    generated = {
+      prompt: generatePrompt(cfg),
+      bash: generateBash(cfg),
+      powershell: generatePowerShell(cfg),
+      instructions: instructions(cfg)
+    };
+    get("projectSignal").textContent = cfg.dryRun ? "Dry" : "Live";
+    get("scopeCount").textContent = scopeCount;
+    renderOutput();
+    showToast("FlutterSweep output generated");
+  }
+
+  async function copyOutput() {
+    if (!output.textContent || output.textContent.includes("Configure the form")) {
+      generateAll();
+    }
+    try {
+      await navigator.clipboard.writeText(output.textContent);
+      showToast("Copied");
+    } catch (error) {
+      const range = document.createRange();
+      range.selectNodeContents(output);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand("copy");
+      selection.removeAllRanges();
+      showToast("Copied");
+    }
+  }
+
+  function showToast(message) {
+    const toast = get("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1700);
+  }
+
+  ["workDir", "platform", "aiTool", "scriptMode", "includeAndroid", "includeIOS", "includeApkAab", "includeIpa", "dryRun", "removeLockfile", "extraNotes"].forEach((id) => {
+    get(id).addEventListener("input", () => {
+      if (Object.keys(generated).length) generateAll();
+    });
+  });
+</script>
+</body>
+</html>
